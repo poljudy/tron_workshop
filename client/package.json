@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "homepage": "https://vadkutsen.github.io/medo",
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d dist",
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview"
