@@ -1,7 +1,10 @@
 {
   "name": "wave-app",
   "version": "0.0.0",
+  "homepage": "https://vadkutsen.github.io/medo",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview"
@@ -15,7 +18,9 @@
     "postcss": "^8.3.11",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
-    "react-icons": "^4.3.1"
+    "react-icons": "^4.3.1",
+    "react-router-dom": "6",
+    "react-toastify": "^9.0.5"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^1.0.0",
@@ -25,6 +30,7 @@
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "gh-pages": "^4.0.0",
     "tailwindcss": "^2.2.19",
     "vite": "^2.6.4"
   }
