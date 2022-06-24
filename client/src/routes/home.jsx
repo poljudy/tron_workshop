@@ -23,7 +23,7 @@ export default function Home() {
     );
   }
   return (
-    <div className="flex w-full justify-center items-center 2xl:px-20 gradient-bg-welcome min-h-screen">
+    <div className="flex w-full justify-center items-start 2xl:px-20 gradient-bg-welcome min-h-screen">
       <div className="flex flex-col md:p-12 py-12 px-4">
         {currentAccount ? (
           <div>
