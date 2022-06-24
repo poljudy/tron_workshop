@@ -19,7 +19,7 @@ const ActionButton = (params) => {
   let button;
   if (params.project.author === current) {
     button = <AuthorActions />;
-  } else if (params.project.assignee !== "Unassigned") {
+  } else if (params.project.assignee !== "Unassigned" && params.project.assignee !== current) {
     button = <p />;
   } else if (params.project.assignee === current) {
     button = <AssigneeActions />;
