@@ -6,10 +6,11 @@ import { Loader, ActionControls } from "../components";
 
 export default function Project() {
   const params = useParams();
-  const { project, getProject, isLoading } = useContext(PlatformContext);
+  const { project, getProject, isLoading, handleProjectUpdatedEvent } = useContext(PlatformContext);
   const projectId = params.id;
   useEffect(() => {
     getProject(projectId);
+    handleProjectUpdatedEvent();
   }, []);
 
   return (

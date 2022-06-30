@@ -234,7 +234,6 @@ export const PlatformProvider = ({ children }) => {
       if (ethereum) {
         const platformContract = createEthereumContract();
         const fetchedProject = await platformContract.getProject(id);
-        console.log(fetchedProject);
         const structuredProject = {
           id: fetchedProject.id.toNumber(),
           title: fetchedProject.title,
@@ -291,8 +290,6 @@ export const PlatformProvider = ({ children }) => {
         await transactionHash.wait();
         console.log(`Success - ${transactionHash.hash}`);
         setIsLoading(false);
-        const projectsList = await platformContract.getAllProjects();
-        setProjects(projectsList);
         window.location.replace("/");
         notify("New task added.", transactionHash.hash);
       } else {
@@ -457,6 +454,44 @@ export const PlatformProvider = ({ children }) => {
     }
   };
 
+  const handleProjectUpdatedEvent = () => {
+    const platformContract = createEthereumContract();
+    const onProjectUpdated = (p) => {
+      const structuredProject = {
+        id: p.id.toNumber(),
+        title: p.title,
+        description: p.description,
+        projectType: ProjectType[p.projectType],
+        createdAt: new Date(
+          p.createdAt.toNumber() * 1000
+        ).toLocaleString(),
+        author: p.author.toString().toLowerCase(),
+        candidates: p.candidates,
+        assignee:
+          p.assignee === address0
+            ? "Unassigned"
+            : p.assignee.toString().toLowerCase(),
+        completedAt:
+          p.completedAt > 0
+            ? new Date(
+              p.completedAt.toNumber() * 1000
+            ).toLocaleString()
+            : "Not completed yet",
+        reward: parseInt(p.reward, 10) / 10 ** 18,
+        result: p.result,
+      };
+      setProject(structuredProject);
+    };
+    if (ethereum) {
+      platformContract.on("ProjectUpdated", onProjectUpdated);
+    }
+    return () => {
+      if (platformContract) {
+        platformContract.off("ProjectUpdated", onProjectUpdated);
+      }
+    };
+  };
+
   // This will run any time currentAccount or network are changed
   useEffect(() => {
     checkIfWalletIsConnected();
@@ -467,6 +502,72 @@ export const PlatformProvider = ({ children }) => {
       getAllProjects();
     }
   }, [currentAccount, network]);
+
+  useEffect(() => {
+    const platformContract = createEthereumContract();
+    const onNewTask = (task) => {
+      setProjects((prevState) => [
+        ...prevState,
+        {
+          id: task.id.toNumber(),
+          title: task.title,
+          description: task.description,
+          projectType: ProjectType[task.projectType],
+          createdAt: new Date(
+            task.createdAt.toNumber() * 1000
+          ).toLocaleString(),
+          author: task.author,
+          candidates: task.candidates,
+          assignee:
+            task.assignee === address0 ? "Unassigned" : task.assignee,
+          completedAt:
+            task.completedAt > 0
+              ? new Date(task.completedAt.toNumber() * 1000).toLocaleString()
+              : "Not completed yet",
+          reward: parseInt(task.reward, 10) / 10 ** 18,
+          result: task.result,
+        },
+      ]);
+    };
+    if (ethereum) {
+      platformContract.on("ProjectAdded", onNewTask);
+    }
+    return () => {
+      if (platformContract) {
+        platformContract.off("ProjectAdded", onNewTask);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const platformContract = createEthereumContract();
+    const onTaskDeleted = (id) => {
+      setProjects((current) => current.filter((p) => p.id !== id));
+    };
+    if (ethereum) {
+      platformContract.on("ProjectDeleted", onTaskDeleted);
+    }
+    return () => {
+      if (platformContract) {
+        platformContract.off("ProjectDeleted", onTaskDeleted);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const platformContract = createEthereumContract();
+    const onTaskDeleted = (id) => {
+      setProjects((current) => current.filter((p) => p.id !== id.toNumber()));
+    };
+    if (ethereum) {
+      platformContract.on("ProjectDeleted", onTaskDeleted);
+    }
+    return () => {
+      if (platformContract) {
+        platformContract.off("ProjectDeleted", onTaskDeleted);
+      }
+    };
+  }, []);
 
   return (
     <PlatformContext.Provider
@@ -492,6 +593,7 @@ export const PlatformProvider = ({ children }) => {
         handleChange,
         getRating,
         fetchedRating,
+        handleProjectUpdatedEvent,
         formData,
         address0,
       }}
