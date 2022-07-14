@@ -70,7 +70,7 @@ export default function Project() {
           )}
         </div>
         <div>
-          <p className="mt-2 text-white text-2xl">{project.reward} MATIC</p>
+          <p className="mt-2 text-white text-2xl">{project.reward} TRX</p>
         </div>
         <ToastContainer />
       </div>

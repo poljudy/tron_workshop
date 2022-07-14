@@ -4,8 +4,7 @@ import { HiMenuAlt4 } from "react-icons/hi";
 import { AiOutlineClose, AiFillPlayCircle } from "react-icons/ai";
 import { shortenAddress } from "../utils/shortenAddress";
 import { PlatformContext } from "../context/PlatformContext";
-import polygonLogo from "../../images/polygonlogo.png";
-import ethLogo from "../../images/ethlogo.png";
+import tronLogo from "../../images/tronlogo.png";
 
 const NavBarItem = ({ title, classprops }) => (
   <li className={`mx-4 cursor-pointer ${classprops}`}>{title}</li>
@@ -35,7 +34,7 @@ const Navbar = () => {
       <img
         alt="Network logo"
         className="w-4 h-4 self-center"
-        src={network.includes("Polygon") ? polygonLogo : ethLogo}
+        src={tronLogo}
       />
       <p>{shortenAddress(currentAccount)}</p>
     </div>
@@ -51,7 +50,7 @@ const Navbar = () => {
         </Link>
       </div>
       <ul className="text-white md:flex hidden list-none flex-row justify-between items-center flex-initial">
-        {currentAccount && network === "Polygon Mumbai Testnet" ? (
+        {/* {currentAccount && network === "Polygon Mumbai Testnet" ? ( */}
           <div className="flex flex-row">
             <Link to="/new">
               <NavBarItem title="Add Task" />
@@ -60,9 +59,9 @@ const Navbar = () => {
               <NavBarItem title="My Tasks" />
             </Link>
           </div>
-        ) : (
+        {/* ) : ( */}
           <li />
-        )}
+        {/* )} */}
         <li>
           {!currentAccount && renderNotConnectedContainer()}
           {currentAccount && renderAccountInfo()}

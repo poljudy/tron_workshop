@@ -105,9 +105,9 @@ export default function NewProject() {
                 </div>
               </div>
             </div>
-            <p className="text-white self-end">Balance: {balance} MATIC</p>
+            <p className="text-white self-end">Balance: {balance} TRX</p>
             <FormField
-              placeholder="Reward (MATIC)"
+              placeholder="Reward (TRX)"
               name="reward"
               type="number"
               handleChange={handleChange}
@@ -115,7 +115,7 @@ export default function NewProject() {
             <div className="h-[1px] w-full bg-gray-400 my-2" />
             <p className="text-white text-center">
               Total amount to pay (including {fee}% portal fee): {totalAmount}{" "}
-              MATIC
+              TRX
             </p>
             {isLoading ? (
               <Loader />
