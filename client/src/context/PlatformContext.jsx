@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { ethers } from "ethers";
-// import { networks } from "../utils/networks";
 
 import { contractAddress } from "../utils/constants";
 import contractABI from "../utils/contractABI.json";
@@ -29,17 +28,6 @@ const getTronWeb = () => {
 const createTronContract = async () => {
   contract = await tronWeb.contract(contractABI, contractAddress);
 };
-
-// const createEthereumContract = () => {
-//   const provider = new ethers.providers.Web3Provider(tronWeb);
-//   const signer = provider.getSigner();
-//   const platformContract = new ethers.Contract(
-//     contractAddress,
-//     contractABI,
-//     signer
-//   );
-//   return platformContract;
-// };
 
 function MessageDisplay({ message, hash }) {
   return (
@@ -81,7 +69,6 @@ export const PlatformProvider = ({ children }) => {
         method: "tron_requestAccounts",
       });
       console.log(accounts);
-      // Access the decentralized web!
     } else {
       console.log("Please install TronLink-Extension!");
     }
@@ -92,20 +79,6 @@ export const PlatformProvider = ({ children }) => {
       const account = await tronWeb.defaultAddress.base58;
       console.log("Yes, catch it:", account);
       setCurrentAccount(account);
-      // Tronlink Sending Code
-      window.dispatchEvent(new Event("tronLink#initialized"));
-      // Example
-      // Suggested reception method
-      if (tronLink) {
-        handleTronLink();
-      } else {
-        window.addEventListener("tronLink#initialized", handleTronLink, {
-          once: true,
-        });
-        // If the event is not dispatched by the end of the timeout,
-        // the user probably doesn't have TronLink installed.
-        setTimeout(handleTronLink, 3000); // 3 seconds
-      }
     } else {
       console.log("No authorized accounts found");
     }
@@ -221,9 +194,6 @@ export const PlatformProvider = ({ children }) => {
 
   const getBalance = async () => {
     const b = await tronWeb.trx.getBalance(currentAccount);
-    // const provider = new ethers.providers.Web3Provider(tronWeb);
-    // const fetchedBalance = await provider.getBalance(currentAccount);
-    // const balanceInEth = ethers.utils.formatEther(fetchedBalance);
     setBalance(b / 1000000);
   };
 
