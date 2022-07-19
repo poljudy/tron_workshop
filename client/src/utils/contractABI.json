@@ -102,6 +102,11 @@
 						"internalType": "string",
 						"name": "result",
 						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "allProjectsIndex",
+						"type": "uint256"
 					}
 				],
 				"indexed": false,
@@ -197,6 +202,11 @@
 						"internalType": "string",
 						"name": "result",
 						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "allProjectsIndex",
+						"type": "uint256"
 					}
 				],
 				"indexed": false,
@@ -407,6 +417,11 @@
 						"internalType": "string",
 						"name": "result",
 						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "allProjectsIndex",
+						"type": "uint256"
 					}
 				],
 				"internalType": "struct Platform.Project[]",
@@ -495,6 +510,11 @@
 						"internalType": "string",
 						"name": "result",
 						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "allProjectsIndex",
+						"type": "uint256"
 					}
 				],
 				"internalType": "struct Platform.Project",

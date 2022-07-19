@@ -1,14 +1,19 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import ProjectCard from "../components/ProjectCard";
 import { PlatformContext } from "../context/PlatformContext";
 
 const MyTasks = () => {
-  const { projects, currentAccount } = useContext(PlatformContext);
+  const { projects, getAllProjects, currentAccount } = useContext(PlatformContext);
+
+  useEffect(() => {
+    getAllProjects();
+  }, []);
+
   function checkTask(task) {
-    return task.author.toLowerCase() === currentAccount.toLowerCase()
-    || task.assignee.toLowerCase() === currentAccount.toLowerCase()
-    || task.candidates.map((c) => c.toString().toLowerCase()).includes(currentAccount.toLowerCase());
+    return task.author === currentAccount
+    || task.assignee === currentAccount
+    || task.candidates.includes(currentAccount);
   }
   return (
     <>

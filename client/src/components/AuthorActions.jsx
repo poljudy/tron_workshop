@@ -143,7 +143,7 @@ const AuthorActions = () => {
           className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
           onClick={() => unassignProject(project.id)}
         >
-          Unassign Candidate
+          Unassign
         </button>
       )}
     </div>

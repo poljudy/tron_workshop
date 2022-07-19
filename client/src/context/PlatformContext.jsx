@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { ethers } from "ethers";
 
 import { contractAddress } from "../utils/constants";
 import contractABI from "../utils/contractABI.json";
 
-export const PlatformContext = React.createContext();
+export const PlatformContext = createContext();
 
-const { tronWeb, tronLink } = window;
-const address0 = "0x0000000000000000000000000000000000000000";
+const { tronWeb } = window;
+const address0 = "410000000000000000000000000000000000000000";
 let contract;
 const ProjectType = {
   0: "First Come First Serve",
@@ -33,15 +33,16 @@ function MessageDisplay({ message, hash }) {
   return (
     <div className="w-full">
       <p>{message}</p>
-      <p>Transaction hash: </p>
-      <a
-        className="text-[#6366f1]"
-        href={`https://nile.tronscan.org/#/transaction/${hash}`}
-        target="_blank"
-        rel="noreferrer"
-      >
-        {hash}
-      </a>
+      {hash && (
+        <a
+          className="text-[#6366f1]"
+          href={`https://nile.tronscan.org/#/transaction/${hash}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Check in tronscan
+        </a>
+      )}
     </div>
   );
 }
@@ -53,32 +54,36 @@ export const PlatformProvider = ({ children }) => {
     projectType: "0",
     reward: 0,
   });
+  // const persistentAccount = localStorage.getItem("account");
   const [currentAccount, setCurrentAccount] = useState("");
-  const [network, setNetwork] = useState("");
+  // const [network, setNetwork] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [projects, setProjects] = useState([]);
+  // const persistentProjects = localStorage.getItem("projects");
+  const [projects, setProjects] = useState("");
+  // const persistentProject = localStorage.getItem("project");
   const [project, setProject] = useState([]);
   const [fee, setFee] = useState(0);
   const [balance, setBalance] = useState(0);
   const [fetchedRating, setFetchedRating] = useState(0);
 
-  async function handleTronLink() {
-    if (tronLink) {
-      console.log("tronLink successfully detected!");
-      const accounts = await tronLink.request({
-        method: "tron_requestAccounts",
-      });
-      console.log(accounts);
-    } else {
-      console.log("Please install TronLink-Extension!");
-    }
-  }
+  // async function handleTronLink() {
+  //   if (tronLink) {
+  //     console.log("tronLink successfully detected!");
+  //     const accounts = await tronLink.request({
+  //       method: "tron_requestAccounts",
+  //     });
+  //     console.log(accounts);
+  //   } else {
+  //     console.log("Please install TronLink-Extension!");
+  //   }
+  // }
 
   const checkIfWalletIsConnected = async () => {
     if (tronWeb && tronWeb.defaultAddress.base58) {
       const account = await tronWeb.defaultAddress.base58;
       console.log("Yes, catch it:", account);
       setCurrentAccount(account);
+      // localStorage.setItem("account", JSON.stringify(account));
     } else {
       console.log("No authorized accounts found");
     }
@@ -194,32 +199,44 @@ export const PlatformProvider = ({ children }) => {
 
   const getBalance = async () => {
     const b = await tronWeb.trx.getBalance(currentAccount);
-    setBalance(b / 1000000);
+    setBalance(tronWeb.fromSun(b));
   };
 
   const getAllProjects = async () => {
     try {
       if (tronWeb) {
+        setIsLoading(true);
         const availableProjects = await contract.getAllProjects().call();
-        const structuredProjects = availableProjects.map((item) => ({
-          id: item.id.toNumber(),
-          title: item.title,
-          description: item.description,
-          projectType: ProjectType[item.projectType],
-          createdAt: new Date(
-            item.createdAt.toNumber() * 1000
-          ).toLocaleString(),
-          author: item.author,
-          candidates: item.candidates,
-          assignee: item.assignee === address0 ? "Unassigned" : item.assignee,
-          completedAt:
-            item.completedAt > 0
-              ? new Date(item.completedAt.toNumber() * 1000).toLocaleString()
-              : "Not completed yet",
-          reward: parseInt(item.reward, 10) / 10 ** 18,
-          result: item.result,
-        }));
+        const structuredProjects = availableProjects
+          .filter((item) => item.title && item.title !== "")
+          .map((item) => ({
+            id: item.id.toNumber(),
+            title: item.title,
+            description: item.description,
+            projectType: ProjectType[item.projectType],
+            createdAt: new Date(
+              item.createdAt.toNumber() * 1000
+            ).toLocaleString(),
+            author: tronWeb.address.fromHex(item.author),
+            candidates: item.candidates
+              ? item.candidates.map((candidate) =>
+                  tronWeb.address.fromHex(candidate)
+                )
+              : [],
+            assignee:
+              item.assignee === address0
+                ? "Unassigned"
+                : tronWeb.address.fromHex(item.assignee),
+            completedAt:
+              item.completedAt > 0
+                ? new Date(item.completedAt.toNumber() * 1000).toLocaleString()
+                : "Not completed yet",
+            reward: tronWeb.fromSun(item.reward),
+            result: item.result,
+          }));
         setProjects(structuredProjects);
+        // localStorage.setItem("projects", JSON.stringify(structuredProjects));
+        setIsLoading(false);
       } else {
         console.log("Tron is not present");
       }
@@ -262,6 +279,7 @@ export const PlatformProvider = ({ children }) => {
   const getProject = async (id) => {
     try {
       if (tronWeb) {
+        setIsLoading(true);
         const fetchedProject = await contract.getProject(id).call();
         const structuredProject = {
           id: fetchedProject.id.toNumber(),
@@ -271,22 +289,28 @@ export const PlatformProvider = ({ children }) => {
           createdAt: new Date(
             fetchedProject.createdAt.toNumber() * 1000
           ).toLocaleString(),
-          author: fetchedProject.author.toString().toLowerCase(),
-          candidates: fetchedProject.candidates,
+          author: tronWeb.address.fromHex(fetchedProject.author),
+          candidates: fetchedProject.candidates
+            ? fetchedProject.candidates.map((candidate) =>
+                tronWeb.address.fromHex(candidate)
+              )
+            : [],
           assignee:
             fetchedProject.assignee === address0
               ? "Unassigned"
-              : fetchedProject.assignee.toString().toLowerCase(),
+              : tronWeb.address.fromHex(fetchedProject.assignee),
           completedAt:
             fetchedProject.completedAt > 0
               ? new Date(
-                fetchedProject.completedAt.toNumber() * 1000
-              ).toLocaleString()
+                  fetchedProject.completedAt.toNumber() * 1000
+                ).toLocaleString()
               : "Not completed yet",
-          reward: parseInt(fetchedProject.reward, 10) / 10 ** 18,
+          reward: tronWeb.fromSun(fetchedProject.reward),
           result: fetchedProject.result,
         };
         setProject(structuredProject);
+        // localStorage.setItem("project", JSON.stringify(structuredProject));
+        setIsLoading(false);
       } else {
         console.log("Tron is not present");
       }
@@ -302,24 +326,22 @@ export const PlatformProvider = ({ children }) => {
         const { title, description, projectType, reward } = formData;
         const feeAmount = (reward / 100) * fee;
         const totalAmount = parseFloat(reward) + parseFloat(feeAmount);
-        const transactionHash = await contract.addProject(
-          {
-            title,
-            description,
-            projectType,
-            reward: ethers.utils.parseEther(reward),
-          },
-          {
-            value: ethers.utils.parseEther(totalAmount.toString()),
-          }
-        );
+        const projectToSend = [
+          title,
+          description,
+          projectType,
+          tronWeb.toSun(reward),
+        ];
         setIsLoading(true);
-        console.log(`Loading - ${transactionHash.hash}`);
-        await transactionHash.wait();
-        console.log(`Success - ${transactionHash.hash}`);
+        const transaction = await contract.addProject(projectToSend).send({
+          feeLimit: 1000_000_000,
+          callValue: tronWeb.toSun(totalAmount),
+          shouldPollResponse: true,
+        });
+        console.log(`Success - ${transaction}`);
         setIsLoading(false);
         window.location.replace("/");
-        notify("New task added.", transactionHash.hash);
+        notify("New task added successfully.");
       } else {
         console.log("No Tron object");
       }
@@ -332,18 +354,20 @@ export const PlatformProvider = ({ children }) => {
   const applyForProject = async (id) => {
     try {
       if (tronWeb) {
-        const transactionHash = await contract.applyForProject(
-          ethers.BigNumber.from(id)
-        );
         setIsLoading(true);
-        console.log(`Loading - ${transactionHash.hash}`);
-        await transactionHash.wait();
-        console.log(`Success - ${transactionHash.hash}`);
+        const transaction = await contract
+          .applyForProject(ethers.BigNumber.from(id))
+          .send({
+            feeLimit: 100_000_000,
+            callValue: 0,
+            shouldPollResponse: true,
+          });
+        console.log(`Success - ${transaction}`);
         setIsLoading(false);
-        const projectsList = await contract.getAllProjects();
+        const projectsList = await getAllProjects();
         setProjects(projectsList);
         await getProject(id);
-        notify("Successfully applied.", transactionHash.hash);
+        notify("Successfully applied.");
       } else {
         console.log("No Tron object");
       }
@@ -356,19 +380,20 @@ export const PlatformProvider = ({ children }) => {
   const submitResult = async (id, result) => {
     try {
       if (tronWeb) {
-        const transactionHash = await contract.submitResult(
-          ethers.BigNumber.from(id),
-          result
-        );
         setIsLoading(true);
-        console.log(`Loading - ${transactionHash.hash}`);
-        await transactionHash.wait();
-        console.log(`Success - ${transactionHash.hash}`);
+        const transaction = await contract
+          .submitResult(ethers.BigNumber.from(id), result)
+          .send({
+            feeLimit: 100_000_000,
+            callValue: 0,
+            shouldPollResponse: true,
+          });
+        console.log(`Success - ${transaction}`);
         setIsLoading(false);
-        const projectsList = await contract.getAllProjects();
+        const projectsList = await getAllProjects();
         setProjects(projectsList);
         await getProject(id);
-        notify("Result submitted.", transactionHash.hash);
+        notify("Result submitted successfully.");
       } else {
         console.log("No Tron object");
       }
@@ -381,18 +406,20 @@ export const PlatformProvider = ({ children }) => {
   const deleteProject = async (id) => {
     try {
       if (tronWeb) {
-        const transactionHash = await contract.deleteProject(
-          ethers.BigNumber.from(id)
-        );
         setIsLoading(true);
-        console.log(`Loading - ${transactionHash.hash}`);
-        await transactionHash.wait();
-        console.log(`Success - ${transactionHash.hash}`);
+        const transaction = await contract
+          .deleteProject(ethers.BigNumber.from(id))
+          .send({
+            feeLimit: 100_000_000,
+            callValue: 0,
+            shouldPollResponse: true,
+          });
+        console.log(`Success - ${transaction}`);
         setIsLoading(false);
-        const projectsList = await contract.getAllProjects();
+        const projectsList = await getAllProjects();
         setProjects(projectsList);
         window.location.replace("/");
-        notify("Task deleted.", transactionHash.hash);
+        notify("Task deleted successfully.");
       } else {
         console.log("No Tron object");
       }
@@ -405,19 +432,20 @@ export const PlatformProvider = ({ children }) => {
   const assignProject = async (id, candidate) => {
     try {
       if (tronWeb) {
-        const transactionHash = await contract.assignProject(
-          ethers.BigNumber.from(id),
-          candidate
-        );
         setIsLoading(true);
-        console.log(`Loading - ${transactionHash.hash}`);
-        await transactionHash.wait();
-        console.log(`Success - ${transactionHash.hash}`);
+        const transaction = await contract
+          .assignProject(ethers.BigNumber.from(id), candidate)
+          .send({
+            feeLimit: 100_000_000,
+            callValue: 0,
+            shouldPollResponse: true,
+          });
+        console.log(`Success - ${transaction}`);
         setIsLoading(false);
-        const projectsList = await contract.getAllProjects();
+        const projectsList = await getAllProjects();
         setProjects(projectsList);
         await getProject(id);
-        notify("Task assigned.", transactionHash.hash);
+        notify("Task assigned.");
       } else {
         console.log("No TRon object");
       }
@@ -430,18 +458,20 @@ export const PlatformProvider = ({ children }) => {
   const unassignProject = async (id) => {
     try {
       if (tronWeb) {
-        const transactionHash = await contract.unassignProject(
-          ethers.BigNumber.from(id)
-        );
         setIsLoading(true);
-        console.log(`Loading - ${transactionHash.hash}`);
-        await transactionHash.wait();
-        console.log(`Success - ${transactionHash.hash}`);
+        const transaction = await contract
+          .unassignProject(ethers.BigNumber.from(id))
+          .send({
+            feeLimit: 100_000_000,
+            callValue: 0,
+            shouldPollResponse: true,
+          });
+        console.log(`Success - ${transaction}`);
         setIsLoading(false);
-        const projectsList = await contract.getAllProjects();
+        const projectsList = await getAllProjects();
         setProjects(projectsList);
         await getProject(id);
-        notify("Task unassigned.", transactionHash.hash);
+        notify("Task unassigned.");
       } else {
         console.log("No Tron object");
       }
@@ -454,19 +484,20 @@ export const PlatformProvider = ({ children }) => {
   const completeProject = async (id, newRating) => {
     try {
       if (tronWeb) {
-        const transactionHash = await contract.completeProject(
-          ethers.BigNumber.from(id),
-          newRating
-        );
         setIsLoading(true);
-        console.log(`Loading - ${transactionHash.hash}`);
-        await transactionHash.wait();
-        console.log(`Success - ${transactionHash.hash}`);
+        const transaction = await contract
+          .completeProject(ethers.BigNumber.from(id), newRating)
+          .send({
+            feeLimit: 100_000_000,
+            callValue: 0,
+            shouldPollResponse: true,
+          });
+        console.log(`Success - ${transaction}`);
         setIsLoading(false);
-        const projectsList = await contract.getAllProjects();
+        const projectsList = await getAllProjects();
         setProjects(projectsList);
         await getProject(id);
-        notify("Task completed.", transactionHash.hash);
+        notify("Task completed.");
       } else {
         console.log("No Tron object");
       }
@@ -476,43 +507,100 @@ export const PlatformProvider = ({ children }) => {
     }
   };
 
-  // const handleProjectUpdatedEvent = () => {
-  //   const platformContract = createTronContract();
-  //   const onProjectUpdated = (p) => {
-  //     const structuredProject = {
-  //       id: p.id.toNumber(),
-  //       title: p.title,
-  //       description: p.description,
-  //       projectType: ProjectType[p.projectType],
-  //       createdAt: new Date(
-  //         p.createdAt.toNumber() * 1000
-  //       ).toLocaleString(),
-  //       author: p.author.toString().toLowerCase(),
-  //       candidates: p.candidates,
-  //       assignee:
-  //         p.assignee === address0
-  //           ? "Unassigned"
-  //           : p.assignee.toString().toLowerCase(),
-  //       completedAt:
-  //         p.completedAt > 0
-  //           ? new Date(
-  //             p.completedAt.toNumber() * 1000
-  //           ).toLocaleString()
-  //           : "Not completed yet",
-  //       reward: parseInt(p.reward, 10) / 10 ** 18,
-  //       result: p.result,
-  //     };
-  //     setProject(structuredProject);
-  //   };
-  //   if (tronWeb) {
-  //     platformContract.on("ProjectUpdated", onProjectUpdated);
-  //   }
-  //   return () => {
-  //     if (platformContract) {
-  //       platformContract.off("ProjectUpdated", onProjectUpdated);
-  //     }
-  //   };
-  // };
+  const handleProjectAddedEvent = async () => {
+    await contract.ProjectAdded().watch((err, eventResult) => {
+      if (err) {
+        return console.error('Error with "method" event:', err);
+      }
+      if (eventResult) {
+        console.log("eventResult:", eventResult);
+        setProjects((prevState) => [
+          ...prevState,
+          {
+            id: eventResult.id.toNumber(),
+            title: eventResult.title,
+            description: eventResult.description,
+            projectType: ProjectType[eventResult.projectType],
+            createdAt: new Date(
+              eventResult.createdAt.toNumber() * 1000
+            ).toLocaleString(),
+            author: eventResult.author,
+            candidates: eventResult.candidates,
+            assignee: eventResult.assignee === address0 ? "Unassigned" : eventResult.assignee,
+            completedAt:
+            eventResult.completedAt > 0
+                ? new Date(eventResult.completedAt.toNumber() * 1000).toLocaleString()
+                : "Not completed yet",
+            reward: parseInt(eventResult.reward, 10) / 10 ** 18,
+            result: eventResult.result,
+          },
+        ]);
+      }
+    });
+  };
+
+  const handleProjectUpdatedEvent = async () => {
+    await contract.ProjectUpdated().watch((err, eventResult) => {
+      if (err) {
+        return console.error('Error with "method" event:', err);
+      }
+      if (eventResult) {
+        console.log("eventResult:", eventResult);
+        const structuredProject = {
+          id: eventResult.id.toNumber(),
+          title: eventResult.title,
+          description: eventResult.description,
+          projectType: ProjectType[eventResult.projectType],
+          createdAt: new Date(
+            eventResult.createdAt.toNumber() * 1000
+          ).toLocaleString(),
+          author: tronWeb.address.fromHex(eventResult.author),
+          candidates: eventResult.candidates
+            ? eventResult.candidates.map((candidate) =>
+                tronWeb.address.fromHex(candidate)
+              )
+            : [],
+          assignee:
+            eventResult.assignee === address0
+              ? "Unassigned"
+              : tronWeb.address.fromHex(eventResult.assignee),
+          completedAt:
+            eventResult.completedAt > 0
+              ? new Date(
+                  eventResult.completedAt.toNumber() * 1000
+                ).toLocaleString()
+              : "Not completed yet",
+          reward: parseInt(eventResult.reward, 10) / 10 ** 18,
+          result: eventResult.result,
+        };
+        setProject(structuredProject);
+      }
+    });
+  };
+
+  const handleProjectDeletedEvent = async () => {
+    await contract.ProjectDeleted().watch((err, eventResult) => {
+      if (err) {
+        return console.error('Error with "method" event:', err);
+      }
+      if (eventResult) {
+        console.log("eventResult:", eventResult);
+        setProjects((current) => current.filter((p) => p.id !== eventResult.toNumber()));
+      }
+    });
+  };
+
+  const handleFeeUpdatedEvent = async () => {
+    await contract.FeeUpdated().watch((err, eventResult) => {
+      if (err) {
+        return console.error('Error with "method" event:', err);
+      }
+      if (eventResult) {
+        console.log("eventResult:", eventResult);
+        setFee(eventResult.toNumber());
+      }
+    });
+  };
 
   // This will run any time currentAccount changed
   useEffect(() => {
@@ -520,87 +608,32 @@ export const PlatformProvider = ({ children }) => {
     // Wait a while to ensure tronweb object has already injected
     setTimeout(async () => {
       // init contract object
+      setIsLoading(true);
       await createTronContract();
+      await checkIfWalletIsConnected();
       await getPlatformFee();
       await getBalance();
-      // await getRating(currentAccount);
-      // await getAllProjects();
-    }, 500);
-    checkIfWalletIsConnected();
+      await getRating(currentAccount);
+      await getAllProjects();
+      setIsLoading(false);
+    }, 1000);
   }, [currentAccount]);
 
-  // useEffect(() => {
-  //   const platformContract = createTronContract();
-  //   const onNewTask = (task) => {
-  //     setProjects((prevState) => [
-  //       ...prevState,
-  //       {
-  //         id: task.id.toNumber(),
-  //         title: task.title,
-  //         description: task.description,
-  //         projectType: ProjectType[task.projectType],
-  //         createdAt: new Date(
-  //           task.createdAt.toNumber() * 1000
-  //         ).toLocaleString(),
-  //         author: task.author,
-  //         candidates: task.candidates,
-  //         assignee:
-  //           task.assignee === address0 ? "Unassigned" : task.assignee,
-  //         completedAt:
-  //           task.completedAt > 0
-  //             ? new Date(task.completedAt.toNumber() * 1000).toLocaleString()
-  //             : "Not completed yet",
-  //         reward: parseInt(task.reward, 10) / 10 ** 18,
-  //         result: task.result,
-  //       },
-  //     ]);
-  //   };
-  //   if (tronWeb) {
-  //     // platformContract.on("ProjectAdded", onNewTask);
-  //   }
-  //   return () => {
-  //     if (platformContract) {
-  //       // platformContract.off("ProjectAdded", onNewTask);
-  //     }
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   const platformContract = createTronContract();
-  //   const onTaskDeleted = (id) => {
-  //     setProjects((current) => current.filter((p) => p.id !== id));
-  //   };
-  //   if (tronWeb) {
-  //     // platformContract.on("ProjectDeleted", onTaskDeleted);
-  //   }
-  //   return () => {
-  //     if (platformContract) {
-  //       // platformContract.off("ProjectDeleted", onTaskDeleted);
-  //     }
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   const platformContract = createTronContract();
-  //   const onTaskDeleted = (id) => {
-  //     setProjects((current) => current.filter((p) => p.id !== id.toNumber()));
-  //   };
-  //   if (tronWeb) {
-  //     // platformContract.on("ProjectDeleted", onTaskDeleted);
-  //   }
-  //   return () => {
-  //     if (platformContract) {
-  //       // platformContract.off("ProjectDeleted", onTaskDeleted);
-  //     }
-  //   };
-  // }, []);
+  useEffect(() => {
+    setTimeout(async () => {
+      await handleProjectAddedEvent();
+      await handleProjectUpdatedEvent();
+      await handleProjectDeletedEvent();
+      await handleFeeUpdatedEvent();
+    }, 100);
+  }, []);
 
   return (
     <PlatformContext.Provider
       value={{
         // connectWallet,
         // switchNetwork,
-        network,
+        // network,
         fee,
         projects,
         project,

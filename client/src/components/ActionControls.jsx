@@ -7,14 +7,15 @@ import CandidateActions from "./CandidateActions";
 const ActionButton = (params) => {
   const { currentAccount, applyForProject } =
     useContext(PlatformContext);
-  const current = currentAccount.toString().toLowerCase();
+  const current = currentAccount.toString();
   const isCandidate = (address) => {
-    for (let i = 0; i < params.project.candidates.length; i++) {
-      if (params.project.candidates[i].candidate.toLowerCase() === address) {
+    const candidates = params.project.candidates || [];
+    candidates.map((candidate) => {
+      if (candidate === address) {
         return true;
       }
-    }
-    return false;
+      return false;
+    });
   };
   let button;
   if (params.project.author === current) {

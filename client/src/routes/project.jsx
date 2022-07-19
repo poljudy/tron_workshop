@@ -10,7 +10,7 @@ export default function Project() {
   const projectId = params.id;
   useEffect(() => {
     getProject(projectId);
-    handleProjectUpdatedEvent();
+    // handleProjectUpdatedEvent();
   }, []);
 
   return (

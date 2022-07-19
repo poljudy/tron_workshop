@@ -15,7 +15,7 @@ const ProjectCard = ({
         <p className="mt-1 italic text-white text-sm md:w-9/12">Completed at: {completedAt}</p>
       </div>
       <div>
-        <p className="mt-2 text-white text-xl md:w-9/12">{reward} MATIC</p>
+        <p className="mt-2 text-white text-xl md:w-9/12">{reward} TRX</p>
       </div>
     </div>
   </Link>
