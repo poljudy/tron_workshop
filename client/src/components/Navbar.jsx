@@ -31,11 +31,7 @@ const Navbar = () => {
       <span className="mr-2">
         My rating: {fetchedRating === 0 ? "unrated" : `${fetchedRating}/5`}
       </span>
-      <img
-        alt="Network logo"
-        className="w-4 h-4 self-center"
-        src={tronLogo}
-      />
+      <img alt="Network logo" className="w-4 h-4 self-center" src={tronLogo} />
       <p>{shortenAddress(currentAccount)}</p>
     </div>
   );
@@ -51,16 +47,16 @@ const Navbar = () => {
       </div>
       <ul className="text-white md:flex hidden list-none flex-row justify-between items-center flex-initial">
         {/* {currentAccount && network === "Polygon Mumbai Testnet" ? ( */}
-          <div className="flex flex-row">
-            <Link to="/new">
-              <NavBarItem title="Add Task" />
-            </Link>
-            <Link to="/mytasks">
-              <NavBarItem title="My Tasks" />
-            </Link>
-          </div>
+        <div className="flex flex-row">
+          <Link to="/new">
+            <NavBarItem title="Add Task" />
+          </Link>
+          <Link to="/mytasks">
+            <NavBarItem title="My Tasks" />
+          </Link>
+        </div>
         {/* ) : ( */}
-          <li />
+        <li />
         {/* )} */}
         <li>
           {!currentAccount && renderNotConnectedContainer()}

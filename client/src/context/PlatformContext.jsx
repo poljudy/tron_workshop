@@ -54,132 +54,23 @@ export const PlatformProvider = ({ children }) => {
     projectType: "0",
     reward: 0,
   });
-  // const persistentAccount = localStorage.getItem("account");
   const [currentAccount, setCurrentAccount] = useState("");
-  // const [network, setNetwork] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  // const persistentProjects = localStorage.getItem("projects");
   const [projects, setProjects] = useState("");
-  // const persistentProject = localStorage.getItem("project");
   const [project, setProject] = useState([]);
   const [fee, setFee] = useState(0);
   const [balance, setBalance] = useState(0);
   const [fetchedRating, setFetchedRating] = useState(0);
-
-  // async function handleTronLink() {
-  //   if (tronLink) {
-  //     console.log("tronLink successfully detected!");
-  //     const accounts = await tronLink.request({
-  //       method: "tron_requestAccounts",
-  //     });
-  //     console.log(accounts);
-  //   } else {
-  //     console.log("Please install TronLink-Extension!");
-  //   }
-  // }
 
   const checkIfWalletIsConnected = async () => {
     if (tronWeb && tronWeb.defaultAddress.base58) {
       const account = await tronWeb.defaultAddress.base58;
       console.log("Yes, catch it:", account);
       setCurrentAccount(account);
-      // localStorage.setItem("account", JSON.stringify(account));
     } else {
       console.log("No authorized accounts found");
     }
-    //   const chainId = await tronWeb.request({ method: "eth_chainId" });
-    //   setNetwork(networks[chainId]);
-    //   // Reload the page when they change networks
-    //   function handleChainChanged() {
-    //     window.location.reload();
-    //   }
-    //   tronWeb.on("chainChanged", handleChainChanged);
   };
-
-  // const checkIfWalletIsConnected = async () => {
-  //   if (!tronWeb) {
-  //     alert("Make sure you have TronLink! -> https://www.tronlink.org/");
-  //     return;
-  //   }
-  //   console.log("We have the tron object", tronWeb);
-  //   // Check if we're authorized to access the user's wallet
-  //   const accounts = await tronWeb.request({ method: "eth_accounts" });
-  //   // Users can have multiple authorized accounts, we grab the first one if its there!
-  //   if (accounts.length !== 0) {
-  //     const account = accounts[0];
-  //     console.log("Found an authorized account:", account);
-  //     setCurrentAccount(account);
-  //   } else {
-  //     console.log("No authorized accounts found");
-  //   }
-  //   const chainId = await tronWeb.request({ method: "eth_chainId" });
-  //   setNetwork(networks[chainId]);
-  //   // Reload the page when they change networks
-  //   function handleChainChanged() {
-  //     window.location.reload();
-  //   }
-  //   tronWeb.on("chainChanged", handleChainChanged);
-  // };
-
-  // const connectWallet = async () => {
-  //   try {
-  //     if (!tronWeb) {
-  //       alert("Get MetaMask -> https://metamask.io/");
-  //       return;
-  //     }
-  //     // Fancy method to request access to account.
-  //     const accounts = await tronWeb.request({
-  //       method: "eth_requestAccounts",
-  //     });
-  //     console.log("Connected", accounts[0]);
-  //     setCurrentAccount(accounts[0]);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const switchNetwork = async () => {
-  //   if (window.ethereum) {
-  //     try {
-  //       // Try to switch to the Mumbai testnet
-  //       await window.ethereum.request({
-  //         method: "wallet_switchEthereumChain",
-  //         params: [{ chainId: "0x13881" }], // Check networks.js for hexadecimal network ids
-  //       });
-  //     } catch (error) {
-  //       // This error code means that the chain we want has not been added to MetaMask
-  //       // In this case we ask the user to add it to their MetaMask
-  //       if (error.code === 4902) {
-  //         try {
-  //           await window.ethereum.request({
-  //             method: "wallet_addEthereumChain",
-  //             params: [
-  //               {
-  //                 chainId: "0x13881",
-  //                 chainName: "Polygon Mumbai Testnet",
-  //                 rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
-  //                 nativeCurrency: {
-  //                   name: "Mumbai Matic",
-  //                   symbol: "MATIC",
-  //                   decimals: 18,
-  //                 },
-  //                 blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
-  //               },
-  //             ],
-  //           });
-  //         } catch (err) {
-  //           console.log(err);
-  //         }
-  //       }
-  //       console.log(error);
-  //     }
-  //   } else {
-  //     // If window.ethereum is not found then MetaMask is not installed
-  //     alert(
-  //       "MetaMask is not installed. Please install it to use this app: https://metamask.io/download.html"
-  //     );
-  //   }
-  // };
 
   const notify = (message, hash) =>
     toast.success(<MessageDisplay message={message} hash={hash} />, {
@@ -631,9 +522,6 @@ export const PlatformProvider = ({ children }) => {
   return (
     <PlatformContext.Provider
       value={{
-        // connectWallet,
-        // switchNetwork,
-        // network,
         fee,
         projects,
         project,
@@ -652,7 +540,6 @@ export const PlatformProvider = ({ children }) => {
         handleChange,
         getRating,
         fetchedRating,
-        // handleProjectUpdatedEvent,
         formData,
         address0,
       }}
