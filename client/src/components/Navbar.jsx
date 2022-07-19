@@ -11,7 +11,7 @@ const NavBarItem = ({ title, classprops }) => (
 );
 
 const Navbar = () => {
-  const { currentAccount, connectWallet, network, fetchedRating } =
+  const { currentAccount, connectWallet, fetchedRating } =
     useContext(PlatformContext);
   const [toggleMenu, setToggleMenu] = React.useState(false);
 
@@ -46,18 +46,18 @@ const Navbar = () => {
         </Link>
       </div>
       <ul className="text-white md:flex hidden list-none flex-row justify-between items-center flex-initial">
-        {/* {currentAccount && network === "Polygon Mumbai Testnet" ? ( */}
-        <div className="flex flex-row">
-          <Link to="/new">
-            <NavBarItem title="Add Task" />
-          </Link>
-          <Link to="/mytasks">
-            <NavBarItem title="My Tasks" />
-          </Link>
-        </div>
-        {/* ) : ( */}
-        <li />
-        {/* )} */}
+        {currentAccount ? (
+          <div className="flex flex-row">
+            <Link to="/new">
+              <NavBarItem title="Add Task" />
+            </Link>
+            <Link to="/mytasks">
+              <NavBarItem title="My Tasks" />
+            </Link>
+          </div>
+        ) : (
+          <li />
+        )}
         <li>
           {!currentAccount && renderNotConnectedContainer()}
           {currentAccount && renderAccountInfo()}
@@ -90,7 +90,7 @@ const Navbar = () => {
               {!currentAccount && renderNotConnectedContainer()}
               {currentAccount && renderAccountInfo()}
             </li>
-            {network === "Polygon Mumbai Testnet" ? (
+            {currentAccount ? (
               <>
                 <li>
                   <Link to="/new">
@@ -101,9 +101,7 @@ const Navbar = () => {
                   <NavBarItem title="My Tasks" />
                 </Link>
               </>
-            ) : (
-              <li />
-            )}
+            ) : null}
           </ul>
         )}
       </div>

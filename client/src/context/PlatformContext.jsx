@@ -7,7 +7,7 @@ import contractABI from "../utils/contractABI.json";
 
 export const PlatformContext = createContext();
 
-const { tronWeb } = window;
+const { tronWeb, tronLink } = window;
 const address0 = "410000000000000000000000000000000000000000";
 let contract;
 const ProjectType = {
@@ -61,6 +61,22 @@ export const PlatformProvider = ({ children }) => {
   const [fee, setFee] = useState(0);
   const [balance, setBalance] = useState(0);
   const [fetchedRating, setFetchedRating] = useState(0);
+
+  const connectWallet = async () => {
+    try {
+      if (!tronLink) {
+        alert("Please install TronLink -> https://www.tronlink.org/");
+        return;
+      }
+      // Fancy method to request access to account.
+      const accounts = await tronLink.request({
+        method: "tron_requestAccounts",
+      });
+      setCurrentAccount(accounts[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const checkIfWalletIsConnected = async () => {
     if (tronWeb && tronWeb.defaultAddress.base58) {
@@ -126,7 +142,6 @@ export const PlatformProvider = ({ children }) => {
             result: item.result,
           }));
         setProjects(structuredProjects);
-        // localStorage.setItem("projects", JSON.stringify(structuredProjects));
         setIsLoading(false);
       } else {
         console.log("Tron is not present");
@@ -499,14 +514,12 @@ export const PlatformProvider = ({ children }) => {
     // Wait a while to ensure tronweb object has already injected
     setTimeout(async () => {
       // init contract object
-      setIsLoading(true);
       await createTronContract();
       await checkIfWalletIsConnected();
       await getPlatformFee();
       await getBalance();
       await getRating(currentAccount);
       await getAllProjects();
-      setIsLoading(false);
     }, 1000);
   }, [currentAccount]);
 
@@ -522,6 +535,7 @@ export const PlatformProvider = ({ children }) => {
   return (
     <PlatformContext.Provider
       value={{
+        connectWallet,
         fee,
         projects,
         project,
