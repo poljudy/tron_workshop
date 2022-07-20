@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { HiSearch } from "react-icons/hi";
 import { useSearchParams } from "react-router-dom";
 import { PlatformContext } from "../context/PlatformContext";
-import { AuthContext } from "../context/AuthContext";
 import ProjectCard from "./ProjectCard";
 
 const Projects = () => {

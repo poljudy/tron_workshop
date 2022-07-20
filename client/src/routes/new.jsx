@@ -1,7 +1,8 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { PlatformContext } from "../context/PlatformContext";
+import { AuthContext } from "../context/AuthContext";
 import { Loader } from "../components";
 
 const FormField = ({ placeholder, name, type, value, handleChange }) => {
@@ -43,8 +44,21 @@ const FormField = ({ placeholder, name, type, value, handleChange }) => {
 };
 
 export default function NewProject() {
-  const { handleChange, addProject, formData, isLoading, fee, balance } =
+  const { handleChange, addProject, formData, isLoading, fee } =
     useContext(PlatformContext);
+
+  const { currentAccount } = useContext(AuthContext);
+
+  const [balance, setBalance] = useState(0);
+
+  const getBalance = async () => {
+    const b = await window.tronWeb.trx.getBalance(currentAccount);
+    setBalance(window.tronWeb.fromSun(b));
+  };
+
+  useEffect(() => {
+    getBalance();
+  });
 
   const handleSubmit = (e) => {
     const { title, description, reward } = formData;
