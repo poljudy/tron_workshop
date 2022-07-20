@@ -8,13 +8,13 @@ const FormField = ({ placeholder, name, type, value, handleChange }) => {
   if (name === "projectType") {
     return (
       <select
-        className="block appearance-none w-full bg-transparent border text-white py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:border-gray-500"
+        className="block w-full bg-transparent border text-white py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:border-gray-500"
         value={value}
         type={type}
         onChange={(e) => handleChange(e, name)}
       >
-        <option className="bg-slate-800" value="0">First Come First Serve</option>
-        <option className="bg-slate-800" value="1">Author Selected</option>
+        <option value="0">First Come First Serve</option>
+        <option value="1">Author Selected</option>
       </select>
     );
   }
