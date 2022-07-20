@@ -13,8 +13,8 @@ const FormField = ({ placeholder, name, type, value, handleChange }) => {
         type={type}
         onChange={(e) => handleChange(e, name)}
       >
-        <option className="bg-slate-800" value="0">First Come First Serve</option>
-        <option className="bg-slate-800" value="1">Author Selected</option>
+        <option style={{ backgroundColor: "rgb(30 41 59)" }} className="bg-slate-800" value="0">First Come First Serve</option>
+        <option style={{ backgroundColor: "rgb(30 41 59)" }} value="1">Author Selected</option>
       </select>
     );
   }
