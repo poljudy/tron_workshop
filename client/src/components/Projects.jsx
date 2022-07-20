@@ -2,14 +2,16 @@ import { useContext } from "react";
 import { HiSearch } from "react-icons/hi";
 import { useSearchParams } from "react-router-dom";
 import { PlatformContext } from "../context/PlatformContext";
+import { AuthContext } from "../context/AuthContext";
 import ProjectCard from "./ProjectCard";
 
 const Projects = () => {
-  const { currentAccount, projects } = useContext(PlatformContext);
+  // const { currentAccount } = useContext(AuthContext);
+  const { projects } = useContext(PlatformContext);
   const [searchParams, setSearchParams] = useSearchParams();
   return (
     <>
-      {currentAccount && projects ? (
+      {projects ? (
         <div>
           <p className="text-white text-3xl text-center my-2">
             {projects.length === 0
@@ -40,7 +42,7 @@ const Projects = () => {
         </div>
       ) : (
         <p className="text-white text-3xl text-center my-2">
-          Connect your account to see the latest projects
+          No tasks yet
         </p>
       )}
       <div className="flex flex-wrap justify-center items-center mt-10">

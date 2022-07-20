@@ -1,9 +1,10 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { HiMenuAlt4 } from "react-icons/hi";
 import { AiOutlineClose, AiFillPlayCircle } from "react-icons/ai";
 import { shortenAddress } from "../utils/shortenAddress";
 import { PlatformContext } from "../context/PlatformContext";
+import { AuthContext } from "../context/AuthContext";
 import tronLogo from "../../images/tronlogo.png";
 
 const NavBarItem = ({ title, classprops }) => (
@@ -11,10 +12,11 @@ const NavBarItem = ({ title, classprops }) => (
 );
 
 const Navbar = () => {
-  const { currentAccount, connectWallet, fetchedRating } =
+  const { currentAccount, connectWallet } =
+    useContext(AuthContext);
+  const { fetchedRating } =
     useContext(PlatformContext);
-  const [toggleMenu, setToggleMenu] = React.useState(false);
-
+  const [toggleMenu, setToggleMenu] = useState(false);
   const renderNotConnectedContainer = () => (
     <button
       type="button"

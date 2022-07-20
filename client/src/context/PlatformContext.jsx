@@ -1,13 +1,13 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { ethers } from "ethers";
-
+// import { AuthContext } from "./AuthContext";
 import { contractAddress } from "../utils/constants";
 import contractABI from "../utils/contractABI.json";
 
 export const PlatformContext = createContext();
 
-const { tronWeb, tronLink } = window;
+const { tronWeb } = window;
 const address0 = "410000000000000000000000000000000000000000";
 let contract;
 const ProjectType = {
@@ -15,19 +15,17 @@ const ProjectType = {
   1: "Author Selected",
 };
 
-const getTronWeb = () => {
-  // Obtain the tronweb object injected by tronLink
-  const obj = setInterval(async () => {
-    if (tronWeb && tronWeb.defaultAddress.base58) {
-      clearInterval(obj);
-      console.log("tronWeb successfully detected!");
-    }
-  }, 10);
-};
+// const getTronWeb = () => {
+//   // Obtain the tronweb object injected by tronLink
+//   const obj = setInterval(async () => {
+//     if (tronWeb && tronWeb.defaultAddress.base58) {
+//       clearInterval(obj);
+//       console.log("tronWeb successfully detected!");
+//     }
+//   }, 10);
+// };
 
-const createTronContract = async () => {
-  contract = await tronWeb.contract(contractABI, contractAddress);
-};
+
 
 function MessageDisplay({ message, hash }) {
   return (
@@ -62,31 +60,19 @@ export const PlatformProvider = ({ children }) => {
   const [balance, setBalance] = useState(0);
   const [fetchedRating, setFetchedRating] = useState(0);
 
-  const connectWallet = async () => {
-    try {
-      if (!tronLink) {
-        alert("Please install TronLink -> https://www.tronlink.org/");
-        return;
-      }
-      // Fancy method to request access to account.
-      const accounts = await tronLink.request({
-        method: "tron_requestAccounts",
-      });
-      setCurrentAccount(accounts[0]);
-    } catch (error) {
-      console.log(error);
-    }
+  const createTronContract = async () => {
+    contract = await tronWeb.contract(contractABI, contractAddress);
   };
 
-  const checkIfWalletIsConnected = async () => {
-    if (tronWeb && tronWeb.defaultAddress.base58) {
-      const account = await tronWeb.defaultAddress.base58;
-      console.log("Yes, catch it:", account);
-      setCurrentAccount(account);
-    } else {
-      console.log("No authorized accounts found");
-    }
-  };
+  // const checkIfWalletIsConnected = async () => {
+  //   if (tronWeb && tronWeb.defaultAddress.base58) {
+  //     const account = await tronWeb.defaultAddress.base58;
+  //     console.log("Yes, catch it:", account);
+  //     setCurrentAccount(account);
+  //   } else {
+  //     console.log("No authorized accounts found");
+  //   }
+  // };
 
   const notify = (message, hash) =>
     toast.success(<MessageDisplay message={message} hash={hash} />, {
@@ -508,34 +494,30 @@ export const PlatformProvider = ({ children }) => {
     });
   };
 
-  // This will run any time currentAccount changed
   useEffect(() => {
-    getTronWeb();
-    // Wait a while to ensure tronweb object has already injected
     setTimeout(async () => {
       // init contract object
       await createTronContract();
-      await checkIfWalletIsConnected();
+      await getAllProjects();
+      // await checkIfWalletIsConnected();
       await getPlatformFee();
       await getBalance();
       await getRating(currentAccount);
-      await getAllProjects();
-    }, 1000);
-  }, [currentAccount]);
-
-  useEffect(() => {
-    setTimeout(async () => {
-      await handleProjectAddedEvent();
-      await handleProjectUpdatedEvent();
-      await handleProjectDeletedEvent();
-      await handleFeeUpdatedEvent();
-    }, 100);
+    }, 2000);
   }, []);
+
+  // useEffect(() => {
+  //   setTimeout(async () => {
+  //     await handleProjectAddedEvent();
+  //     await handleProjectUpdatedEvent();
+  //     await handleProjectDeletedEvent();
+  //     await handleFeeUpdatedEvent();
+  //   }, 100);
+  // }, []);
 
   return (
     <PlatformContext.Provider
       value={{
-        connectWallet,
         fee,
         projects,
         project,
