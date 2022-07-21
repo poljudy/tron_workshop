@@ -2,9 +2,8 @@
 
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "./github/OpenZeppelin/openzeppelin-contracts/contracts/access/Ownable.sol";
+import "./github/OpenZeppelin/openzeppelin-contracts/contracts/security/ReentrancyGuard.sol";
 
 contract Platform is Ownable, ReentrancyGuard {
 
@@ -25,6 +24,7 @@ contract Platform is Ownable, ReentrancyGuard {
         ProjectType projectType;
         uint256 reward;
         string result;
+        uint allProjectsIndex;
     }
 
     struct ReceivedProject {
@@ -41,7 +41,8 @@ contract Platform is Ownable, ReentrancyGuard {
 
     uint8 public platformFeePercentage = 1; // Platform fee in %
     uint256 public totalFees;
-    uint256 projectsCounter = 0;
+    uint256 mappingLength = 0;
+    uint[] allProjects;
     mapping(uint256 => Project) projects;
     mapping(address => uint8) ratings;
 
@@ -135,6 +136,12 @@ contract Platform is Ownable, ReentrancyGuard {
         return uint8(_prevRating + _newRating) / 2;
     }
 
+    function calculatePlatformFee(uint256 _reward) internal view returns (uint256) {
+        uint256 platformFee = (_reward / 100) *
+            platformFeePercentage;
+        return platformFee;
+    }
+
     // Contract functions
 
     function addProject(ReceivedProject calldata _newProject)
@@ -148,12 +155,11 @@ contract Platform is Ownable, ReentrancyGuard {
             "Description is required."
         );
         require(_newProject.reward > 0, "Reward is required.");
-        uint256 platformFee = (_newProject.reward / 100) *
-            platformFeePercentage;
+        uint256 platformFee = calculatePlatformFee(_newProject.reward);
         uint256 amount = _newProject.reward + platformFee;
         require(msg.value == amount, "Wrong amount submitted.");
         totalFees += platformFee;
-        uint256 _id = projectsCounter;
+        uint256 _id = mappingLength + 1;
         projects[_id].id = _id;
         projects[_id].title = _newProject.title;
         projects[_id].description = _newProject.description;
@@ -161,7 +167,9 @@ contract Platform is Ownable, ReentrancyGuard {
         projects[_id].createdAt = block.timestamp;
         projects[_id].reward = _newProject.reward;
         projects[_id].projectType = _newProject.projectType;
-        projectsCounter++;
+        projects[_id].allProjectsIndex = allProjects.length;
+        allProjects.push(_id);
+        mappingLength++;
         emit ProjectAdded(projects[_id]);
         return true;
     }
@@ -212,6 +220,7 @@ contract Platform is Ownable, ReentrancyGuard {
             projects[_id].assignee = payable(msg.sender);
             emit ProjectUpdated(projects[_id]);
         } else {
+            require(!isAddressApplied(_id, msg.sender), "Account already added to the candidates list");
             projects[_id].candidates.push(Candidate(msg.sender, ratings[msg.sender]));
         }
         emit ProjectUpdated(projects[_id]);
@@ -266,8 +275,10 @@ contract Platform is Ownable, ReentrancyGuard {
         );
         (bool success, ) = projects[_id].author.call{value: projects[_id].reward}("");
         require(success, "Tranfer failed.");
-        projectsCounter = projectsCounter - 1;
         delete projects[_id];
+        delete allProjects[projects[_id].allProjectsIndex];
+        allProjects[projects[_id].allProjectsIndex] = allProjects[allProjects.length - 1];
+        allProjects.pop();
         emit ProjectDeleted(_id);
         return true;
     }
@@ -288,11 +299,9 @@ contract Platform is Ownable, ReentrancyGuard {
     // Getters
 
     function getAllProjects() public view returns (Project[] memory) {
-        Project[] memory projectList = new Project[](projectsCounter);
-        for (uint256 i = 0; i < projectsCounter; i++) {
-            if (projects[i].author != address(0)) {
-                projectList[i] = projects[i];
-            }
+        Project[] memory projectList = new Project[](allProjects.length);
+        for (uint256 i; i < allProjects.length; i++) {
+            projectList[i] = projects[allProjects[i]];
         }
         return projectList;
     }

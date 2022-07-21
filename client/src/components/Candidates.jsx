@@ -25,7 +25,7 @@ const Candidates = (props) => {
     );
   }
   return (
-    <p className="text-white text-3xl text-center my-2">
+    <p className="text-white text-xl my-2">
       No candidates applied yet
     </p>
   );
