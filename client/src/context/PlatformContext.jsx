@@ -403,9 +403,9 @@ export const PlatformProvider = ({ children }) => {
 
   // Events listeners
 
-  useEffect(async () => {
-    const contract = await createTronContract();
-    const onNewTask = async () => {
+  useEffect(() => {
+    setInterval(async () => {
+      const contract = await createTronContract();
       await contract.ProjectAdded().watch((err, eventResult) => {
         if (err) {
           return console.error('Error with "method" event:', err);
@@ -440,20 +440,12 @@ export const PlatformProvider = ({ children }) => {
           ]);
         }
       });
-    };
-    if (tronWeb) {
-      contract.on("ProjectAdded", onNewTask);
-    }
-    return () => {
-      if (contract) {
-        contract.off("ProjectAdded", onNewTask);
-      }
-    };
+    }, 1000);
   }, []);
 
   useEffect(async () => {
     const contract = await createTronContract();
-    const onTaskUpdated = async () => {
+    setInterval(async () => {
       await contract.ProjectUpdated().watch((err, eventResult) => {
         if (err) {
           return console.error('Error with "method" event:', err);
@@ -490,20 +482,12 @@ export const PlatformProvider = ({ children }) => {
           setProject(structuredProject);
         }
       });
-    };
-    if (tronWeb) {
-      contract.on("ProjectUpdated", onTaskUpdated);
-    }
-    return () => {
-      if (contract) {
-        contract.off("ProjectUpdated", onTaskUpdated);
-      }
-    };
+    }, 1000);
   }, []);
 
   useEffect(async () => {
     const contract = await createTronContract();
-    const onFeeUpdated = async () => {
+    setInterval(async () => {
       await contract.FeeUpdated().watch((err, eventResult) => {
         if (err) {
           return console.error('Error with "method" event:', err);
@@ -513,20 +497,12 @@ export const PlatformProvider = ({ children }) => {
           setFee(eventResult.result.toNumber());
         }
       });
-    };
-    if (tronWeb) {
-      contract.on("ProjectDeleted", onFeeUpdated);
-    }
-    return () => {
-      if (contract) {
-        contract.off("ProjectDeleted", onFeeUpdated);
-      }
-    };
+    }, 1000);
   }, []);
 
   useEffect(async () => {
     const contract = await createTronContract();
-    const onTaskDeleted = async () => {
+    setInterval(async () => {
       await contract.ProjectDeleted().watch((err, eventResult) => {
         if (err) {
           return console.error('Error with "method" event:', err);
@@ -538,15 +514,7 @@ export const PlatformProvider = ({ children }) => {
           );
         }
       });
-    };
-    if (tronWeb) {
-      contract.on("ProjectDeleted", onTaskDeleted);
-    }
-    return () => {
-      if (contract) {
-        contract.off("ProjectDeleted", onTaskDeleted);
-      }
-    };
+    }, 1000);
   }, []);
 
   return (
