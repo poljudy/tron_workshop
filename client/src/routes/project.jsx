@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { PlatformContext } from "../context/PlatformContext";
-import { Loader, ActionControls } from "../components";
+import { Loader, ActionControls, Candidates } from "../components";
 
 export default function Project() {
   const params = useParams();
@@ -10,7 +10,7 @@ export default function Project() {
   const projectId = params.id;
   useEffect(() => {
     getProject(projectId);
-  }, [params]);
+  }, []);
 
   return (
     <div className="min-h-screen">
@@ -29,10 +29,10 @@ export default function Project() {
           {project.projectType === "First Come First Serve" ? (
             <span />
           ) : (
-            <p className="mt-1 text-white text-sm md:w-9/12">
-              Candidates applied:{" "}
-              {project.candidates ? project.candidates.length : 0}
-            </p>
+            <div className="mt-1 text-white text-sm md:w-9/12">
+              Candidates applied ({project.candidates ? project.candidates.length : 0}):
+              <Candidates candidates={project.candidates} />
+            </div>
           )}
 
           <p className="mt-1 text-white text-sm md:w-9/12">

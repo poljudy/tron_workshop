@@ -2,9 +2,7 @@ import { useContext } from "react";
 import { PlatformContext } from "../context/PlatformContext";
 
 const CandidateActions = () => {
-  const {
-    project
-  } = useContext(PlatformContext);
+  const { project } = useContext(PlatformContext);
 
   if (project.assignee === "Unassigned") {
     return (

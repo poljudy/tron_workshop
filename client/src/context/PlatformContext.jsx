@@ -7,9 +7,7 @@ import contractABI from "../utils/contractABI.json";
 
 export const PlatformContext = createContext();
 
-const { tronWeb } = window;
 const address0 = "410000000000000000000000000000000000000000";
-let contract;
 const ProjectType = {
   0: "First Come First Serve",
   1: "Author Selected",
@@ -45,12 +43,8 @@ export const PlatformProvider = ({ children }) => {
   const [project, setProject] = useState([]);
   const [fee, setFee] = useState(0);
   const [fetchedRating, setFetchedRating] = useState(0);
-
-  const createTronContract = async () => {
-    contract = await tronWeb.contract(contractABI, contractAddress);
-  };
-
-  const { currentAccount } = useContext(AuthContext);
+  // const [contract, setContract] = useState(undefined);
+  const { tronWeb, currentAccount } = useContext(AuthContext);
 
   const notify = (message, hash) => toast.success(<MessageDisplay message={message} hash={hash} />, {
     position: "top-right",
@@ -67,10 +61,16 @@ export const PlatformProvider = ({ children }) => {
     setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
   };
 
+  const createTronContract = async () => {
+    const c = await tronWeb.contract(contractABI, contractAddress);
+    return c;
+  };
+
   const getAllProjects = async () => {
     try {
       if (tronWeb) {
         setIsLoading(true);
+        const contract = await createTronContract();
         const availableProjects = await contract.getAllProjects().call();
         const structuredProjects = availableProjects
           .filter((item) => item.title && item.title !== "")
@@ -83,8 +83,14 @@ export const PlatformProvider = ({ children }) => {
               item.createdAt.toNumber() * 1000
             ).toLocaleString(),
             author: tronWeb.address.fromHex(item.author),
-            candidates: item.candidates
-              ? item.candidates.map((candidate) => tronWeb.address.fromHex(candidate))
+            candidates: item[5]
+              ? item[5].map((c) => {
+                const candidate = {
+                  candidate: tronWeb.address.fromHex(c.candidate),
+                  rating: c.rating
+                };
+                return candidate;
+              })
               : [],
             assignee:
               item.assignee === address0
@@ -105,12 +111,14 @@ export const PlatformProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
       alert(error.message);
+      setIsLoading(false);
     }
   };
 
   const getPlatformFee = async () => {
     try {
       if (tronWeb) {
+        const contract = await createTronContract();
         const fetchedFee = await contract.platformFeePercentage().call();
         setFee(fetchedFee);
       } else {
@@ -124,7 +132,8 @@ export const PlatformProvider = ({ children }) => {
 
   const getRating = async (address) => {
     try {
-      if (tronWeb) {
+      if (tronWeb && address) {
+        const contract = await createTronContract();
         const r = await contract.getRating(address).call();
         setFetchedRating(r);
       } else {
@@ -140,6 +149,7 @@ export const PlatformProvider = ({ children }) => {
     try {
       if (tronWeb) {
         setIsLoading(true);
+        const contract = await createTronContract();
         const fetchedProject = await contract.getProject(id).call();
         const structuredProject = {
           id: fetchedProject.id.toNumber(),
@@ -150,8 +160,14 @@ export const PlatformProvider = ({ children }) => {
             fetchedProject.createdAt.toNumber() * 1000
           ).toLocaleString(),
           author: tronWeb.address.fromHex(fetchedProject.author),
-          candidates: fetchedProject.candidates
-            ? fetchedProject.candidates.map((candidate) => tronWeb.address.fromHex(candidate))
+          candidates: fetchedProject[5]
+            ? fetchedProject[5].map((c) => {
+              const candidate = {
+                candidate: tronWeb.address.fromHex(c.candidate),
+                rating: c.rating
+              };
+              return candidate;
+            })
             : [],
           assignee:
             fetchedProject.assignee === address0
@@ -174,6 +190,7 @@ export const PlatformProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
       alert(error.message);
+      setIsLoading(false);
     }
   };
 
@@ -190,6 +207,7 @@ export const PlatformProvider = ({ children }) => {
           tronWeb.toSun(reward),
         ];
         setIsLoading(true);
+        const contract = await createTronContract();
         const transaction = await contract.addProject(projectToSend).send({
           feeLimit: 1000_000_000,
           callValue: tronWeb.toSun(totalAmount),
@@ -205,6 +223,7 @@ export const PlatformProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
       alert("Oops! Something went wrong. See the browser console for details.");
+      setIsLoading(false);
     }
   };
 
@@ -213,6 +232,7 @@ export const PlatformProvider = ({ children }) => {
       if (tronWeb) {
         setIsLoading(true);
         const bnId = ethers.BigNumber.from(id);
+        const contract = await createTronContract();
         const transaction = await contract.applyForProject(bnId).send({
           feeLimit: 100_000_000,
           callValue: 0,
@@ -229,6 +249,7 @@ export const PlatformProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
       alert("Oops! Something went wrong. See the browser console for details.");
+      setIsLoading(false);
     }
   };
 
@@ -236,6 +257,7 @@ export const PlatformProvider = ({ children }) => {
     try {
       if (tronWeb) {
         setIsLoading(true);
+        const contract = await createTronContract();
         const transaction = await contract
           .submitResult(ethers.BigNumber.from(id), result)
           .send({
@@ -254,6 +276,7 @@ export const PlatformProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
       alert("Oops! Something went wrong. See the browser console for details.");
+      setIsLoading(false);
     }
   };
 
@@ -261,6 +284,7 @@ export const PlatformProvider = ({ children }) => {
     try {
       if (tronWeb) {
         setIsLoading(true);
+        const contract = await createTronContract();
         const transaction = await contract
           .deleteProject(ethers.BigNumber.from(id))
           .send({
@@ -279,6 +303,7 @@ export const PlatformProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
       alert("Oops! Something went wrong. See the browser console for details.");
+      setIsLoading(false);
     }
   };
 
@@ -286,6 +311,7 @@ export const PlatformProvider = ({ children }) => {
     try {
       if (tronWeb) {
         setIsLoading(true);
+        const contract = await createTronContract();
         const transaction = await contract
           .assignProject(ethers.BigNumber.from(id), candidate)
           .send({
@@ -304,6 +330,7 @@ export const PlatformProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
       alert("Oops! Something went wrong. See the browser console for details.");
+      setIsLoading(false);
     }
   };
 
@@ -311,6 +338,7 @@ export const PlatformProvider = ({ children }) => {
     try {
       if (tronWeb) {
         setIsLoading(true);
+        const contract = await createTronContract();
         const transaction = await contract
           .unassignProject(ethers.BigNumber.from(id))
           .send({
@@ -329,6 +357,7 @@ export const PlatformProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
       alert("Oops! Something went wrong. See the browser console for details.");
+      setIsLoading(false);
     }
   };
 
@@ -336,6 +365,7 @@ export const PlatformProvider = ({ children }) => {
     try {
       if (tronWeb) {
         setIsLoading(true);
+        const contract = await createTronContract();
         const transaction = await contract
           .completeProject(ethers.BigNumber.from(id), newRating)
           .send({
@@ -354,10 +384,12 @@ export const PlatformProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
       alert("Oops! Something went wrong. See the browser console for details.");
+      setIsLoading(false);
     }
   };
 
   const handleProjectAddedEvent = async () => {
+    const contract = await createTronContract();
     await contract.ProjectAdded().watch((err, eventResult) => {
       if (err) {
         return console.error('Error with "method" event:', err);
@@ -390,6 +422,7 @@ export const PlatformProvider = ({ children }) => {
   };
 
   const handleProjectUpdatedEvent = async () => {
+    const contract = await createTronContract();
     await contract.ProjectUpdated().watch((err, eventResult) => {
       if (err) {
         return console.error('Error with "method" event:', err);
@@ -429,6 +462,7 @@ export const PlatformProvider = ({ children }) => {
   };
 
   const handleProjectDeletedEvent = async () => {
+    const contract = await createTronContract();
     await contract.ProjectDeleted().watch((err, eventResult) => {
       if (err) {
         return console.error('Error with "method" event:', err);
@@ -441,6 +475,7 @@ export const PlatformProvider = ({ children }) => {
   };
 
   const handleFeeUpdatedEvent = async () => {
+    const contract = await createTronContract();
     await contract.FeeUpdated().watch((err, eventResult) => {
       if (err) {
         return console.error('Error with "method" event:', err);
@@ -454,13 +489,16 @@ export const PlatformProvider = ({ children }) => {
 
   useEffect(() => {
     setTimeout(async () => {
-      // init contract object
       await createTronContract();
       await getAllProjects();
       await getPlatformFee();
-      await getRating(currentAccount);
-    }, 10);
+      // await getRating(currentAccount);
+    }, 100);
   }, []);
+
+  useEffect(() => {
+    getRating(currentAccount);
+  }, [currentAccount]);
 
   useEffect(() => {
     setTimeout(async () => {
@@ -468,7 +506,7 @@ export const PlatformProvider = ({ children }) => {
       await handleProjectUpdatedEvent();
       await handleProjectDeletedEvent();
       await handleFeeUpdatedEvent();
-    }, 100);
+    }, 1000);
   }, []);
 
   return (

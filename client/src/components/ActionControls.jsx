@@ -5,26 +5,26 @@ import AssigneeActions from "./AssigneeActions";
 import CandidateActions from "./CandidateActions";
 
 const ActionButton = (params) => {
-  const { currentAccount, applyForProject } =
-    useContext(PlatformContext);
-  const current = currentAccount.toString();
-  const isCandidate = (address) => {
-    const candidates = params.project.candidates || [];
-    candidates.map((candidate) => {
-      if (candidate === address) {
+  const { currentAccount, applyForProject } = useContext(PlatformContext);
+  const isCandidate = () => {
+    for (let i = 0; i < params.project.candidates.length; i += 1) {
+      if (params.project.candidates[i].candidate === currentAccount) {
         return true;
       }
-      return false;
-    });
+    }
+    return false;
   };
   let button;
-  if (params.project.author === current) {
+  if (params.project.author === currentAccount) {
     button = <AuthorActions />;
-  } else if (params.project.assignee !== "Unassigned" && params.project.assignee !== current) {
+  } else if (
+    params.project.assignee !== "Unassigned" &&
+    params.project.assignee !== currentAccount
+  ) {
     button = <p />;
-  } else if (params.project.assignee === current) {
+  } else if (params.project.assignee === currentAccount) {
     button = <AssigneeActions />;
-  } else if (isCandidate(current)) {
+  } else if (isCandidate()) {
     button = <CandidateActions />;
   } else {
     button = (
