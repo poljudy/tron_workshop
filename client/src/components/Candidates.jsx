@@ -7,16 +7,17 @@ const Candidates = (props) => {
       <div className="flex flex-wrap justify-start items-center">
         <ul>
           {candidates.map((candidate, i) => (
-            <li key={i} className="flex flex-row justify-center items-center">
+            <li key={i} className="flex flex-row justify-start items-center">
               <span>{candidate.candidate}</span>{" "}
               <span className="flex flex-row justify-center items-center m-2">
-                {[...Array(5)].map((star, index) => (
-                  <FaStar
-                    key={index}
-                    color={candidate.rating > index ? "#ffc107" : "#e4e5e9"}
-                    size={20}
-                  />
-                ))}
+                {candidate.rating === 0 ? "Unrated" :
+                  [...Array(candidate.rating)].map((star, index) => (
+                    <FaStar
+                      key={index}
+                      color="#ffc107"
+                      size={20}
+                    />
+                  ))}
               </span>
             </li>
           ))}

@@ -6,16 +6,15 @@ import { shortenAddress } from "../utils/shortenAddress";
 import { PlatformContext } from "../context/PlatformContext";
 import { AuthContext } from "../context/AuthContext";
 import tronLogo from "../../images/tronlogo.png";
+import { FaStar } from "react-icons/fa";
 
 const NavBarItem = ({ title, classprops }) => (
   <li className={`mx-4 cursor-pointer ${classprops}`}>{title}</li>
 );
 
 const Navbar = () => {
-  const { currentAccount, connectWallet } =
-    useContext(AuthContext);
-  const { fetchedRating } =
-    useContext(PlatformContext);
+  const { currentAccount, connectWallet } = useContext(AuthContext);
+  const { fetchedRating } = useContext(PlatformContext);
   const [toggleMenu, setToggleMenu] = useState(false);
   const renderNotConnectedContainer = () => (
     <button
@@ -30,8 +29,15 @@ const Navbar = () => {
 
   const renderAccountInfo = () => (
     <div className="flex flex-row">
-      <span className="mr-2">
-        My rating: {fetchedRating === 0 ? "unrated" : `${fetchedRating}/5`}
+      <span>
+        My rating:
+      </span>
+      <span className="flex flex-row justify-center items-center mr-4">
+        {fetchedRating === 0
+          ? "unrated"
+          : [...Array(fetchedRating)].map((star, index) => (
+            <FaStar key={index} color="#ffc107" size={20} />
+          ))}
       </span>
       <img alt="Network logo" className="w-4 h-4 self-center" src={tronLogo} />
       <p>{shortenAddress(currentAccount)}</p>

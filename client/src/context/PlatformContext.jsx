@@ -44,7 +44,8 @@ export const PlatformProvider = ({ children }) => {
   const [fee, setFee] = useState(0);
   const [fetchedRating, setFetchedRating] = useState(0);
   // const [contract, setContract] = useState(undefined);
-  const { tronWeb, currentAccount } = useContext(AuthContext);
+  const { currentAccount } = useContext(AuthContext);
+  const { tronWeb } = window;
 
   const notify = (message, hash) =>
     toast.success(<MessageDisplay message={message} hash={hash} />, {
@@ -390,11 +391,12 @@ export const PlatformProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    setTimeout(async () => {
+    const fetchData = async () => {
       await createTronContract();
       await getAllProjects();
       await getPlatformFee();
-    }, 100);
+    };
+    fetchData().catch(console.error);
   }, []);
 
   useEffect(() => {
@@ -404,9 +406,10 @@ export const PlatformProvider = ({ children }) => {
   // Events listeners
 
   // TODO Fix events listenenrs later
-  useEffect(() => {
-    const onTaskAdded = async () => {
-      const contract = await createTronContract();
+
+  const onTaskAdded = async () => {
+    const contract = await createTronContract();
+    if (tronWeb) {
       await contract.ProjectAdded().watch((err, eventResult) => {
         if (err) {
           return console.error('Error with "method" event:', err);
@@ -426,15 +429,10 @@ export const PlatformProvider = ({ children }) => {
               ).toLocaleString(),
               author: p.author,
               candidates: p.candidates,
-              assignee:
-                p.assignee === address0
-                  ? "Unassigned"
-                  : p.assignee,
+              assignee: p.assignee === address0 ? "Unassigned" : p.assignee,
               completedAt:
                 p.completedAt > 0
-                  ? new Date(
-                    p.completedAt.toNumber() * 1000
-                  ).toLocaleString()
+                  ? new Date(p.completedAt.toNumber() * 1000).toLocaleString()
                   : "Not completed yet",
               reward: parseInt(p.reward, 10) / 10 ** 18,
               result: p.result,
@@ -442,12 +440,15 @@ export const PlatformProvider = ({ children }) => {
           ]);
         }
       });
-    };
+    }
+  };
+
+  useEffect(() => {
     onTaskAdded().catch(console.error);
   }, []);
 
-  useEffect(() => {
-    const onTaskUpdated = async () => {
+  const onTaskUpdated = async () => {
+    if (tronWeb) {
       const contract = await createTronContract();
       await contract.ProjectUpdated().watch((err, eventResult) => {
         if (err) {
@@ -461,12 +462,12 @@ export const PlatformProvider = ({ children }) => {
             title: p.title,
             description: p.description,
             projectType: ProjectType[p.projectType],
-            createdAt: new Date(
-              p.createdAt.toNumber() * 1000
-            ).toLocaleString(),
+            createdAt: new Date(p.createdAt.toNumber() * 1000).toLocaleString(),
             author: tronWeb.address.fromHex(p.author),
             candidates: p.candidates
-              ? p.candidates.map((candidate) => tronWeb.address.fromHex(candidate))
+              ? p.candidates.map((candidate) =>
+                  tronWeb.address.fromHex(candidate)
+                )
               : [],
             assignee:
               p.assignee === address0
@@ -474,9 +475,7 @@ export const PlatformProvider = ({ children }) => {
                 : tronWeb.address.fromHex(p.assignee),
             completedAt:
               p.completedAt > 0
-                ? new Date(
-                    p.completedAt.toNumber() * 1000
-                  ).toLocaleString()
+                ? new Date(p.completedAt.toNumber() * 1000).toLocaleString()
                 : "Not completed yet",
             reward: parseInt(p.reward, 10) / 10 ** 18,
             result: p.result,
@@ -484,13 +483,16 @@ export const PlatformProvider = ({ children }) => {
           setProject(structuredProject);
         }
       });
-    };
+    }
+  };
+
+  useEffect(() => {
     onTaskUpdated().catch(console.error);
   }, []);
 
-  useEffect(() => {
-    const onFeeUpdated = async () => {
-      const contract = await createTronContract();
+  const onFeeUpdated = async () => {
+    const contract = await createTronContract();
+    if (tronWeb) {
       await contract.FeeUpdated().watch((err, eventResult) => {
         if (err) {
           return console.error('Error with "method" event:', err);
@@ -500,13 +502,16 @@ export const PlatformProvider = ({ children }) => {
           setFee(eventResult.result.fee.toNumber());
         }
       });
-    };
+    }
+  };
+
+  useEffect(() => {
     onFeeUpdated().catch(console.error);
   }, []);
 
-  useEffect(() => {
-    const onTaskDeleted = async () => {
-      const contract = await createTronContract();
+  const onTaskDeleted = async () => {
+    const contract = await createTronContract();
+    if (tronWeb) {
       await contract.ProjectDeleted().watch((err, eventResult) => {
         if (err) {
           return console.error('Error with "method" event:', err);
@@ -517,7 +522,10 @@ export const PlatformProvider = ({ children }) => {
           setProjects((current) => current.filter((p) => p.id !== id));
         }
       });
-    };
+    }
+  };
+
+  useEffect(() => {
     onTaskDeleted().catch(console.error);
   }, []);
 
