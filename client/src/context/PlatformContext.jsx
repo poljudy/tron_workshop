@@ -404,118 +404,122 @@ export const PlatformProvider = ({ children }) => {
   // Events listeners
 
   // TODO Fix events listenenrs later
-  // useEffect(() => {
-  //   setInterval(async () => {
-  //     const contract = await createTronContract();
-  //     await contract.ProjectAdded().watch((err, eventResult) => {
-  //       if (err) {
-  //         return console.error('Error with "method" event:', err);
-  //       }
-  //       if (eventResult) {
-  //         console.log("eventResult:", eventResult);
-  //         setProjects((prevState) => [
-  //           ...prevState,
-  //           {
-  //             id: eventResult.result._id.toNumber(),
-  //             title: eventResult.result.title,
-  //             description: eventResult.result.description,
-  //             projectType: ProjectType[eventResult.result.projectType],
-  //             createdAt: new Date(
-  //               eventResult.result.createdAt.toNumber() * 1000
-  //             ).toLocaleString(),
-  //             author: eventResult.result.author,
-  //             candidates: eventResult.result.candidates,
-  //             assignee:
-  //               eventResult.result.assignee === address0
-  //                 ? "Unassigned"
-  //                 : eventResult.result.assignee,
-  //             completedAt:
-  //               eventResult.result.completedAt > 0
-  //                 ? new Date(
-  //                     eventResult.result.completedAt.toNumber() * 1000
-  //                   ).toLocaleString()
-  //                 : "Not completed yet",
-  //             reward: parseInt(eventResult.result.reward, 10) / 10 ** 18,
-  //             result: eventResult.result.result,
-  //           },
-  //         ]);
-  //       }
-  //     });
-  //   }, 1000);
-  // }, []);
+  useEffect(() => {
+    const onTaskAdded = async () => {
+      const contract = await createTronContract();
+      await contract.ProjectAdded().watch((err, eventResult) => {
+        if (err) {
+          return console.error('Error with "method" event:', err);
+        }
+        if (eventResult) {
+          console.log("eventResult:", eventResult);
+          const p = eventResult.result.project;
+          setProjects((prevState) => [
+            ...prevState,
+            {
+              id: p.id.toNumber(),
+              title: p.title,
+              description: p.description,
+              projectType: ProjectType[p.projectType],
+              createdAt: new Date(
+                p.createdAt.toNumber() * 1000
+              ).toLocaleString(),
+              author: p.author,
+              candidates: p.candidates,
+              assignee:
+                p.assignee === address0
+                  ? "Unassigned"
+                  : p.assignee,
+              completedAt:
+                p.completedAt > 0
+                  ? new Date(
+                    p.completedAt.toNumber() * 1000
+                  ).toLocaleString()
+                  : "Not completed yet",
+              reward: parseInt(p.reward, 10) / 10 ** 18,
+              result: p.result,
+            },
+          ]);
+        }
+      });
+    };
+    onTaskAdded().catch(console.error);
+  }, []);
 
-  // useEffect(async () => {
-  //   const contract = await createTronContract();
-  //   setInterval(async () => {
-  //     await contract.ProjectUpdated().watch((err, eventResult) => {
-  //       if (err) {
-  //         return console.error('Error with "method" event:', err);
-  //       }
-  //       if (eventResult) {
-  //         console.log("eventResult:", eventResult);
-  //         const structuredProject = {
-  //           id: eventResult.result.id.toNumber(),
-  //           title: eventResult.result.title,
-  //           description: eventResult.result.description,
-  //           projectType: ProjectType[eventResult.result.projectType],
-  //           createdAt: new Date(
-  //             eventResult.result.createdAt.toNumber() * 1000
-  //           ).toLocaleString(),
-  //           author: tronWeb.address.fromHex(eventResult.result.author),
-  //           candidates: eventResult.result.candidates
-  //             ? eventResult.result.candidates.map((candidate) =>
-  //                 tronWeb.address.fromHex(candidate)
-  //               )
-  //             : [],
-  //           assignee:
-  //             eventResult.result.assignee === address0
-  //               ? "Unassigned"
-  //               : tronWeb.address.fromHex(eventResult.result.assignee),
-  //           completedAt:
-  //             eventResult.result.completedAt > 0
-  //               ? new Date(
-  //                   eventResult.result.completedAt.toNumber() * 1000
-  //                 ).toLocaleString()
-  //               : "Not completed yet",
-  //           reward: parseInt(eventResult.result.reward, 10) / 10 ** 18,
-  //           result: eventResult.result.result,
-  //         };
-  //         setProject(structuredProject);
-  //       }
-  //     });
-  //   }, 1000);
-  // }, []);
+  useEffect(() => {
+    const onTaskUpdated = async () => {
+      const contract = await createTronContract();
+      await contract.ProjectUpdated().watch((err, eventResult) => {
+        if (err) {
+          return console.error('Error with "method" event:', err);
+        }
+        if (eventResult) {
+          console.log("eventResult:", eventResult);
+          const p = eventResult.result.project;
+          const structuredProject = {
+            id: p.id.toNumber(),
+            title: p.title,
+            description: p.description,
+            projectType: ProjectType[p.projectType],
+            createdAt: new Date(
+              p.createdAt.toNumber() * 1000
+            ).toLocaleString(),
+            author: tronWeb.address.fromHex(p.author),
+            candidates: p.candidates
+              ? p.candidates.map((candidate) => tronWeb.address.fromHex(candidate))
+              : [],
+            assignee:
+              p.assignee === address0
+                ? "Unassigned"
+                : tronWeb.address.fromHex(p.assignee),
+            completedAt:
+              p.completedAt > 0
+                ? new Date(
+                    p.completedAt.toNumber() * 1000
+                  ).toLocaleString()
+                : "Not completed yet",
+            reward: parseInt(p.reward, 10) / 10 ** 18,
+            result: p.result,
+          };
+          setProject(structuredProject);
+        }
+      });
+    };
+    onTaskUpdated().catch(console.error);
+  }, []);
 
-  // useEffect(async () => {
-  //   const contract = await createTronContract();
-  //   setInterval(async () => {
-  //     await contract.FeeUpdated().watch((err, eventResult) => {
-  //       if (err) {
-  //         return console.error('Error with "method" event:', err);
-  //       }
-  //       if (eventResult) {
-  //         console.log("eventResult:", eventResult);
-  //         setFee(eventResult.result.toNumber());
-  //       }
-  //     });
-  //   }, 1000);
-  // }, []);
+  useEffect(() => {
+    const onFeeUpdated = async () => {
+      const contract = await createTronContract();
+      await contract.FeeUpdated().watch((err, eventResult) => {
+        if (err) {
+          return console.error('Error with "method" event:', err);
+        }
+        if (eventResult) {
+          console.log("eventResult:", eventResult);
+          setFee(eventResult.result.fee.toNumber());
+        }
+      });
+    };
+    onFeeUpdated().catch(console.error);
+  }, []);
 
-  // useEffect(async () => {
-  //   const contract = await createTronContract();
-  //   setInterval(async () => {
-  //     await contract.ProjectDeleted().watch((err, eventResult) => {
-  //       if (err) {
-  //         return console.error('Error with "method" event:', err);
-  //       }
-  //       if (eventResult) {
-  //         console.log("eventResult:", eventResult);
-  //         const id = eventResult.result._id.toNumber();
-  //         setProjects((current) => current.filter((p) => p.id !== id));
-  //       }
-  //     });
-  //   }, 1000);
-  // }, []);
+  useEffect(() => {
+    const onTaskDeleted = async () => {
+      const contract = await createTronContract();
+      await contract.ProjectDeleted().watch((err, eventResult) => {
+        if (err) {
+          return console.error('Error with "method" event:', err);
+        }
+        if (eventResult) {
+          console.log("eventResult:", eventResult);
+          const id = eventResult.result.id.toNumber();
+          setProjects((current) => current.filter((p) => p.id !== id));
+        }
+      });
+    };
+    onTaskDeleted().catch(console.error);
+  }, []);
 
   return (
     <PlatformContext.Provider
