@@ -13,7 +13,7 @@ The idea of MeDo is to ease the difficulties faced by freelancers nowadays such 
 
 ## Prepare the client
 1. Replace the cotract address in the utils/constants.js with the new deployed one
-2. Replace conractABI.json with the contract json from smart_contract/artifacts/contracts/{your_contract}/{your_contract}.json
+2. Replace conractABI.json with the contract abi json
 
 ## Run client
 Run `yarn dev` at the client directory to run the client locally
