@@ -1,7 +1,7 @@
 # MeDo - Blockchain Freelance Platform
 MeDo is a prototype of a freelancing platform which stores it's data on blockchain.
 
-Application deployed on Spheron Network at [https://medo-tron-i5zty3n.spheron.app/](https://medo-tron-i5zty3n.spheron.app/), currently running on TRON Nile testnet.
+Application deployed on Spheron Network at [https://medo-tron.netlify.app/](https://medo-tron.netlify.app/), currently running on TRON Nile testnet.
 Smart Contract deployed at address TFXueB5e9FzotHmCQccWULSsgnNnn41Wby.
 
 ## Introduction
