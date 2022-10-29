@@ -8,4 +8,6 @@ export { default as AssigneeActions } from "./AssigneeActions";
 export { default as CandidateActions } from "./CandidateActions";
 export { default as StarRating } from "./StarRating";
 export { default as Projects } from "./Projects";
+export { default as Profiles } from "./Profiles";
+export { default as Hero } from "./Hero";
 export { default as Candidates } from "./Candidates";

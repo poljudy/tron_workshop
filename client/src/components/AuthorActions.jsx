@@ -9,12 +9,14 @@ const AuthorActions = () => {
     deleteProject,
     assignProject,
     unassignProject,
+    requestChange,
     completeProject,
   } = useContext(PlatformContext);
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const defaultSelectValue = "Select a candidate to assign";
   const [selected, setSelected] = useState(defaultSelectValue);
+  const [message, setMessage] = useState("");
 
   const handleAssign = (e) => {
     if (selected === "Select a candidate to assign") return;
@@ -28,8 +30,13 @@ const AuthorActions = () => {
     completeProject(project.id, rating);
   };
 
+  const handleRequestChange = (e) => {
+    e.preventDefault();
+    requestChange(project.id, message);
+  };
+
   // If the task is not assigned
-  if (project.assignee === "Unassigned") {
+  if (project.status === "Active") {
     if (project.candidates.length > 0) {
       return (
         <div>
@@ -135,6 +142,22 @@ const AuthorActions = () => {
             onClick={handleComplete}
           >
             Complete
+          </button>
+          <p className="mt-3 text-white">Not satisfied with the result?</p>
+          <p className="text-white">Submit a change request (You can submit up to 3 change requests).</p>
+          <textarea
+            className="my-2 w-9/12 rounded-sm p-2 outline-none bg-transparent text-white text-sm white-glassmorphism"
+            placeholder="Describe what exactly you'd like to change..."
+            name="requestMessage"
+            type="text"
+            onChange={(e) => setMessage(e.target.value)}
+          />
+          <button
+            type="button"
+            className="flex flex-row justify-center items-center my-5 bg-[#9c3a06] p-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
+            onClick={handleRequestChange}
+          >
+            Request Change
           </button>
         </>
       ) : (

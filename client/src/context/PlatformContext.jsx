@@ -8,10 +8,29 @@ import contractABI from "../utils/contractABI.json";
 export const PlatformContext = createContext();
 
 const address0 = "410000000000000000000000000000000000000000";
-const ProjectType = {
+const ProjectTypes = {
   0: "First Come First Serve",
-  1: "Author Selected",
+  1: "Casting",
 };
+
+const Statuses = {
+  0: "Active",
+  1: "Assigned",
+  2: "In Review",
+  3: "Change Requested",
+  4: "Completed"
+};
+
+const Categories = [
+  "Programming & Tech",
+  "Writing & Translation",
+  "Video & Animation",
+  "Music & Audio",
+  "Data",
+  "Business",
+  "Lifestyle",
+  "Other"
+];
 
 function MessageDisplay({ message, hash }) {
   return (
@@ -47,17 +66,16 @@ export const PlatformProvider = ({ children }) => {
   const { currentAccount } = useContext(AuthContext);
   const { tronWeb } = window;
 
-  const notify = (message, hash) =>
-    toast.success(<MessageDisplay message={message} hash={hash} />, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
+  const notify = (message, hash) => toast.success(<MessageDisplay message={message} hash={hash} />, {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "dark",
+  });
 
   const handleChange = (e, name) => {
     setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
@@ -74,25 +92,27 @@ export const PlatformProvider = ({ children }) => {
         setIsLoading(true);
         const contract = await createTronContract();
         const availableProjects = await contract.getAllProjects().call();
+        console.log(availableProjects);
         const structuredProjects = availableProjects
           .filter((item) => item.title && item.title !== "")
           .map((item) => ({
             id: item.id.toNumber(),
+            category: item.category,
             title: item.title,
             description: item.description,
-            projectType: ProjectType[item.projectType],
+            projectType: ProjectTypes[item.projectType],
             createdAt: new Date(
               item.createdAt.toNumber() * 1000
             ).toLocaleString(),
             author: tronWeb.address.fromHex(item.author),
-            candidates: item[5]
-              ? item[5].map((c) => {
-                  const candidate = {
-                    candidate: tronWeb.address.fromHex(c.candidate),
-                    rating: c.rating,
-                  };
-                  return candidate;
-                })
+            candidates: item.candidates
+              ? item.candidates.map((c) => {
+                const candidate = {
+                  candidate: tronWeb.address.fromHex(c.candidate),
+                  rating: c.rating,
+                };
+                return candidate;
+              })
               : [],
             assignee:
               item.assignee === address0
@@ -104,6 +124,7 @@ export const PlatformProvider = ({ children }) => {
                 : "Not completed yet",
             reward: tronWeb.fromSun(item.reward),
             result: item.result,
+            status: Statuses[item.status]
           }));
         setProjects(structuredProjects);
         setIsLoading(false);
@@ -153,23 +174,19 @@ export const PlatformProvider = ({ children }) => {
         setIsLoading(true);
         const contract = await createTronContract();
         const fetchedProject = await contract.getProject(id).call();
+        console.log(fetchedProject);
         const structuredProject = {
           id: fetchedProject.id.toNumber(),
+          category: fetchedProject.category,
           title: fetchedProject.title,
           description: fetchedProject.description,
-          projectType: ProjectType[fetchedProject.projectType],
+          projectType: ProjectTypes[fetchedProject.projectType],
           createdAt: new Date(
             fetchedProject.createdAt.toNumber() * 1000
           ).toLocaleString(),
           author: tronWeb.address.fromHex(fetchedProject.author),
-          candidates: fetchedProject[5]
-            ? fetchedProject[5].map((c) => {
-                const candidate = {
-                  candidate: tronWeb.address.fromHex(c.candidate),
-                  rating: c.rating,
-                };
-                return candidate;
-              })
+          candidates: fetchedProject.candidates
+            ? fetchedProject.candidates.map((c) => tronWeb.address.fromHex(c))
             : [],
           assignee:
             fetchedProject.assignee === address0
@@ -178,11 +195,20 @@ export const PlatformProvider = ({ children }) => {
           completedAt:
             fetchedProject.completedAt > 0
               ? new Date(
-                  fetchedProject.completedAt.toNumber() * 1000
-                ).toLocaleString()
+                fetchedProject.completedAt.toNumber() * 1000
+              ).toLocaleString()
               : "Not completed yet",
           reward: tronWeb.fromSun(fetchedProject.reward),
           result: fetchedProject.result,
+          status: Statuses[fetchedProject.status],
+          lastStatusChangeAt: new Date(fetchedProject.lastStatusChangeAt.toNumber() * 1000).toLocaleString(),
+          changeRequests: fetchedProject[12].map((r) => {
+            const request = {
+              message: r.message,
+              requestedAt: new Date(r.requestedAt.toNumber() * 1000).toLocaleString(),
+            };
+            return request;
+          }),
         };
         setProject(structuredProject);
         setIsLoading(false);
@@ -199,10 +225,11 @@ export const PlatformProvider = ({ children }) => {
   const addProject = async () => {
     try {
       if (tronWeb) {
-        const { title, description, projectType, reward } = formData;
+        const { category, title, description, projectType, reward } = formData;
         const feeAmount = (reward / 100) * fee;
         const totalAmount = parseFloat(reward) + parseFloat(feeAmount);
         const projectToSend = [
+          category,
           title,
           description,
           projectType,
@@ -363,6 +390,33 @@ export const PlatformProvider = ({ children }) => {
     }
   };
 
+  const requestChange = async (id, message) => {
+    if (message.length === 0) return;
+    if (tronWeb) {
+      try {
+        setIsLoading(true);
+        const contract = await createTronContract();
+        const transaction = await contract
+          .requestChange(ethers.BigNumber.from(id), message)
+          .send({
+            feeLimit: 100_000_000,
+            callValue: 0,
+            shouldPollResponse: true,
+          });
+        console.log(`Success - ${transaction}`);
+        setIsLoading(false);
+        await getAllProjects();
+        await getProject(id);
+        notify("Change reaquest submitted.");
+      } catch (error) {
+        console.log(error);
+        alert("Oops! Something went wrong. See the browser console for details.");
+      }
+    } else {
+      console.log("No Tron object");
+    }
+  };
+
   const completeProject = async (id, newRating) => {
     try {
       if (tronWeb) {
@@ -423,7 +477,7 @@ export const PlatformProvider = ({ children }) => {
               id: p.id.toNumber(),
               title: p.title,
               description: p.description,
-              projectType: ProjectType[p.projectType],
+              projectType: ProjectTypes[p.projectType],
               createdAt: new Date(
                 p.createdAt.toNumber() * 1000
               ).toLocaleString(),
@@ -461,7 +515,7 @@ export const PlatformProvider = ({ children }) => {
             id: p.id.toNumber(),
             title: p.title,
             description: p.description,
-            projectType: ProjectType[p.projectType],
+            projectType: ProjectTypes[p.projectType],
             createdAt: new Date(p.createdAt.toNumber() * 1000).toLocaleString(),
             author: tronWeb.address.fromHex(p.author),
             candidates: p.candidates
@@ -534,6 +588,7 @@ export const PlatformProvider = ({ children }) => {
       value={{
         fee,
         projects,
+        ProjectTypes,
         project,
         currentAccount,
         isLoading,
@@ -545,6 +600,7 @@ export const PlatformProvider = ({ children }) => {
         deleteProject,
         assignProject,
         unassignProject,
+        requestChange,
         completeProject,
         handleChange,
         getRating,

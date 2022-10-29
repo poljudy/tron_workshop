@@ -8,7 +8,7 @@ const Candidates = (props) => {
         <ul>
           {candidates.map((candidate, i) => (
             <li key={i} className="flex flex-row justify-start items-center">
-              <span>{candidate.candidate}</span>{" "}
+              <span>{candidate}</span>{" "}
               <span className="flex flex-row justify-center items-center m-2">
                 {candidate.rating === 0 ? "Unrated" :
                   [...Array(candidate.rating)].map((star, index) => (

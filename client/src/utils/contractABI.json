@@ -1,45 +1,12 @@
 [
 	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint8",
-				"name": "_fee",
-				"type": "uint8"
-			}
-		],
-		"name": "FeeUpdated",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "previousOwner",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "newOwner",
-				"type": "address"
-			}
-		],
-		"name": "OwnershipTransferred",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
 		"inputs": [
 			{
 				"components": [
 					{
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
+						"internalType": "string",
+						"name": "category",
+						"type": "string"
 					},
 					{
 						"internalType": "string",
@@ -52,188 +19,7 @@
 						"type": "string"
 					},
 					{
-						"internalType": "address payable",
-						"name": "author",
-						"type": "address"
-					},
-					{
-						"internalType": "address payable",
-						"name": "assignee",
-						"type": "address"
-					},
-					{
-						"components": [
-							{
-								"internalType": "address",
-								"name": "candidate",
-								"type": "address"
-							},
-							{
-								"internalType": "uint8",
-								"name": "rating",
-								"type": "uint8"
-							}
-						],
-						"internalType": "struct Platform.Candidate[]",
-						"name": "candidates",
-						"type": "tuple[]"
-					},
-					{
-						"internalType": "uint256",
-						"name": "createdAt",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "completedAt",
-						"type": "uint256"
-					},
-					{
-						"internalType": "enum Platform.ProjectType",
-						"name": "projectType",
-						"type": "uint8"
-					},
-					{
-						"internalType": "uint256",
-						"name": "reward",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "result",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "allProjectsIndex",
-						"type": "uint256"
-					}
-				],
-				"indexed": false,
-				"internalType": "struct Platform.Project",
-				"name": "_project",
-				"type": "tuple"
-			}
-		],
-		"name": "ProjectAdded",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "_id",
-				"type": "uint256"
-			}
-		],
-		"name": "ProjectDeleted",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "title",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "description",
-						"type": "string"
-					},
-					{
-						"internalType": "address payable",
-						"name": "author",
-						"type": "address"
-					},
-					{
-						"internalType": "address payable",
-						"name": "assignee",
-						"type": "address"
-					},
-					{
-						"components": [
-							{
-								"internalType": "address",
-								"name": "candidate",
-								"type": "address"
-							},
-							{
-								"internalType": "uint8",
-								"name": "rating",
-								"type": "uint8"
-							}
-						],
-						"internalType": "struct Platform.Candidate[]",
-						"name": "candidates",
-						"type": "tuple[]"
-					},
-					{
-						"internalType": "uint256",
-						"name": "createdAt",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "completedAt",
-						"type": "uint256"
-					},
-					{
-						"internalType": "enum Platform.ProjectType",
-						"name": "projectType",
-						"type": "uint8"
-					},
-					{
-						"internalType": "uint256",
-						"name": "reward",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "result",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "allProjectsIndex",
-						"type": "uint256"
-					}
-				],
-				"indexed": false,
-				"internalType": "struct Platform.Project",
-				"name": "_project",
-				"type": "tuple"
-			}
-		],
-		"name": "ProjectUpdated",
-		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"components": [
-					{
-						"internalType": "string",
-						"name": "title",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "description",
-						"type": "string"
-					},
-					{
-						"internalType": "enum Platform.ProjectType",
+						"internalType": "enum ProjectTypes",
 						"name": "projectType",
 						"type": "uint8"
 					},
@@ -347,14 +133,55 @@
 	},
 	{
 		"inputs": [],
-		"name": "getAllProjects",
-		"outputs": [
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint8",
+				"name": "_fee",
+				"type": "uint8"
+			}
+		],
+		"name": "FeeUpdated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
 			{
 				"components": [
 					{
 						"internalType": "uint256",
 						"name": "id",
 						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "category",
+						"type": "string"
 					},
 					{
 						"internalType": "string",
@@ -377,21 +204,9 @@
 						"type": "address"
 					},
 					{
-						"components": [
-							{
-								"internalType": "address",
-								"name": "candidate",
-								"type": "address"
-							},
-							{
-								"internalType": "uint8",
-								"name": "rating",
-								"type": "uint8"
-							}
-						],
-						"internalType": "struct Platform.Candidate[]",
+						"internalType": "address[]",
 						"name": "candidates",
-						"type": "tuple[]"
+						"type": "address[]"
 					},
 					{
 						"internalType": "uint256",
@@ -404,7 +219,7 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "enum Platform.ProjectType",
+						"internalType": "enum ProjectTypes",
 						"name": "projectType",
 						"type": "uint8"
 					},
@@ -419,35 +234,74 @@
 						"type": "string"
 					},
 					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "message",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "requestedAt",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct Platform.ChangeRequest[]",
+						"name": "changeRequests",
+						"type": "tuple[]"
+					},
+					{
 						"internalType": "uint256",
 						"name": "allProjectsIndex",
 						"type": "uint256"
+					},
+					{
+						"internalType": "enum Statuses",
+						"name": "status",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastStatusChangeAt",
+						"type": "uint256"
 					}
 				],
-				"internalType": "struct Platform.Project[]",
-				"name": "",
-				"type": "tuple[]"
+				"indexed": false,
+				"internalType": "struct Platform.Project",
+				"name": "_project",
+				"type": "tuple"
 			}
 		],
-		"stateMutability": "view",
-		"type": "function"
+		"name": "ProjectAdded",
+		"type": "event"
 	},
 	{
+		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": false,
 				"internalType": "uint256",
 				"name": "_id",
 				"type": "uint256"
 			}
 		],
-		"name": "getProject",
-		"outputs": [
+		"name": "ProjectDeleted",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
 			{
 				"components": [
 					{
 						"internalType": "uint256",
 						"name": "id",
 						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "category",
+						"type": "string"
 					},
 					{
 						"internalType": "string",
@@ -470,21 +324,9 @@
 						"type": "address"
 					},
 					{
-						"components": [
-							{
-								"internalType": "address",
-								"name": "candidate",
-								"type": "address"
-							},
-							{
-								"internalType": "uint8",
-								"name": "rating",
-								"type": "uint8"
-							}
-						],
-						"internalType": "struct Platform.Candidate[]",
+						"internalType": "address[]",
 						"name": "candidates",
-						"type": "tuple[]"
+						"type": "address[]"
 					},
 					{
 						"internalType": "uint256",
@@ -497,7 +339,7 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "enum Platform.ProjectType",
+						"internalType": "enum ProjectTypes",
 						"name": "projectType",
 						"type": "uint8"
 					},
@@ -512,36 +354,52 @@
 						"type": "string"
 					},
 					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "message",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "requestedAt",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct Platform.ChangeRequest[]",
+						"name": "changeRequests",
+						"type": "tuple[]"
+					},
+					{
 						"internalType": "uint256",
 						"name": "allProjectsIndex",
 						"type": "uint256"
+					},
+					{
+						"internalType": "enum Statuses",
+						"name": "status",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastStatusChangeAt",
+						"type": "uint256"
 					}
 				],
+				"indexed": false,
 				"internalType": "struct Platform.Project",
-				"name": "",
+				"name": "_project",
 				"type": "tuple"
 			}
 		],
-		"stateMutability": "view",
-		"type": "function"
+		"name": "ProjectUpdated",
+		"type": "event"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_address",
-				"type": "address"
-			}
-		],
-		"name": "getRating",
-		"outputs": [
-			{
-				"internalType": "uint8",
-				"name": "",
-				"type": "uint8"
-			}
-		],
-		"stateMutability": "view",
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -552,12 +410,12 @@
 				"type": "uint256"
 			},
 			{
-				"internalType": "address",
-				"name": "_address",
-				"type": "address"
+				"internalType": "string",
+				"name": "_message",
+				"type": "string"
 			}
 		],
-		"name": "isAddressApplied",
+		"name": "requestChange",
 		"outputs": [
 			{
 				"internalType": "bool",
@@ -565,39 +423,25 @@
 				"type": "bool"
 			}
 		],
-		"stateMutability": "view",
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
+		"inputs": [
 			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
 			}
 		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "platformFeePercentage",
+		"name": "requestPayment",
 		"outputs": [
 			{
-				"internalType": "uint8",
+				"internalType": "bool",
 				"name": "",
-				"type": "uint8"
+				"type": "bool"
 			}
 		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "renounceOwnership",
-		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
@@ -645,19 +489,6 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "totalFees",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -700,6 +531,303 @@
 			}
 		],
 		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getAllProjects",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "category",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					},
+					{
+						"internalType": "address payable",
+						"name": "author",
+						"type": "address"
+					},
+					{
+						"internalType": "address payable",
+						"name": "assignee",
+						"type": "address"
+					},
+					{
+						"internalType": "address[]",
+						"name": "candidates",
+						"type": "address[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "createdAt",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "completedAt",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum ProjectTypes",
+						"name": "projectType",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "reward",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "result",
+						"type": "string"
+					},
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "message",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "requestedAt",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct Platform.ChangeRequest[]",
+						"name": "changeRequests",
+						"type": "tuple[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "allProjectsIndex",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum Statuses",
+						"name": "status",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastStatusChangeAt",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Platform.Project[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getProject",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "category",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "title",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					},
+					{
+						"internalType": "address payable",
+						"name": "author",
+						"type": "address"
+					},
+					{
+						"internalType": "address payable",
+						"name": "assignee",
+						"type": "address"
+					},
+					{
+						"internalType": "address[]",
+						"name": "candidates",
+						"type": "address[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "createdAt",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "completedAt",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum ProjectTypes",
+						"name": "projectType",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "reward",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "result",
+						"type": "string"
+					},
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "message",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "requestedAt",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct Platform.ChangeRequest[]",
+						"name": "changeRequests",
+						"type": "tuple[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "allProjectsIndex",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum Statuses",
+						"name": "status",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastStatusChangeAt",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Platform.Project",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_address",
+				"type": "address"
+			}
+		],
+		"name": "getRating",
+		"outputs": [
+			{
+				"internalType": "uint8",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "platformFeePercentage",
+		"outputs": [
+			{
+				"internalType": "uint8",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "ratings",
+		"outputs": [
+			{
+				"internalType": "uint8",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalFees",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	}
 ]

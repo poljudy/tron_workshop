@@ -17,6 +17,10 @@ export default function Project() {
       <div className="container mx-auto flex flex-row self-center items-start white-glassmorphism p-3">
         <div className="ml-5 flex flex-col flex-1">
           <h3 className="mt-2 text-white text-4xl">{project.title}</h3>
+          <div className="flex flex-row gap-2 items-center">
+            <div className="mt-2 text-center text-white white-glassmorphism w-3/12">{project.category}</div>
+            <div className="mt-2 text-center text-white white-glassmorphism w-6/12 ">{project.status} since {project.lastStatusChangeAt}</div>
+          </div>
           <p className="mt-1 text-white text-2xl md:w-9/12">
             {project.description}
           </p>
@@ -30,7 +34,7 @@ export default function Project() {
             <span />
           ) : (
             <div className="mt-1 text-white text-sm md:w-9/12">
-              Candidates applied ({project.candidates ? project.candidates.length : 0}):
+              Candidates applied ({project.candidates.length}):
               <Candidates candidates={project.candidates} />
             </div>
           )}
@@ -59,6 +63,7 @@ export default function Project() {
           <p className="mt-1 italic text-white text-sm md:w-9/12">
             Completed at: {project.completedAt}
           </p>
+          {/* <p className="mt-1 text-white text-sm md:w-9/12">Change Requests: {project.changeRequests}</p> */}
 
           {isLoading ? (
             <Loader />

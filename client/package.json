@@ -1,6 +1,7 @@
 {
   "name": "wave-app",
   "version": "0.0.0",
+  "license": "MIT",
   "homepage": "https://vadkutsen.github.io/medo",
   "scripts": {
     "dev": "vite",
@@ -8,6 +9,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.3",
     "@tailwindcss/forms": "^0.3.4",
     "autoprefixer": "^10.4.0",
     "eth-revert-reason": "^1.0.3",
@@ -19,6 +21,7 @@
     "react-icons": "^4.3.1",
     "react-router-dom": "6",
     "react-toastify": "^9.0.5",
+    "react-visibility-sensor": "^5.1.1",
     "tronweb": "^4.2.0"
   },
   "devDependencies": {

@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { PlatformContext } from "../context/PlatformContext";
 import ProjectCard from "./ProjectCard";
 
-const Projects = () => {
+const Profiles = () => {
   // const { currentAccount } = useContext(AuthContext);
   const { projects } = useContext(PlatformContext);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -15,8 +15,8 @@ const Projects = () => {
         <div>
           <p className="text-white text-3xl text-center my-2">
             {projects.length === 0
-              ? "No tasks yet"
-              : `Recent Tasks (${projects.length})`}
+              ? "No profiles yet"
+              : `Recent Profiles (${projects.length})`}
           </p>
           {projects.length > 0 && (
             <div className="flex flex-row justify-center items-center">
@@ -42,7 +42,7 @@ const Projects = () => {
         </div>
       ) : (
         <p className="text-white text-3xl text-center my-2">
-          No tasks yet
+          No profiles yet
         </p>
       )}
       <div className="list-none justify-center items-center mt-10">
@@ -61,4 +61,4 @@ const Projects = () => {
   );
 };
 
-export default Projects;
+export default Profiles;
