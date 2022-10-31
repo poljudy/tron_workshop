@@ -234,21 +234,9 @@
 						"type": "string"
 					},
 					{
-						"components": [
-							{
-								"internalType": "string",
-								"name": "message",
-								"type": "string"
-							},
-							{
-								"internalType": "uint256",
-								"name": "requestedAt",
-								"type": "uint256"
-							}
-						],
-						"internalType": "struct Platform.ChangeRequest[]",
+						"internalType": "string[]",
 						"name": "changeRequests",
-						"type": "tuple[]"
+						"type": "string[]"
 					},
 					{
 						"internalType": "uint256",
@@ -354,21 +342,9 @@
 						"type": "string"
 					},
 					{
-						"components": [
-							{
-								"internalType": "string",
-								"name": "message",
-								"type": "string"
-							},
-							{
-								"internalType": "uint256",
-								"name": "requestedAt",
-								"type": "uint256"
-							}
-						],
-						"internalType": "struct Platform.ChangeRequest[]",
+						"internalType": "string[]",
 						"name": "changeRequests",
-						"type": "tuple[]"
+						"type": "string[]"
 					},
 					{
 						"internalType": "uint256",
@@ -600,21 +576,9 @@
 						"type": "string"
 					},
 					{
-						"components": [
-							{
-								"internalType": "string",
-								"name": "message",
-								"type": "string"
-							},
-							{
-								"internalType": "uint256",
-								"name": "requestedAt",
-								"type": "uint256"
-							}
-						],
-						"internalType": "struct Platform.ChangeRequest[]",
+						"internalType": "string[]",
 						"name": "changeRequests",
-						"type": "tuple[]"
+						"type": "string[]"
 					},
 					{
 						"internalType": "uint256",
@@ -713,21 +677,9 @@
 						"type": "string"
 					},
 					{
-						"components": [
-							{
-								"internalType": "string",
-								"name": "message",
-								"type": "string"
-							},
-							{
-								"internalType": "uint256",
-								"name": "requestedAt",
-								"type": "uint256"
-							}
-						],
-						"internalType": "struct Platform.ChangeRequest[]",
+						"internalType": "string[]",
 						"name": "changeRequests",
-						"type": "tuple[]"
+						"type": "string[]"
 					},
 					{
 						"internalType": "uint256",

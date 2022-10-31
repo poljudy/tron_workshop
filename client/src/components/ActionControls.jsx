@@ -8,7 +8,7 @@ const ActionButton = (params) => {
   const { currentAccount, applyForProject } = useContext(PlatformContext);
   const isCandidate = () => {
     for (let i = 0; i < params.project.candidates.length; i += 1) {
-      if (params.project.candidates[i].candidate === currentAccount) {
+      if (params.project.candidates[i] === currentAccount) {
         return true;
       }
     }

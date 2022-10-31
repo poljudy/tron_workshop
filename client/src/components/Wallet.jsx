@@ -6,7 +6,6 @@ import { AuthContext } from "../context/AuthContext";
 import { PlatformContext } from "../context/PlatformContext";
 import { shortenAddress } from "../utils/shortenAddress";
 
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }

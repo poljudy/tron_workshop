@@ -2,35 +2,10 @@ import { createContext, useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { ethers } from "ethers";
 import { AuthContext } from "./AuthContext";
-import { contractAddress } from "../utils/constants";
+import { contractAddress, ProjectTypes, address0, Statuses } from "../utils/constants";
 import contractABI from "../utils/contractABI.json";
 
 export const PlatformContext = createContext();
-
-const address0 = "410000000000000000000000000000000000000000";
-const ProjectTypes = {
-  0: "First Come First Serve",
-  1: "Casting",
-};
-
-const Statuses = {
-  0: "Active",
-  1: "Assigned",
-  2: "In Review",
-  3: "Change Requested",
-  4: "Completed"
-};
-
-const Categories = [
-  "Programming & Tech",
-  "Writing & Translation",
-  "Video & Animation",
-  "Music & Audio",
-  "Data",
-  "Business",
-  "Lifestyle",
-  "Other"
-];
 
 function MessageDisplay({ message, hash }) {
   return (
@@ -52,6 +27,7 @@ function MessageDisplay({ message, hash }) {
 
 export const PlatformProvider = ({ children }) => {
   const [formData, setformData] = useState({
+    category: "Programming & Tech",
     title: "",
     description: "",
     projectType: "0",
@@ -106,13 +82,7 @@ export const PlatformProvider = ({ children }) => {
             ).toLocaleString(),
             author: tronWeb.address.fromHex(item.author),
             candidates: item.candidates
-              ? item.candidates.map((c) => {
-                const candidate = {
-                  candidate: tronWeb.address.fromHex(c.candidate),
-                  rating: c.rating,
-                };
-                return candidate;
-              })
+              ? item.candidates.map((c) => tronWeb.address.fromHex(c.candidate))
               : [],
             assignee:
               item.assignee === address0
@@ -124,7 +94,7 @@ export const PlatformProvider = ({ children }) => {
                 : "Not completed yet",
             reward: tronWeb.fromSun(item.reward),
             result: item.result,
-            status: Statuses[item.status]
+            status: Statuses[item.status],
           }));
         setProjects(structuredProjects);
         setIsLoading(false);
@@ -169,8 +139,8 @@ export const PlatformProvider = ({ children }) => {
   };
 
   const getProject = async (id) => {
-    try {
-      if (tronWeb) {
+    if (tronWeb) {
+      try {
         setIsLoading(true);
         const contract = await createTronContract();
         const fetchedProject = await contract.getProject(id).call();
@@ -185,9 +155,10 @@ export const PlatformProvider = ({ children }) => {
             fetchedProject.createdAt.toNumber() * 1000
           ).toLocaleString(),
           author: tronWeb.address.fromHex(fetchedProject.author),
-          candidates: fetchedProject.candidates
-            ? fetchedProject.candidates.map((c) => tronWeb.address.fromHex(c))
-            : [],
+          candidates:
+            fetchedProject.candidates.length > 0
+              ? fetchedProject.candidates.map((c) => tronWeb.address.fromHex(c))
+              : [],
           assignee:
             fetchedProject.assignee === address0
               ? "Unassigned"
@@ -201,30 +172,26 @@ export const PlatformProvider = ({ children }) => {
           reward: tronWeb.fromSun(fetchedProject.reward),
           result: fetchedProject.result,
           status: Statuses[fetchedProject.status],
-          lastStatusChangeAt: new Date(fetchedProject.lastStatusChangeAt.toNumber() * 1000).toLocaleString(),
-          changeRequests: fetchedProject[12].map((r) => {
-            const request = {
-              message: r.message,
-              requestedAt: new Date(r.requestedAt.toNumber() * 1000).toLocaleString(),
-            };
-            return request;
-          }),
+          lastStatusChangeAt: new Date(
+            fetchedProject.lastStatusChangeAt.toNumber() * 1000
+          ).toLocaleString(),
+          changeRequests: fetchedProject.changeRequests,
         };
         setProject(structuredProject);
         setIsLoading(false);
-      } else {
-        console.log("Tron is not present");
+      } catch (error) {
+        console.log(error);
+        alert(error.message);
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.log(error);
-      alert(error.message);
-      setIsLoading(false);
+    } else {
+      console.log("Tron is not present");
     }
   };
 
   const addProject = async () => {
-    try {
-      if (tronWeb) {
+    if (tronWeb) {
+      try {
         const { category, title, description, projectType, reward } = formData;
         const feeAmount = (reward / 100) * fee;
         const totalAmount = parseFloat(reward) + parseFloat(feeAmount);
@@ -246,19 +213,21 @@ export const PlatformProvider = ({ children }) => {
         setIsLoading(false);
         window.location.replace("/");
         notify("New task added successfully.");
-      } else {
-        console.log("No Tron object");
+      } catch (error) {
+        console.log(error);
+        alert(
+          "Oops! Something went wrong. See the browser console for details."
+        );
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.log(error);
-      alert("Oops! Something went wrong. See the browser console for details.");
-      setIsLoading(false);
+    } else {
+      console.log("No Tron object");
     }
   };
 
   const applyForProject = async (id) => {
-    try {
-      if (tronWeb) {
+    if (tronWeb) {
+      try {
         setIsLoading(true);
         const bnId = ethers.BigNumber.from(id);
         const contract = await createTronContract();
@@ -272,19 +241,21 @@ export const PlatformProvider = ({ children }) => {
         await getAllProjects();
         await getProject(id);
         notify("Successfully applied.");
-      } else {
-        console.log("No Tron object");
+      } catch (error) {
+        console.log(error);
+        alert(
+          "Oops! Something went wrong. See the browser console for details."
+        );
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.log(error);
-      alert("Oops! Something went wrong. See the browser console for details.");
-      setIsLoading(false);
+    } else {
+      console.log("No Tron object");
     }
   };
 
   const submitResult = async (id, result) => {
-    try {
-      if (tronWeb) {
+    if (tronWeb) {
+      try {
         setIsLoading(true);
         const contract = await createTronContract();
         const transaction = await contract
@@ -299,19 +270,21 @@ export const PlatformProvider = ({ children }) => {
         await getAllProjects();
         await getProject(id);
         notify("Result submitted successfully.");
-      } else {
-        console.log("No Tron object");
+      } catch (error) {
+        console.log(error);
+        alert(
+          "Oops! Something went wrong. See the browser console for details."
+        );
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.log(error);
-      alert("Oops! Something went wrong. See the browser console for details.");
-      setIsLoading(false);
+    } else {
+      console.log("No Tron object");
     }
   };
 
   const deleteProject = async (id) => {
-    try {
-      if (tronWeb) {
+    if (tronWeb) {
+      try {
         setIsLoading(true);
         const contract = await createTronContract();
         const transaction = await contract
@@ -326,19 +299,21 @@ export const PlatformProvider = ({ children }) => {
         await getAllProjects();
         notify("Task deleted successfully.");
         window.location.replace("/");
-      } else {
-        console.log("No Tron object");
+      } catch (error) {
+        console.log(error);
+        alert(
+          "Oops! Something went wrong. See the browser console for details."
+        );
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.log(error);
-      alert("Oops! Something went wrong. See the browser console for details.");
-      setIsLoading(false);
+    } else {
+      console.log("No Tron object");
     }
   };
 
   const assignProject = async (id, candidate) => {
-    try {
-      if (tronWeb) {
+    if (tronWeb) {
+      try {
         setIsLoading(true);
         const contract = await createTronContract();
         const transaction = await contract
@@ -353,19 +328,21 @@ export const PlatformProvider = ({ children }) => {
         await getAllProjects();
         await getProject(id);
         notify("Task assigned.");
-      } else {
-        console.log("No TRon object");
+      } catch (error) {
+        console.log(error);
+        alert(
+          "Oops! Something went wrong. See the browser console for details."
+        );
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.log(error);
-      alert("Oops! Something went wrong. See the browser console for details.");
-      setIsLoading(false);
+    } else {
+      console.log("No TRon object");
     }
   };
 
   const unassignProject = async (id) => {
-    try {
-      if (tronWeb) {
+    if (tronWeb) {
+      try {
         setIsLoading(true);
         const contract = await createTronContract();
         const transaction = await contract
@@ -380,13 +357,15 @@ export const PlatformProvider = ({ children }) => {
         await getAllProjects();
         await getProject(id);
         notify("Task unassigned.");
-      } else {
-        console.log("No Tron object");
+      } catch (error) {
+        console.log(error);
+        alert(
+          "Oops! Something went wrong. See the browser console for details."
+        );
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.log(error);
-      alert("Oops! Something went wrong. See the browser console for details.");
-      setIsLoading(false);
+    } else {
+      console.log("No Tron object");
     }
   };
 
@@ -410,7 +389,9 @@ export const PlatformProvider = ({ children }) => {
         notify("Change reaquest submitted.");
       } catch (error) {
         console.log(error);
-        alert("Oops! Something went wrong. See the browser console for details.");
+        alert(
+          "Oops! Something went wrong. See the browser console for details."
+        );
       }
     } else {
       console.log("No Tron object");
@@ -475,21 +456,35 @@ export const PlatformProvider = ({ children }) => {
             ...prevState,
             {
               id: p.id.toNumber(),
+              category: p.category,
               title: p.title,
               description: p.description,
               projectType: ProjectTypes[p.projectType],
               createdAt: new Date(
                 p.createdAt.toNumber() * 1000
               ).toLocaleString(),
-              author: p.author,
-              candidates: p.candidates,
-              assignee: p.assignee === address0 ? "Unassigned" : p.assignee,
+              author: tronWeb.address.fromHex(p.author),
+              candidates:
+                p.candidates.length > 0
+                  ? p.candidates.map((c) => tronWeb.address.fromHex(c))
+                  : [],
+              assignee:
+                p.assignee === address0
+                  ? "Unassigned"
+                  : tronWeb.address.fromHex(p.assignee),
               completedAt:
                 p.completedAt > 0
-                  ? new Date(p.completedAt.toNumber() * 1000).toLocaleString()
+                  ? new Date(
+                    p.completedAt.toNumber() * 1000
+                  ).toLocaleString()
                   : "Not completed yet",
-              reward: parseInt(p.reward, 10) / 10 ** 18,
+              reward: tronWeb.fromSun(p.reward),
               result: p.result,
+              status: Statuses[p.status],
+              lastStatusChangeAt: new Date(
+                p.lastStatusChangeAt.toNumber() * 1000
+              ).toLocaleString(),
+              changeRequests: p.changeRequests,
             },
           ]);
         }
@@ -513,26 +508,35 @@ export const PlatformProvider = ({ children }) => {
           const p = eventResult.result.project;
           const structuredProject = {
             id: p.id.toNumber(),
+            category: p.category,
             title: p.title,
             description: p.description,
             projectType: ProjectTypes[p.projectType],
-            createdAt: new Date(p.createdAt.toNumber() * 1000).toLocaleString(),
+            createdAt: new Date(
+              p.createdAt.toNumber() * 1000
+            ).toLocaleString(),
             author: tronWeb.address.fromHex(p.author),
-            candidates: p.candidates
-              ? p.candidates.map((candidate) =>
-                  tronWeb.address.fromHex(candidate)
-                )
-              : [],
+            candidates:
+                p.candidates.length > 0
+                  ? p.candidates.map((c) => tronWeb.address.fromHex(c))
+                  : [],
             assignee:
-              p.assignee === address0
-                ? "Unassigned"
-                : tronWeb.address.fromHex(p.assignee),
+                p.assignee === address0
+                  ? "Unassigned"
+                  : tronWeb.address.fromHex(p.assignee),
             completedAt:
-              p.completedAt > 0
-                ? new Date(p.completedAt.toNumber() * 1000).toLocaleString()
-                : "Not completed yet",
-            reward: parseInt(p.reward, 10) / 10 ** 18,
+                p.completedAt > 0
+                  ? new Date(
+                    p.completedAt.toNumber() * 1000
+                  ).toLocaleString()
+                  : "Not completed yet",
+            reward: tronWeb.fromSun(p.reward),
             result: p.result,
+            status: Statuses[p.status],
+            lastStatusChangeAt: new Date(
+              p.lastStatusChangeAt.toNumber() * 1000
+            ).toLocaleString(),
+            changeRequests: p.changeRequests,
           };
           setProject(structuredProject);
         }

@@ -11,3 +11,5 @@ export { default as Projects } from "./Projects";
 export { default as Profiles } from "./Profiles";
 export { default as Hero } from "./Hero";
 export { default as Candidates } from "./Candidates";
+export { default as Team } from "./Team";
+export { default as Sponsors } from "./Sponsors";

@@ -34,7 +34,7 @@ export default function Project() {
             <span />
           ) : (
             <div className="mt-1 text-white text-sm md:w-9/12">
-              Candidates applied ({project.candidates.length}):
+              Candidates applied ({project.candidates ? project.candidates.length : 0}):
               <Candidates candidates={project.candidates} />
             </div>
           )}

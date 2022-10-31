@@ -2,11 +2,8 @@ import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { HiMenuAlt4 } from "react-icons/hi";
 import { AiOutlineClose, AiFillPlayCircle } from "react-icons/ai";
-// import { FaStar } from "react-icons/fa";
-// import { shortenAddress } from "../utils/shortenAddress";
-// import { PlatformContext } from "../context/PlatformContext";
 import { AuthContext } from "../context/AuthContext";
-// import tronLogo from "../../images/tronlogo.png";
+import logo1 from "../../images/logo1.png";
 import Wallet from "./Wallet";
 
 const NavBarItem = ({ title, classprops }) => (
@@ -30,28 +27,16 @@ const Navbar = () => {
 
   const renderAccountInfo = () => (
     <div className="flex flex-row">
-      {/* <span>
-        My rating:
-      </span>
-      <span className="flex flex-row justify-center items-center mr-4">
-        {fetchedRating === 0
-          ? "unrated"
-          : [...Array(fetchedRating)].map((star, index) => (
-            <FaStar key={index} color="#ffc107" size={20} />
-          ))}
-      </span> */}
-      {/* <img alt="Network logo" className="w-4 h-4 self-center" src={tronLogo} />
-      <p>{shortenAddress(currentAccount)}</p> */}
       <Wallet />
     </div>
   );
 
   return (
     <nav className="w-full flex md:justify-center justify-between items-center p-4">
-      <div className="md:flex-[0.5] flex-initial justify-center items-center">
+      <div className="md:flex-[0.9] flex-initial justify-center items-center">
         <Link to="/">
           <p className="text-white text-2xl cursor-pointer font-bold">
-            <span className="text-[#d946ef]">Me</span>Do
+            <img alt="Brand logo" className="h-7 self-center" src={logo1} />
           </p>
         </Link>
       </div>
@@ -65,14 +50,11 @@ const Navbar = () => {
               <NavBarItem title="Find Freelancers" />
             </Link>
             <Link to="/profile/new">
-              <NavBarItem title="Create Profile" />
+              <NavBarItem title="Add Service" />
             </Link>
             <Link to="/new">
               <NavBarItem title="Add Task" />
             </Link>
-            {/* <Link to="/mytasks">
-              <NavBarItem title="My Tasks" />
-            </Link> */}
           </div>
         ) : (
           <li />
@@ -107,8 +89,14 @@ const Navbar = () => {
             </li>
             {currentAccount ? (
               <li>
+                <Link to="#">
+                  <NavBarItem title="Find Tasks" />
+                </Link>
+                <Link to="#">
+                  <NavBarItem title="Find Freelancers" />
+                </Link>
                 <Link to="/profile/new">
-                  <NavBarItem title="Create Profile" />
+                  <NavBarItem title="Add Service" />
                 </Link>
                 <Link to="/new">
                   <NavBarItem title="Add Task" />
