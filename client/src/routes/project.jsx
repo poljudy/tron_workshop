@@ -63,7 +63,7 @@ export default function Project() {
           <p className="mt-1 italic text-white text-sm md:w-9/12">
             Completed at: {project.completedAt}
           </p>
-          {/* <p className="mt-1 text-white text-sm md:w-9/12">Change Requests: {project.changeRequests}</p> */}
+          <p className="mt-1 text-white text-sm md:w-9/12">Change Requests: {project.changeRequests}</p>
 
           {isLoading ? (
             <Loader />

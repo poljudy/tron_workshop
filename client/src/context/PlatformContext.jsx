@@ -39,8 +39,8 @@ export const PlatformProvider = ({ children }) => {
   const [fee, setFee] = useState(0);
   const [fetchedRating, setFetchedRating] = useState(0);
   // const [contract, setContract] = useState(undefined);
-  const { currentAccount } = useContext(AuthContext);
-  const { tronWeb } = window;
+  const { currentAccount, tronWeb } = useContext(AuthContext);
+  // const { tronWeb } = window;
 
   const notify = (message, hash) => toast.success(<MessageDisplay message={message} hash={hash} />, {
     position: "top-right",
@@ -62,6 +62,41 @@ export const PlatformProvider = ({ children }) => {
     return c;
   };
 
+  function formatProject(p) {
+    return ({
+      id: p.id.toNumber(),
+      category: p.category,
+      title: p.title,
+      description: p.description,
+      projectType: ProjectTypes[p.projectType],
+      createdAt: new Date(
+        p.createdAt.toNumber() * 1000
+      ).toLocaleString(),
+      author: tronWeb.address.fromHex(p.author),
+      candidates:
+        p.candidates.length > 0
+          ? p.candidates.map((c) => tronWeb.address.fromHex(c))
+          : [],
+      assignee:
+        p.assignee === address0
+          ? "Unassigned"
+          : tronWeb.address.fromHex(p.assignee),
+      completedAt:
+        p.completedAt > 0
+          ? new Date(
+            p.completedAt.toNumber() * 1000
+          ).toLocaleString()
+          : "Not completed yet",
+      reward: tronWeb.fromSun(p.reward),
+      result: p.result,
+      status: Statuses[p.status],
+      lastStatusChangeAt: new Date(
+        p.lastStatusChangeAt.toNumber() * 1000
+      ).toLocaleString(),
+      changeRequests: p.changeRequests,
+    });
+  }
+
   const getAllProjects = async () => {
     try {
       if (tronWeb) {
@@ -71,31 +106,7 @@ export const PlatformProvider = ({ children }) => {
         console.log(availableProjects);
         const structuredProjects = availableProjects
           .filter((item) => item.title && item.title !== "")
-          .map((item) => ({
-            id: item.id.toNumber(),
-            category: item.category,
-            title: item.title,
-            description: item.description,
-            projectType: ProjectTypes[item.projectType],
-            createdAt: new Date(
-              item.createdAt.toNumber() * 1000
-            ).toLocaleString(),
-            author: tronWeb.address.fromHex(item.author),
-            candidates: item.candidates
-              ? item.candidates.map((c) => tronWeb.address.fromHex(c.candidate))
-              : [],
-            assignee:
-              item.assignee === address0
-                ? "Unassigned"
-                : tronWeb.address.fromHex(item.assignee),
-            completedAt:
-              item.completedAt > 0
-                ? new Date(item.completedAt.toNumber() * 1000).toLocaleString()
-                : "Not completed yet",
-            reward: tronWeb.fromSun(item.reward),
-            result: item.result,
-            status: Statuses[item.status],
-          }));
+          .map((item) => (formatProject(item)));
         setProjects(structuredProjects);
         setIsLoading(false);
       } else {
@@ -145,39 +156,7 @@ export const PlatformProvider = ({ children }) => {
         const contract = await createTronContract();
         const fetchedProject = await contract.getProject(id).call();
         console.log(fetchedProject);
-        const structuredProject = {
-          id: fetchedProject.id.toNumber(),
-          category: fetchedProject.category,
-          title: fetchedProject.title,
-          description: fetchedProject.description,
-          projectType: ProjectTypes[fetchedProject.projectType],
-          createdAt: new Date(
-            fetchedProject.createdAt.toNumber() * 1000
-          ).toLocaleString(),
-          author: tronWeb.address.fromHex(fetchedProject.author),
-          candidates:
-            fetchedProject.candidates.length > 0
-              ? fetchedProject.candidates.map((c) => tronWeb.address.fromHex(c))
-              : [],
-          assignee:
-            fetchedProject.assignee === address0
-              ? "Unassigned"
-              : tronWeb.address.fromHex(fetchedProject.assignee),
-          completedAt:
-            fetchedProject.completedAt > 0
-              ? new Date(
-                fetchedProject.completedAt.toNumber() * 1000
-              ).toLocaleString()
-              : "Not completed yet",
-          reward: tronWeb.fromSun(fetchedProject.reward),
-          result: fetchedProject.result,
-          status: Statuses[fetchedProject.status],
-          lastStatusChangeAt: new Date(
-            fetchedProject.lastStatusChangeAt.toNumber() * 1000
-          ).toLocaleString(),
-          changeRequests: fetchedProject.changeRequests,
-        };
-        setProject(structuredProject);
+        setProject(formatProject(fetchedProject));
         setIsLoading(false);
       } catch (error) {
         console.log(error);
@@ -392,6 +371,7 @@ export const PlatformProvider = ({ children }) => {
         alert(
           "Oops! Something went wrong. See the browser console for details."
         );
+        setIsLoading(false);
       }
     } else {
       console.log("No Tron object");
@@ -438,7 +418,7 @@ export const PlatformProvider = ({ children }) => {
     getRating(currentAccount);
   }, [currentAccount]);
 
-  // Events listeners
+  // Event listeners
 
   // TODO Fix events listenenrs later
 
@@ -450,42 +430,9 @@ export const PlatformProvider = ({ children }) => {
           return console.error('Error with "method" event:', err);
         }
         if (eventResult) {
-          console.log("eventResult:", eventResult);
-          const p = eventResult.result.project;
           setProjects((prevState) => [
             ...prevState,
-            {
-              id: p.id.toNumber(),
-              category: p.category,
-              title: p.title,
-              description: p.description,
-              projectType: ProjectTypes[p.projectType],
-              createdAt: new Date(
-                p.createdAt.toNumber() * 1000
-              ).toLocaleString(),
-              author: tronWeb.address.fromHex(p.author),
-              candidates:
-                p.candidates.length > 0
-                  ? p.candidates.map((c) => tronWeb.address.fromHex(c))
-                  : [],
-              assignee:
-                p.assignee === address0
-                  ? "Unassigned"
-                  : tronWeb.address.fromHex(p.assignee),
-              completedAt:
-                p.completedAt > 0
-                  ? new Date(
-                    p.completedAt.toNumber() * 1000
-                  ).toLocaleString()
-                  : "Not completed yet",
-              reward: tronWeb.fromSun(p.reward),
-              result: p.result,
-              status: Statuses[p.status],
-              lastStatusChangeAt: new Date(
-                p.lastStatusChangeAt.toNumber() * 1000
-              ).toLocaleString(),
-              changeRequests: p.changeRequests,
-            },
+            formatProject(eventResult.result.project),
           ]);
         }
       });
@@ -504,41 +451,7 @@ export const PlatformProvider = ({ children }) => {
           return console.error('Error with "method" event:', err);
         }
         if (eventResult) {
-          console.log("eventResult:", eventResult);
-          const p = eventResult.result.project;
-          const structuredProject = {
-            id: p.id.toNumber(),
-            category: p.category,
-            title: p.title,
-            description: p.description,
-            projectType: ProjectTypes[p.projectType],
-            createdAt: new Date(
-              p.createdAt.toNumber() * 1000
-            ).toLocaleString(),
-            author: tronWeb.address.fromHex(p.author),
-            candidates:
-                p.candidates.length > 0
-                  ? p.candidates.map((c) => tronWeb.address.fromHex(c))
-                  : [],
-            assignee:
-                p.assignee === address0
-                  ? "Unassigned"
-                  : tronWeb.address.fromHex(p.assignee),
-            completedAt:
-                p.completedAt > 0
-                  ? new Date(
-                    p.completedAt.toNumber() * 1000
-                  ).toLocaleString()
-                  : "Not completed yet",
-            reward: tronWeb.fromSun(p.reward),
-            result: p.result,
-            status: Statuses[p.status],
-            lastStatusChangeAt: new Date(
-              p.lastStatusChangeAt.toNumber() * 1000
-            ).toLocaleString(),
-            changeRequests: p.changeRequests,
-          };
-          setProject(structuredProject);
+          setProject(formatProject(eventResult.result.project));
         }
       });
     }

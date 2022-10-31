@@ -16,14 +16,14 @@ export default function Home() {
           <Sponsors />
         </>
       ) : (
-        <>
+        <div className="flex flex-row">
           <div className="flex flex-col w-9/12 md:p-12 py-12 px-4">
             {isLoading ? <Loader /> : <Projects />}
           </div>
           <div className="flex flex-col w-9/12 md:p-12 py-12 px-4">
             {isLoading ? <Loader /> : <Profiles />}
           </div>
-        </>
+        </div>
       )}
     </div>
   );

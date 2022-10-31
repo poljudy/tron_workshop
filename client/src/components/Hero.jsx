@@ -13,9 +13,10 @@ function Hero() {
   return (
     <>
       <div className="flex flex-col items-center">
-        <h1 className="text-white text-6xl">Meet our new brand</h1>
+        <h1 className="mt-10 text-white text-6xl">Meet our new brand</h1>
         <img alt="Brand logo" className="w-6/12 self-center" src={logo1} />
         <h2 className="mt-2 text-white text-4xl">formerly MeDo</h2>
+        <p className="mt-2 text-white text-4xl">the best decentralized freelance platform</p>
       </div>
       <div className="wrapper flex items-center justify-between px-[5rem] rounded-b-[5rem] w-[100%] h-[35rem] relative z-[3]">
         {/* left side */}
@@ -44,13 +45,13 @@ function Hero() {
         </div>
         {/* right side */}
         <div className="headings flex flex-1 flex-col text-white items-start justify-center h-[100%] text-[2rem]">
-          <img alt="Hero 1" className="w-10/12 self-center" src={hero2} />
+          <img alt="Hero 1" className="md:w-10/12 lg:w-6/12 self-center" src={hero1} />
         </div>
       </div>
       <div className="wrapper flex items-center justify-between px-[5rem] rounded-b-[5rem] w-[100%] h-[35rem] relative z-[3]">
         {/* left side */}
         <div className="headings flex flex-1 flex-col text-white items-start justify-center h-[100%] text-[2rem]">
-          <img alt="Hero 2" className="w-11/12 self-center" src={hero1} />
+          <img alt="Hero 2" className="md:w-11/12 lg:w-8/12 self-center" src={hero2} />
         </div>
         {/* right side */}
         <div className="headings flex flex-1 flex-col text-white items-start justify-center h-[100%] text-[2rem]">
