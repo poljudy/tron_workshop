@@ -2,13 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import App from "./App";
+import "./index.css";
 import { PlatformProvider } from "./context/PlatformContext";
 import { AuthProvider } from "./context/AuthContext";
 import MyTasks from "./routes/myTasks";
-import Project from "./routes/project";
-import "./index.css";
-import NewProject from "./routes/new";
-import NewProfile from "./routes/newProfile";
+import Task from "./routes/task";
+import Service from "./routes/service";
+import NewTask from "./routes/newTask";
+import NewService from "./routes/newService";
+import Services from "./routes/services";
+import Tasks from "./routes/tasks";
 import Home from "./routes/home";
 
 ReactDOM.render(
@@ -18,10 +21,12 @@ ReactDOM.render(
         <Routes>
           <Route path="/" element={<App />}>
             <Route index element={<Home />} />
-            <Route path="profile" element={<MyTasks />} />
-            <Route path="profile/new" element={<NewProfile />} />
-            <Route path="new" element={<NewProject />} />
-            <Route path=":id" element={<Project />} />
+            <Route path="services" element={<Services />} />
+            <Route path="services/new" element={<NewService />} />
+            <Route path="tasks/:id" element={<Service />} />
+            <Route path="tasks" element={<Tasks />} />
+            <Route path="tasks/new" element={<NewTask />} />
+            <Route path="tasks/:id" element={<Task />} />
             <Route
               path="*"
               element={(

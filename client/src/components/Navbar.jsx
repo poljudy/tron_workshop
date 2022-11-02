@@ -43,16 +43,16 @@ const Navbar = () => {
       <ul className="text-white md:flex hidden list-none flex-row justify-between items-center flex-initial">
         {currentAccount ? (
           <div className="flex flex-row">
-            <Link to="#">
+            <Link to="/tasks">
               <NavBarItem title="Find Tasks" />
             </Link>
-            <Link to="#">
+            <Link to="/services">
               <NavBarItem title="Find Freelancers" />
             </Link>
-            <Link to="/profile/new">
+            <Link to="/services/new">
               <NavBarItem title="Add Service" />
             </Link>
-            <Link to="/new">
+            <Link to="/tasks/new">
               <NavBarItem title="Add Task" />
             </Link>
           </div>
@@ -89,16 +89,16 @@ const Navbar = () => {
             </li>
             {currentAccount ? (
               <li>
-                <Link to="#">
+                <Link to="/tasks">
                   <NavBarItem title="Find Tasks" />
                 </Link>
-                <Link to="#">
+                <Link to="/services">
                   <NavBarItem title="Find Freelancers" />
                 </Link>
-                <Link to="/profile/new">
+                <Link to="/services/new">
                   <NavBarItem title="Add Service" />
                 </Link>
-                <Link to="/new">
+                <Link to="/tasks/new">
                   <NavBarItem title="Add Task" />
                 </Link>
               </li>

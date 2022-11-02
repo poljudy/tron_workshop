@@ -25,7 +25,7 @@ const FormField = ({ placeholder, name, type, value, handleChange }) => {
           <option style={{ backgroundColor: "rgb(30 41 59)" }} value="Other">Other</option>
         </select>
       );
-    case "projectType":
+    case "taskType":
       return (
         <select
           className="appearance-none w-full bg-transparent border text-white py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:border-gray-500 light:text-gray-800"
@@ -34,7 +34,7 @@ const FormField = ({ placeholder, name, type, value, handleChange }) => {
           onChange={(e) => handleChange(e, name)}
         >
           <option style={{ backgroundColor: "rgb(30 41 59)" }} className="bg-slate-800" value="0">First Come First Serve</option>
-          <option style={{ backgroundColor: "rgb(30 41 59)" }} value="1">Casting</option>
+          <option style={{ backgroundColor: "rgb(30 41 59)" }} value="1">SelectedByAuthor</option>
         </select>
       );
     case "description":
@@ -62,8 +62,8 @@ const FormField = ({ placeholder, name, type, value, handleChange }) => {
   }
 };
 
-export default function NewProject() {
-  const { handleChange, addProject, formData, isLoading, fee } =
+export default function NewTask() {
+  const { handleChange, addTask, formData, isLoading, fee } =
     useContext(PlatformContext);
 
   const { currentAccount } = useContext(AuthContext);
@@ -83,7 +83,7 @@ export default function NewProject() {
     const { title, description, reward } = formData;
     e.preventDefault();
     if (!title || !description || !reward) return;
-    addProject();
+    addTask();
   };
 
   const totalAmount = (
@@ -147,7 +147,7 @@ export default function NewProject() {
               </span>
               <div className="relative">
                 <FormField
-                  name="projectType"
+                  name="taskType"
                   type="select"
                   handleChange={handleChange}
                 />

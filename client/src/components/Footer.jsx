@@ -13,7 +13,7 @@ const Footer = () => (
     <div className="sm:w-[90%] w-full flex flex-row justify-between mt-3">
       <div className="flex text-white text-left">
         <img alt="Brand logo" className="h-6" src={logo1} />
-        <AiOutlineCopyright className="w-3 self-center" />
+        <AiOutlineCopyright className="w-4 self-center" />
         <span className="text-xl">2022</span>
       </div>
       <div className="flex gap-2 text-white text-right">

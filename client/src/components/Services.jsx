@@ -2,23 +2,22 @@ import { useContext } from "react";
 import { HiSearch } from "react-icons/hi";
 import { useSearchParams } from "react-router-dom";
 import { PlatformContext } from "../context/PlatformContext";
-import ProjectCard from "./ProjectCard";
+import TaskCard from "./TaskCard";
 
-const Profiles = () => {
+const Services = () => {
   // const { currentAccount } = useContext(AuthContext);
-  const { projects } = useContext(PlatformContext);
+  const { tasks } = useContext(PlatformContext);
   const [searchParams, setSearchParams] = useSearchParams();
-  console.log(projects);
   return (
     <>
-      {projects ? (
+      {tasks ? (
         <div>
           <p className="text-white text-3xl text-center my-2">
-            {projects.length === 0
+            {tasks.length === 0
               ? "No profiles yet"
-              : `Recent Profiles (${projects.length})`}
+              : `Recent Profiles (${tasks.length})`}
           </p>
-          {projects.length > 0 && (
+          {tasks.length > 0 && (
             <div className="flex flex-row justify-center items-center">
               <input
                 className="my-2 w-4/12 rounded-sm p-2 outline-none bg-transparent text-white text-sm white-glassmorphism"
@@ -46,8 +45,8 @@ const Profiles = () => {
         </p>
       )}
       <div className="list-none justify-center items-center mt-10">
-        {projects &&
-          [...projects]
+        {tasks &&
+          [...tasks]
             .reverse()
             .filter((p) => {
               const filter = searchParams.get("filter");
@@ -55,10 +54,10 @@ const Profiles = () => {
               const title = p.title.toLowerCase();
               return title.includes(filter.toLowerCase());
             })
-            .map((project, i) => <ProjectCard key={i} {...project} />)}
+            .map((task, i) => <TaskCard key={i} {...task} />)}
       </div>
     </>
   );
 };
 
-export default Profiles;
+export default Services;

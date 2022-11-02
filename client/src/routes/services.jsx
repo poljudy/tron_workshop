@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import TaskCard from "../components/TaskCard";
 import { PlatformContext } from "../context/PlatformContext";
 
-const MyTasks = () => {
+const Services = () => {
   const { tasks, getAllTasks, currentAccount } = useContext(PlatformContext);
 
   useEffect(() => {
@@ -44,4 +44,4 @@ const MyTasks = () => {
   );
 };
 
-export default MyTasks;
+export default Services;

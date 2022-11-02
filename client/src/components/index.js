@@ -1,14 +1,14 @@
 export { default as Loader } from "./Loader";
 export { default as Navbar } from "./Navbar";
 export { default as Footer } from "./Footer";
-export { default as ProjectCard } from "./ProjectCard";
+export { default as TaskCard } from "./TaskCard";
 export { default as ActionControls } from "./ActionControls";
 export { default as AuthorActions } from "./AuthorActions";
 export { default as AssigneeActions } from "./AssigneeActions";
 export { default as CandidateActions } from "./CandidateActions";
 export { default as StarRating } from "./StarRating";
-export { default as Projects } from "./Projects";
-export { default as Profiles } from "./Profiles";
+export { default as Tasks } from "./Tasks";
+export { default as Services } from "./Services";
 export { default as Hero } from "./Hero";
 export { default as Candidates } from "./Candidates";
 export { default as Team } from "./Team";

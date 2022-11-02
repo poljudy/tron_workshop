@@ -5,24 +5,24 @@ import AssigneeActions from "./AssigneeActions";
 import CandidateActions from "./CandidateActions";
 
 const ActionButton = (params) => {
-  const { currentAccount, applyForProject } = useContext(PlatformContext);
+  const { currentAccount, applyForTask } = useContext(PlatformContext);
   const isCandidate = () => {
-    for (let i = 0; i < params.project.candidates.length; i += 1) {
-      if (params.project.candidates[i] === currentAccount) {
+    for (let i = 0; i < params.task.candidates.length; i += 1) {
+      if (params.task.candidates[i] === currentAccount) {
         return true;
       }
     }
     return false;
   };
   let button;
-  if (params.project.author === currentAccount) {
+  if (params.task.author === currentAccount) {
     button = <AuthorActions />;
   } else if (
-    params.project.assignee !== "Unassigned" &&
-    params.project.assignee !== currentAccount
+    params.task.assignee !== "Unassigned" &&
+    params.task.assignee !== currentAccount
   ) {
     button = <p />;
-  } else if (params.project.assignee === currentAccount) {
+  } else if (params.task.assignee === currentAccount) {
     button = <AssigneeActions />;
   } else if (isCandidate()) {
     button = <CandidateActions />;
@@ -31,7 +31,7 @@ const ActionButton = (params) => {
       <div>
         <button
           type="button"
-          onClick={() => applyForProject(params.project.id)}
+          onClick={() => applyForTask(params.task.id)}
           className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
         >
           Apply

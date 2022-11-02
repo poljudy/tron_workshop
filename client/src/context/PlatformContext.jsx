@@ -2,7 +2,7 @@ import { createContext, useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { ethers } from "ethers";
 import { AuthContext } from "./AuthContext";
-import { contractAddress, ProjectTypes, address0, Statuses } from "../utils/constants";
+import { contractAddress, TaskTypes, address0, Statuses } from "../utils/constants";
 import contractABI from "../utils/contractABI.json";
 
 export const PlatformContext = createContext();
@@ -30,12 +30,12 @@ export const PlatformProvider = ({ children }) => {
     category: "Programming & Tech",
     title: "",
     description: "",
-    projectType: "0",
+    taskType: "0",
     reward: 0,
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [projects, setProjects] = useState("");
-  const [project, setProject] = useState([]);
+  const [tasks, setTasks] = useState("");
+  const [task, setTask] = useState([]);
   const [fee, setFee] = useState(0);
   const [fetchedRating, setFetchedRating] = useState(0);
   // const [contract, setContract] = useState(undefined);
@@ -62,52 +62,52 @@ export const PlatformProvider = ({ children }) => {
     return c;
   };
 
-  function formatProject(p) {
+  function formatTask(t) {
     return ({
-      id: p.id.toNumber(),
-      category: p.category,
-      title: p.title,
-      description: p.description,
-      projectType: ProjectTypes[p.projectType],
+      id: t.id.toNumber(),
+      category: t.category,
+      title: t.title,
+      description: t.description,
+      taskType: TaskTypes[t.taskType],
       createdAt: new Date(
-        p.createdAt.toNumber() * 1000
+        t.createdAt.toNumber() * 1000
       ).toLocaleString(),
-      author: tronWeb.address.fromHex(p.author),
+      author: tronWeb.address.fromHex(t.author),
       candidates:
-        p.candidates.length > 0
-          ? p.candidates.map((c) => tronWeb.address.fromHex(c))
+        t.candidates.length > 0
+          ? t.candidates.map((c) => tronWeb.address.fromHex(c))
           : [],
       assignee:
-        p.assignee === address0
+        t.assignee === address0
           ? "Unassigned"
-          : tronWeb.address.fromHex(p.assignee),
+          : tronWeb.address.fromHex(t.assignee),
       completedAt:
-        p.completedAt > 0
+        t.completedAt > 0
           ? new Date(
-            p.completedAt.toNumber() * 1000
+            t.completedAt.toNumber() * 1000
           ).toLocaleString()
           : "Not completed yet",
-      reward: tronWeb.fromSun(p.reward),
-      result: p.result,
-      status: Statuses[p.status],
+      reward: tronWeb.fromSun(t.reward),
+      result: t.result,
+      status: Statuses[t.status],
       lastStatusChangeAt: new Date(
-        p.lastStatusChangeAt.toNumber() * 1000
+        t.lastStatusChangeAt.toNumber() * 1000
       ).toLocaleString(),
-      changeRequests: p.changeRequests,
+      changeRequests: t.changeRequests,
     });
   }
 
-  const getAllProjects = async () => {
+  const getAllTasks = async () => {
     try {
       if (tronWeb) {
         setIsLoading(true);
         const contract = await createTronContract();
-        const availableProjects = await contract.getAllProjects().call();
-        console.log(availableProjects);
-        const structuredProjects = availableProjects
+        const availableTasks = await contract.getAllTasks().call();
+        console.log(availableTasks);
+        const structuredTasks = availableTasks
           .filter((item) => item.title && item.title !== "")
-          .map((item) => (formatProject(item)));
-        setProjects(structuredProjects);
+          .map((item) => (formatTask(item)));
+        setTasks(structuredTasks);
         setIsLoading(false);
       } else {
         console.log("Tron is not present");
@@ -149,14 +149,14 @@ export const PlatformProvider = ({ children }) => {
     }
   };
 
-  const getProject = async (id) => {
+  const getTask = async (id) => {
     if (tronWeb) {
       try {
         setIsLoading(true);
         const contract = await createTronContract();
-        const fetchedProject = await contract.getProject(id).call();
-        console.log(fetchedProject);
-        setProject(formatProject(fetchedProject));
+        const fetchedTask = await contract.getTask(id).call();
+        console.log(fetchedTask);
+        setTask(formatTask(fetchedTask));
         setIsLoading(false);
       } catch (error) {
         console.log(error);
@@ -168,22 +168,22 @@ export const PlatformProvider = ({ children }) => {
     }
   };
 
-  const addProject = async () => {
+  const addTask = async () => {
     if (tronWeb) {
       try {
-        const { category, title, description, projectType, reward } = formData;
+        const { category, title, description, taskType, reward } = formData;
         const feeAmount = (reward / 100) * fee;
         const totalAmount = parseFloat(reward) + parseFloat(feeAmount);
-        const projectToSend = [
+        const taskToSend = [
           category,
           title,
           description,
-          projectType,
+          taskType,
           tronWeb.toSun(reward),
         ];
         setIsLoading(true);
         const contract = await createTronContract();
-        const transaction = await contract.addProject(projectToSend).send({
+        const transaction = await contract.addTask(taskToSend).send({
           feeLimit: 1000_000_000,
           callValue: tronWeb.toSun(totalAmount),
           shouldPollResponse: true,
@@ -204,21 +204,21 @@ export const PlatformProvider = ({ children }) => {
     }
   };
 
-  const applyForProject = async (id) => {
+  const applyForTask = async (id) => {
     if (tronWeb) {
       try {
         setIsLoading(true);
         const bnId = ethers.BigNumber.from(id);
         const contract = await createTronContract();
-        const transaction = await contract.applyForProject(bnId).send({
+        const transaction = await contract.applyForTask(bnId).send({
           feeLimit: 100_000_000,
           callValue: 0,
           shouldPollResponse: true,
         });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
-        await getAllProjects();
-        await getProject(id);
+        await getAllTasks();
+        await getTask(id);
         notify("Successfully applied.");
       } catch (error) {
         console.log(error);
@@ -246,8 +246,8 @@ export const PlatformProvider = ({ children }) => {
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
-        await getAllProjects();
-        await getProject(id);
+        await getAllTasks();
+        await getTask(id);
         notify("Result submitted successfully.");
       } catch (error) {
         console.log(error);
@@ -261,13 +261,13 @@ export const PlatformProvider = ({ children }) => {
     }
   };
 
-  const deleteProject = async (id) => {
+  const deleteTask = async (id) => {
     if (tronWeb) {
       try {
         setIsLoading(true);
         const contract = await createTronContract();
         const transaction = await contract
-          .deleteProject(ethers.BigNumber.from(id))
+          .deleteTask(ethers.BigNumber.from(id))
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
@@ -275,7 +275,7 @@ export const PlatformProvider = ({ children }) => {
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
-        await getAllProjects();
+        await getAllTasks();
         notify("Task deleted successfully.");
         window.location.replace("/");
       } catch (error) {
@@ -290,13 +290,13 @@ export const PlatformProvider = ({ children }) => {
     }
   };
 
-  const assignProject = async (id, candidate) => {
+  const assignTask = async (id, candidate) => {
     if (tronWeb) {
       try {
         setIsLoading(true);
         const contract = await createTronContract();
         const transaction = await contract
-          .assignProject(ethers.BigNumber.from(id), candidate)
+          .assignTask(ethers.BigNumber.from(id), candidate)
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
@@ -304,8 +304,8 @@ export const PlatformProvider = ({ children }) => {
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
-        await getAllProjects();
-        await getProject(id);
+        await getAllTasks();
+        await getTask(id);
         notify("Task assigned.");
       } catch (error) {
         console.log(error);
@@ -319,13 +319,13 @@ export const PlatformProvider = ({ children }) => {
     }
   };
 
-  const unassignProject = async (id) => {
+  const unassignTask = async (id) => {
     if (tronWeb) {
       try {
         setIsLoading(true);
         const contract = await createTronContract();
         const transaction = await contract
-          .unassignProject(ethers.BigNumber.from(id))
+          .unassignTask(ethers.BigNumber.from(id))
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
@@ -333,8 +333,8 @@ export const PlatformProvider = ({ children }) => {
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
-        await getAllProjects();
-        await getProject(id);
+        await getAllTasks();
+        await getTask(id);
         notify("Task unassigned.");
       } catch (error) {
         console.log(error);
@@ -363,8 +363,8 @@ export const PlatformProvider = ({ children }) => {
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
-        await getAllProjects();
-        await getProject(id);
+        await getAllTasks();
+        await getTask(id);
         notify("Change reaquest submitted.");
       } catch (error) {
         console.log(error);
@@ -378,13 +378,13 @@ export const PlatformProvider = ({ children }) => {
     }
   };
 
-  const completeProject = async (id, newRating) => {
+  const completeTask = async (id, newRating) => {
     try {
       if (tronWeb) {
         setIsLoading(true);
         const contract = await createTronContract();
         const transaction = await contract
-          .completeProject(ethers.BigNumber.from(id), newRating)
+          .completeTask(ethers.BigNumber.from(id), newRating)
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
@@ -392,8 +392,8 @@ export const PlatformProvider = ({ children }) => {
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
-        await getAllProjects();
-        await getProject(id);
+        await getAllTasks();
+        await getTask(id);
         notify("Task completed.");
       } else {
         console.log("No Tron object");
@@ -408,7 +408,7 @@ export const PlatformProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       await createTronContract();
-      await getAllProjects();
+      await getAllTasks();
       await getPlatformFee();
     };
     fetchData().catch(console.error);
@@ -425,14 +425,14 @@ export const PlatformProvider = ({ children }) => {
   const onTaskAdded = async () => {
     const contract = await createTronContract();
     if (tronWeb) {
-      await contract.ProjectAdded().watch((err, eventResult) => {
+      await contract.TaskAdded().watch((err, eventResult) => {
         if (err) {
           return console.error('Error with "method" event:', err);
         }
         if (eventResult) {
-          setProjects((prevState) => [
+          setTasks((prevState) => [
             ...prevState,
-            formatProject(eventResult.result.project),
+            formatTask(eventResult.result.task),
           ]);
         }
       });
@@ -446,12 +446,12 @@ export const PlatformProvider = ({ children }) => {
   const onTaskUpdated = async () => {
     if (tronWeb) {
       const contract = await createTronContract();
-      await contract.ProjectUpdated().watch((err, eventResult) => {
+      await contract.TaskUpdated().watch((err, eventResult) => {
         if (err) {
           return console.error('Error with "method" event:', err);
         }
         if (eventResult) {
-          setProject(formatProject(eventResult.result.project));
+          setTask(formatTask(eventResult.result.task));
         }
       });
     }
@@ -483,14 +483,14 @@ export const PlatformProvider = ({ children }) => {
   const onTaskDeleted = async () => {
     const contract = await createTronContract();
     if (tronWeb) {
-      await contract.ProjectDeleted().watch((err, eventResult) => {
+      await contract.TaskDeleted().watch((err, eventResult) => {
         if (err) {
           return console.error('Error with "method" event:', err);
         }
         if (eventResult) {
           console.log("eventResult:", eventResult);
           const id = eventResult.result.id.toNumber();
-          setProjects((current) => current.filter((p) => p.id !== id));
+          setTasks((current) => current.filter((p) => p.id !== id));
         }
       });
     }
@@ -504,21 +504,21 @@ export const PlatformProvider = ({ children }) => {
     <PlatformContext.Provider
       value={{
         fee,
-        projects,
-        ProjectTypes,
-        project,
+        tasks,
+        TaskTypes,
+        task,
         currentAccount,
         isLoading,
-        getAllProjects,
-        getProject,
-        addProject,
-        applyForProject,
+        getAllTasks,
+        getTask,
+        addTask,
+        applyForTask,
         submitResult,
-        deleteProject,
-        assignProject,
-        unassignProject,
+        deleteTask,
+        assignTask,
+        unassignTask,
         requestChange,
-        completeProject,
+        completeTask,
         handleChange,
         getRating,
         fetchedRating,

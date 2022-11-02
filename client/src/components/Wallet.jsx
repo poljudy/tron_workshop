@@ -11,7 +11,7 @@ function classNames(...classes) {
 }
 
 export default function Wallet() {
-  const { currentAccount, connectWallet } = useContext(AuthContext);
+  const { currentAccount } = useContext(AuthContext);
   const [balance, setBalance] = useState(0);
   const { fetchedRating } = useContext(PlatformContext);
 

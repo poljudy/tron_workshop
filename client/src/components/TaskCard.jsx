@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 
-const ProjectCard = ({
+const TaskCard = ({
   id,
   title,
   createdAt,
-  projectType,
+  taskType,
   reward,
   status,
   category,
@@ -14,7 +14,7 @@ const ProjectCard = ({
     <div className="flex flex-row justify-center items-start white-glassmorphism p-3 m-2 cursor-pointer transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300">
       <div className="ml-5 flex flex-col flex-1">
         <p className="mt-2 text-white text-3xl md:w-9/12">{title}</p>
-        <p className="mt-1 italic text-white text-sm md:w-9/12">{projectType}</p>
+        <p className="mt-1 italic text-white text-sm md:w-9/12">{taskType}</p>
         <p className="mt-1 italic text-white text-sm md:w-9/12">Created at: {createdAt}</p>
         <p className="mt-1 italic text-white text-sm md:w-9/12">Candidates: {candidates.length}</p>
         <div className="flex flex-row gap-2 items-center">
@@ -31,4 +31,4 @@ const ProjectCard = ({
   </Link>
 );
 
-export default ProjectCard;
+export default TaskCard;

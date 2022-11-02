@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { PlatformContext } from "../context/PlatformContext";
-import { Projects, Profiles, Hero, Team, Sponsors, Loader } from "../components";
+import { Tasks, Services, Hero, Team, Sponsors, Loader } from "../components";
 import { AuthContext } from "../context/AuthContext";
 
 export default function Home() {
@@ -16,12 +16,13 @@ export default function Home() {
           <Sponsors />
         </>
       ) : (
-        <div className="flex flex-row">
-          <div className="flex flex-col w-9/12 md:p-12 py-12 px-4">
-            {isLoading ? <Loader /> : <Projects />}
+        <div className="flex flex-col">
+          <div className="flex flex-row w-full md:p-12 py-12 px-4">
+            <p className="text-white">Recent Tasks <span>View all</span></p>
+            {isLoading ? <Loader /> : <Tasks />}
           </div>
-          <div className="flex flex-col w-9/12 md:p-12 py-12 px-4">
-            {isLoading ? <Loader /> : <Profiles />}
+          <div className="flex flex-row w-full md:p-12 py-12 px-4">
+            {isLoading ? <Loader /> : <Services />}
           </div>
         </div>
       )}

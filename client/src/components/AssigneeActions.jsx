@@ -2,15 +2,15 @@ import { useContext, useState } from "react";
 import { PlatformContext } from "../context/PlatformContext";
 
 const AssigneeActions = () => {
-  const { project, unassignProject, submitResult } =
+  const { task, unassignTask, submitResult } =
     useContext(PlatformContext);
   const [result, setResult] = useState("");
   const handleSubmit = (e) => {
     if (result === "") return;
     e.preventDefault();
-    submitResult(project.id, result);
+    submitResult(task.id, result);
   };
-  if (project.result) {
+  if (task.result) {
     return (
       <p className="mt-5 text-2xl text-white text-basetext-white">
         Result submitted. Waiting for completion from the author.
@@ -22,7 +22,7 @@ const AssigneeActions = () => {
       <button
         type="button"
         className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
-        onClick={() => unassignProject(project.id)}
+        onClick={() => unassignTask(task.id)}
       >
         Unassign
       </button>

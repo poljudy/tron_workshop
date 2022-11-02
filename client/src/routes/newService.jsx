@@ -48,8 +48,8 @@ const FormField = ({ placeholder, name, type, value, handleChange }) => {
   );
 };
 
-export default function NewProfile() {
-  const { handleChange, addProject, formData, isLoading, fee } =
+export default function NewService() {
+  const { handleChange, addTask, formData, isLoading, fee } =
     useContext(PlatformContext);
 
   const { currentAccount } = useContext(AuthContext);
@@ -69,7 +69,7 @@ export default function NewProfile() {
     const { title, description, reward } = formData;
     e.preventDefault();
     if (!title || !description || !reward) return;
-    addProject();
+    addTask();
   };
 
   // const totalAmount = (
@@ -81,7 +81,7 @@ export default function NewProfile() {
       <div className="flex mf:flex-row flex-col items-start justify-between md:p-20 py-12 px-4">
         <div className="flex flex-1 justify-start items-start flex-col mf:mr-10">
           <h1 className="text-3xl sm:text-5xl text-white py-1">
-            Create Your Profile
+            Add Service
           </h1>
           <p className="text-left mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
             Let your customers know what your services are.
