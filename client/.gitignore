@@ -25,3 +25,4 @@ typechain
 #Hardhat files
 cache
 artifacts
+package-lock.js

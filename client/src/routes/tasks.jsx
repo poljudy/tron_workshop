@@ -3,6 +3,7 @@ import { HiSearch } from "react-icons/hi";
 import { useSearchParams } from "react-router-dom";
 import { PlatformContext } from "../context/PlatformContext";
 import TaskCard from "../components/TaskCard";
+import { Categories } from "../utils/constants";
 
 const Tasks = () => {
   // const { currentAccount } = useContext(AuthContext);
@@ -10,7 +11,7 @@ const Tasks = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   console.log(tasks);
   return (
-    <>
+    <div className="min-h-screen">
       {tasks ? (
         <div>
           <p className="text-white text-3xl text-center my-2">
@@ -37,6 +38,9 @@ const Tasks = () => {
               <span>
                 <HiSearch size={30} className="text-gray-500" />
               </span>
+              <div className="flex flex-row gap-2 justify-center items-center">
+                {Categories.map((c, i) => <div className="p-2 text-center text-white white-glassmorphism" key={i}>{c}</div>)}
+              </div>
             </div>
           )}
         </div>
@@ -57,7 +61,7 @@ const Tasks = () => {
             })
             .map((task, i) => <TaskCard key={i} {...task} />)}
       </div>
-    </>
+    </div>
   );
 };
 

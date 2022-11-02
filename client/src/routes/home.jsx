@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import { PlatformContext } from "../context/PlatformContext";
-import { Tasks, Services, Hero, Team, Sponsors, Loader } from "../components";
+import { Welcome, Tasks, Services, Hero, Team, Sponsors, Loader } from "../components";
 import { AuthContext } from "../context/AuthContext";
 
 export default function Home() {
@@ -16,13 +17,29 @@ export default function Home() {
           <Sponsors />
         </>
       ) : (
-        <div className="flex flex-col">
-          <div className="flex flex-row w-full md:p-12 py-12 px-4">
-            <p className="text-white">Recent Tasks <span>View all</span></p>
-            {isLoading ? <Loader /> : <Tasks />}
+        <div className="flex flex-col items-center">
+          <Welcome />
+          <div className="flex flex-col w-full py-12 px-4">
+            <div className="flex flex-row text-white w-full justify-between text-3xl">
+              <span className="text-left">Recent Tasks</span>
+              <Link to="/tasks" className="text-blue-400 text-xl">
+                <i>View all</i>
+              </Link>
+            </div>
+            <div>
+              {isLoading ? <Loader /> : <Tasks />}
+            </div>
           </div>
-          <div className="flex flex-row w-full md:p-12 py-12 px-4">
-            {isLoading ? <Loader /> : <Services />}
+          <div className="flex flex-col w-full py-12 px-4">
+            <div className="flex flex-row text-white w-full justify-between text-3xl">
+              <span className="text-left">Recent Services</span>
+              <Link to="/services" className="text-blue-400 text-xl">
+                <i>View all</i>
+              </Link>
+            </div>
+            <div>
+              {isLoading ? <Loader /> : <Services />}
+            </div>
           </div>
         </div>
       )}

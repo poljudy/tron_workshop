@@ -1,29 +1,15 @@
 import { createContext, useEffect, useState, useContext } from "react";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import { ethers } from "ethers";
 import { AuthContext } from "./AuthContext";
 import { contractAddress, TaskTypes, address0, Statuses } from "../utils/constants";
 import contractABI from "../utils/contractABI.json";
+import { PlatformContext } from "./PlatformContext";
+// import MessageDisplay from "./PlatformContext";
 
-export const PlatformContext = createContext();
+export const ProfileContext = createContext();
 
-const MessageDisplay = ({ message, hash }) => (
-  <div className="w-full">
-    <p>{message}</p>
-    {hash && (
-      <a
-        className="text-[#6366f1]"
-        href={`https://nile.tronscan.org/#/transaction/${hash}`}
-        target="_blank"
-        rel="noreferrer"
-      >
-        Check in tronscan
-      </a>
-    )}
-  </div>
-);
-
-export const PlatformProvider = ({ children }) => {
+export const ProfileProvider = ({ children }) => {
   const [formData, setformData] = useState({
     category: "Programming & Tech",
     title: "",
@@ -31,25 +17,15 @@ export const PlatformProvider = ({ children }) => {
     taskType: "0",
     reward: 0,
   });
-  const [isLoading, setIsLoading] = useState(false);
+//   const [isLoading, setIsLoading] = useState(false);
   const [tasks, setTasks] = useState("");
   const [task, setTask] = useState([]);
-  const [fee, setFee] = useState(0);
-  const [fetchedRating, setFetchedRating] = useState(0);
+//   const [fee, setFee] = useState(0);
+//   const [fetchedRating, setFetchedRating] = useState(0);
   // const [contract, setContract] = useState(undefined);
   const { currentAccount, tronWeb } = useContext(AuthContext);
   // const { tronWeb } = window;
-
-  const notify = (message, hash) => toast.success(<MessageDisplay message={message} hash={hash} />, {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "dark",
-  });
+  const { notify, fee, setIsLoading } = useContext(PlatformContext);
 
   const handleChange = (e, name) => {
     setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
@@ -117,36 +93,6 @@ export const PlatformProvider = ({ children }) => {
     }
   };
 
-  const getPlatformFee = async () => {
-    try {
-      if (tronWeb) {
-        const contract = await createTronContract();
-        const fetchedFee = await contract.platformFeePercentage().call();
-        setFee(fetchedFee);
-      } else {
-        console.log("Tron is not present");
-      }
-    } catch (error) {
-      console.log(error);
-      alert(error.message);
-    }
-  };
-
-  const getRating = async (address) => {
-    try {
-      if (tronWeb && address) {
-        const contract = await createTronContract();
-        const r = await contract.getRating(address).call();
-        setFetchedRating(r);
-      } else {
-        console.log("Tron is not present");
-      }
-    } catch (error) {
-      console.log(error);
-      alert(error.message);
-    }
-  };
-
   const getTask = async (id) => {
     if (tronWeb) {
       try {
@@ -166,7 +112,7 @@ export const PlatformProvider = ({ children }) => {
     }
   };
 
-  const addTask = async () => {
+  const createProfile = async () => {
     if (tronWeb) {
       try {
         const { category, title, description, taskType, reward } = formData;
@@ -407,14 +353,9 @@ export const PlatformProvider = ({ children }) => {
     const fetchData = async () => {
       await createTronContract();
       await getAllTasks();
-      await getPlatformFee();
     };
     fetchData().catch(console.error);
   }, []);
-
-  useEffect(() => {
-    getRating(currentAccount);
-  }, [currentAccount]);
 
   // Event listeners
 
@@ -459,25 +400,6 @@ export const PlatformProvider = ({ children }) => {
     onTaskUpdated().catch(console.error);
   }, []);
 
-  const onFeeUpdated = async () => {
-    const contract = await createTronContract();
-    if (tronWeb) {
-      await contract.FeeUpdated().watch((err, eventResult) => {
-        if (err) {
-          return console.error('Error with "method" event:', err);
-        }
-        if (eventResult) {
-          console.log("eventResult:", eventResult);
-          setFee(eventResult.result.fee.toNumber());
-        }
-      });
-    }
-  };
-
-  useEffect(() => {
-    onFeeUpdated().catch(console.error);
-  }, []);
-
   const onTaskDeleted = async () => {
     const contract = await createTronContract();
     if (tronWeb) {
@@ -499,34 +421,12 @@ export const PlatformProvider = ({ children }) => {
   }, []);
 
   return (
-    <PlatformContext.Provider
+    <ProfileContext.Provider
       value={{
-        MessageDisplay,
-        notify,
-        fee,
-        tasks,
-        TaskTypes,
-        task,
-        currentAccount,
-        isLoading,
-        getAllTasks,
-        getTask,
-        addTask,
-        applyForTask,
-        submitResult,
-        deleteTask,
-        assignTask,
-        unassignTask,
-        requestChange,
-        completeTask,
-        handleChange,
-        getRating,
-        fetchedRating,
-        formData,
-        address0,
+        createProfile
       }}
     >
       {children}
-    </PlatformContext.Provider>
+    </ProfileContext.Provider>
   );
 };

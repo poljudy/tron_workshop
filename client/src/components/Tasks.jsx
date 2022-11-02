@@ -7,7 +7,7 @@ const Tasks = () => {
   return (
     <>
       {!tasks && (
-        <p className="text-white text-3xl text-center my-2">
+        <p className="text-white text-2xl text-center my-2">
           No tasks yet
         </p>
       )}

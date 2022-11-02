@@ -20,6 +20,11 @@ export default function Wallet() {
     setBalance(window.tronWeb.fromSun(b));
   };
 
+  const handleDisconnect = () => {
+    window.localStorage.removeItem("currentAccount");
+    window.location.reload();
+  };
+
   useEffect(() => {
     getBalance();
   });
@@ -114,21 +119,35 @@ export default function Wallet() {
                 </a>
               )}
             </Menu.Item>
-            <form method="POST" action="#">
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    type="submit"
-                    className={classNames(
-                      active ? "bg-[#2546bd] text-white" : "text-white",
-                      "block w-full text-left px-4 py-2 text-sm"
-                    )}
-                  >
-                    Disconnect Wallet
-                  </button>
-                )}
-              </Menu.Item>
-            </form>
+            <Menu.Item>
+              {({ active }) => (
+                <a
+                  href="/profile"
+                  className={classNames(
+                    active
+                      ? "bg-blue-700 text-white cursor-pointer"
+                      : "text-white cursor-pointer",
+                    "block px-4 py-2 text-sm"
+                  )}
+                >
+                  My Profile
+                </a>
+              )}
+            </Menu.Item>
+            <Menu.Item>
+              {({ active }) => (
+                <button
+                  type="submit"
+                  className={classNames(
+                    active ? "bg-[#2546bd] text-white" : "text-white",
+                    "block w-full text-left px-4 py-2 text-sm"
+                  )}
+                  onClick={handleDisconnect}
+                >
+                  Disconnect Wallet
+                </button>
+              )}
+            </Menu.Item>
           </div>
         </Menu.Items>
       </Transition>

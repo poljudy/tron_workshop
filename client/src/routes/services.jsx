@@ -1,46 +1,67 @@
-import React, { useContext, useEffect } from "react";
-import { Outlet } from "react-router-dom";
-import TaskCard from "../components/TaskCard";
-import { PlatformContext } from "../context/PlatformContext";
+import { useContext } from "react";
+import { HiSearch } from "react-icons/hi";
+import { useSearchParams } from "react-router-dom";
+import { ServiceContext } from "../context/ServiceContext";
+import ServiceCard from "../components/ServiceCard";
+import { Categories } from "../utils/constants";
 
 const Services = () => {
-  const { tasks, getAllTasks, currentAccount } = useContext(PlatformContext);
-
-  useEffect(() => {
-    getAllTasks();
-  }, []);
-
-  function checkTask(task) {
-    return task.author === currentAccount
-    || task.assignee === currentAccount
-    || task.candidates.includes(currentAccount);
-  }
+  // const { currentAccount } = useContext(AuthContext);
+  const { services } = useContext(ServiceContext);
+  const [searchParams, setSearchParams] = useSearchParams();
+  console.log("services", services);
   return (
-    <>
-      <div className="flex w-full justify-center items-start 2xl:px-20 gradient-bg-welcome min-h-screen">
-        <div className="flex flex-col w-9/12 md:p-12 py-12 px-4">
-          {currentAccount ? (
-            <h3 className="text-white text-3xl text-center my-2">Your Tasks</h3>
-          ) : (
-            <h3 className="text-white text-3xl text-center my-2">
-              Connect your account to see the latest tasks
-            </h3>
+    <div className="min-h-screen">
+      {services ? (
+        <div>
+          <p className="text-white text-3xl text-center my-2">
+            {services.length === 0
+              ? "No services yet"
+              : `Recent Services (${services.length})`}
+          </p>
+          {services.length > 0 && (
+            <div className="flex flex-row justify-center items-center">
+              <input
+                className="my-2 w-4/12 rounded-sm p-2 outline-none bg-transparent text-white text-sm white-glassmorphism"
+                type="search"
+                placeholder="Search..."
+                value={searchParams.get("filter") || ""}
+                onChange={(event) => {
+                  const filter = event.target.value;
+                  if (filter) {
+                    setSearchParams({ filter });
+                  } else {
+                    setSearchParams({});
+                  }
+                }}
+              />
+              <span>
+                <HiSearch size={30} className="text-gray-500" />
+              </span>
+              <div className="flex flex-row gap-2 justify-center items-center">
+                {Categories.map((c, i) => <div className="p-2 text-center text-white white-glassmorphism" key={i}>{c}</div>)}
+              </div>
+            </div>
           )}
-
-          <div className="list-none justify-center items-center mt-10">
-            {[...tasks]
-              .reverse()
-              .filter(
-                (p) => checkTask(p)
-              )
-              .map((task, i) => (
-                <TaskCard key={i} {...task} />
-              ))}
-          </div>
         </div>
+      ) : (
+        <p className="text-white text-3xl text-center my-2">
+          No tasks yet
+        </p>
+      )}
+      <div className="list-none justify-center items-center mt-10">
+        {services &&
+          [...services]
+            .reverse()
+            .filter((p) => {
+              const filter = searchParams.get("filter");
+              if (!filter) return true;
+              const title = p.title.toLowerCase();
+              return title.includes(filter.toLowerCase());
+            })
+            .map((service, i) => <ServiceCard key={i} {...service} />)}
       </div>
-      <Outlet />
-    </>
+    </div>
   );
 };
 
