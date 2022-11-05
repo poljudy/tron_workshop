@@ -1,26 +1,21 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { PlatformContext } from "../context/PlatformContext";
-import { AuthContext } from "../context/AuthContext";
+import { ServiceContext } from "../context/ServiceContext";
 import { Loader } from "../components";
+import { Categories } from "../utils/constants";
 
 const FormField = ({ placeholder, name, type, value, handleChange }) => {
   if (name === "category") {
     return (
       <select
-        className="appearance-none w-full bg-transparent border text-white py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:border-gray-500 light:text-gray-800"
+        className="appearance-none w-full white-glassmorphism text-white py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:border-gray-500 light:text-gray-800"
         value={value}
         type={type}
         onChange={(e) => handleChange(e, name)}
       >
-        <option style={{ backgroundColor: "rgb(30 41 59)" }} className="bg-slate-800" value="0">Programming & Tech</option>
-        <option style={{ backgroundColor: "rgb(30 41 59)" }} value="1">Writing & Translation</option>
-        <option style={{ backgroundColor: "rgb(30 41 59)" }} value="1">Video & Animation</option>
-        <option style={{ backgroundColor: "rgb(30 41 59)" }} value="1">Music & Audio</option>
-        <option style={{ backgroundColor: "rgb(30 41 59)" }} value="1">Data</option>
-        <option style={{ backgroundColor: "rgb(30 41 59)" }} value="1">Business</option>
-        <option style={{ backgroundColor: "rgb(30 41 59)" }} value="1">Lifestyle</option>
+        {Categories.map((c, i) => <option className="white-glassmorphism" key={i} value={c}>{c}</option>)}
       </select>
     );
   }
@@ -49,32 +44,16 @@ const FormField = ({ placeholder, name, type, value, handleChange }) => {
 };
 
 export default function NewService() {
-  const { handleChange, addTask, formData, isLoading, fee } =
-    useContext(PlatformContext);
+  const { isLoading } = useContext(PlatformContext);
 
-  const { currentAccount } = useContext(AuthContext);
-
-  // const [balance, setBalance] = useState(0);
-
-  // const getBalance = async () => {
-  //   const b = await window.tronWeb.trx.getBalance(currentAccount);
-  //   setBalance(window.tronWeb.fromSun(b));
-  // };
-
-  // useEffect(() => {
-  //   getBalance();
-  // });
+  const { handleChange, formData, addService } = useContext(ServiceContext);
 
   const handleSubmit = (e) => {
-    const { title, description, reward } = formData;
+    const { title, description, price } = formData;
     e.preventDefault();
-    if (!title || !description || !reward) return;
-    addTask();
+    if (!title || !description || !price) return;
+    addService();
   };
-
-  // const totalAmount = (
-  //   parseFloat(formData.reward) + parseFloat((formData.reward / 100) * fee) || 0
-  // ).toFixed(4);
 
   return (
     <div className="flex w-full justify-center items-start min-h-screen">
@@ -90,20 +69,6 @@ export default function NewService() {
 
         <div className="flex flex-col flex-2 items-center justify-start w-full mf:mt-0 mt-10">
           <div className="p-5 w-full flex flex-col justify-start items-center blue-glassmorphism">
-            <div className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism">
-              <span
-                className="block tracking-wide text-gray-20 text-xs font-bold mb-2"
-                htmlFor="grid-state"
-              >
-                Username / Company Name
-              </span>
-              <FormField
-                placeholder="e.g. Elon..."
-                name="title"
-                type="text"
-                handleChange={handleChange}
-              />
-            </div>
             <div className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism">
               <span
                 className="block tracking-wide text-gray-20 text-xs font-bold mb-2"
@@ -131,6 +96,20 @@ export default function NewService() {
                 className="block tracking-wide text-gray-20 text-xs font-bold mb-2"
                 htmlFor="grid-state"
               >
+                Title
+              </span>
+              <FormField
+                placeholder="title..."
+                name="title"
+                type="text"
+                handleChange={handleChange}
+              />
+            </div>
+            <div className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism">
+              <span
+                className="block tracking-wide text-gray-20 text-xs font-bold mb-2"
+                htmlFor="grid-state"
+              >
                 Description
               </span>
               <FormField
@@ -140,14 +119,22 @@ export default function NewService() {
                 handleChange={handleChange}
               />
             </div>
-            <div className="flex flex-row flex-2">
-              <FormField
-                placeholder="Price"
-                name="reward"
-                type="number"
-                handleChange={handleChange}
-              />
-              <span className="text-white self-center">TRX</span>
+            <div className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism">
+              <span
+                className="block tracking-wide text-gray-20 text-xs font-bold mb-2"
+                htmlFor="grid-state"
+              >
+                Price
+              </span>
+              <div className="flex flex-row gap-2">
+                <FormField
+                  placeholder="0"
+                  name="price"
+                  type="number"
+                  handleChange={handleChange}
+                />
+                <span className="text-white self-center">TRX</span>
+              </div>
             </div>
             <div className="h-[1px] w-full bg-gray-400 my-2" />
             {isLoading ? (
@@ -158,7 +145,7 @@ export default function NewService() {
                 onClick={handleSubmit}
                 className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
               >
-                Create Profile
+                Add Service
               </button>
             )}
           </div>

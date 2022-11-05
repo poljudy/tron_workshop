@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState, useContext } from "react";
 import { AuthContext } from "./AuthContext";
-import { contractAddress, Statuses } from "../utils/constants";
+import { contractAddress, Statuses, Categories } from "../utils/constants";
 import contractABI from "../utils/contractABI.json";
 import { PlatformContext } from "./PlatformContext";
 
@@ -8,7 +8,7 @@ export const ServiceContext = createContext();
 
 export const ServiceProvider = ({ children }) => {
   const [formData, setformData] = useState({
-    category: "Programming & Tech",
+    category: Categories[0],
     title: "",
     description: "",
     price: 0,
@@ -96,10 +96,12 @@ export const ServiceProvider = ({ children }) => {
           description,
           tronWeb.toSun(price),
         ];
+        console.log("serviceToSend", serviceToSend);
         setIsLoading(true);
         const contract = await createTronContract();
         const transaction = await contract.addService(serviceToSend).send({
           feeLimit: 1000_000_000,
+          callValue: 0,
           shouldPollResponse: true,
         });
         console.log(`Success - ${transaction}`);
@@ -175,7 +177,8 @@ export const ServiceProvider = ({ children }) => {
         getAllServices,
         getService,
         addService,
-        handleChange
+        handleChange,
+        formData
       }}
     >
       {children}

@@ -6,12 +6,12 @@ const Tasks = () => {
   const { tasks } = useContext(PlatformContext);
   return (
     <>
-      {!tasks && (
+      {tasks.length < 1 && (
         <p className="text-white text-2xl text-center my-2">
           No tasks yet
         </p>
       )}
-      <div className="list-none justify-center items-center mt-10">
+      <div className="flex flex-row w-full justify-center items-center mt-10">
         {tasks &&
           [...tasks]
             .reverse()

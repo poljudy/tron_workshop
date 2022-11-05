@@ -29,7 +29,7 @@ ReactDOM.render(
                 <Route index element={<Home />} />
                 <Route path="services" element={<Services />} />
                 <Route path="services/new" element={<NewService />} />
-                <Route path="tasks/:id" element={<Service />} />
+                <Route path="services/:id" element={<Service />} />
                 <Route path="tasks" element={<Tasks />} />
                 <Route path="tasks/new" element={<NewTask />} />
                 <Route path="tasks/:id" element={<Task />} />

@@ -17,11 +17,11 @@ export default function Home() {
           <Sponsors />
         </>
       ) : (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center w-full">
           <Welcome />
-          <div className="flex flex-col w-full py-12 px-4">
-            <div className="flex flex-row text-white w-full justify-between text-3xl">
-              <span className="text-left">Recent Tasks</span>
+          <div className="flex flex-col w-9/12 py-12 px-4">
+            <div className="flex flex-row justify-between text-3xl">
+              <span className="text-left text-white">Recent Tasks</span>
               <Link to="/tasks" className="text-blue-400 text-xl">
                 <i>View all</i>
               </Link>
@@ -30,9 +30,9 @@ export default function Home() {
               {isLoading ? <Loader /> : <Tasks />}
             </div>
           </div>
-          <div className="flex flex-col w-full py-12 px-4">
-            <div className="flex flex-row text-white w-full justify-between text-3xl">
-              <span className="text-left">Recent Services</span>
+          <div className="flex flex-col w-9/12 py-12 px-4">
+            <div className="flex flex-row justify-between text-3xl">
+              <span className="text-left text-white">Recent Services</span>
               <Link to="/services" className="text-blue-400 text-xl">
                 <i>View all</i>
               </Link>

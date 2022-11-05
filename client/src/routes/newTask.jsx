@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { PlatformContext } from "../context/PlatformContext";
 import { AuthContext } from "../context/AuthContext";
 import { Loader } from "../components";
+import { Categories, TaskTypes } from "../utils/constants";
 
 const FormField = ({ placeholder, name, type, value, handleChange }) => {
   switch (name) {
@@ -15,14 +16,7 @@ const FormField = ({ placeholder, name, type, value, handleChange }) => {
           type={type}
           onChange={(e) => handleChange(e, name)}
         >
-          <option style={{ backgroundColor: "rgb(30 41 59)" }} className="bg-slate-800" value="Programming & Tech">Programming & Tech</option>
-          <option style={{ backgroundColor: "rgb(30 41 59)" }} value="Writing & Translation">Writing & Translation</option>
-          <option style={{ backgroundColor: "rgb(30 41 59)" }} value="Video & Animation">Video & Animation</option>
-          <option style={{ backgroundColor: "rgb(30 41 59)" }} value="Music & Audio">Music & Audio</option>
-          <option style={{ backgroundColor: "rgb(30 41 59)" }} value="Data">Data</option>
-          <option style={{ backgroundColor: "rgb(30 41 59)" }} value="Business">Business</option>
-          <option style={{ backgroundColor: "rgb(30 41 59)" }} value="Lifestyle">Lifestyle</option>
-          <option style={{ backgroundColor: "rgb(30 41 59)" }} value="Other">Other</option>
+          {Categories.map((c, i) => <option className="white-glassmorphism" key={i} value={c}>{c}</option>)}
         </select>
       );
     case "taskType":
@@ -33,8 +27,7 @@ const FormField = ({ placeholder, name, type, value, handleChange }) => {
           type={type}
           onChange={(e) => handleChange(e, name)}
         >
-          <option style={{ backgroundColor: "rgb(30 41 59)" }} className="bg-slate-800" value="0">First Come First Serve</option>
-          <option style={{ backgroundColor: "rgb(30 41 59)" }} value="1">SelectedByAuthor</option>
+          {Object.keys(TaskTypes).map((k) => <option className="white-glassmorphism" key={k} value={k}>{TaskTypes[k]}</option>)}
         </select>
       );
     case "description":

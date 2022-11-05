@@ -509,6 +509,7 @@ export const PlatformProvider = ({ children }) => {
         task,
         currentAccount,
         isLoading,
+        setIsLoading,
         getAllTasks,
         getTask,
         addTask,

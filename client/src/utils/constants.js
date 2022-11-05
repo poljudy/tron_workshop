@@ -1,13 +1,13 @@
 import abi from "./contractABI.json";
 
-export const contractAddress = "TVpze1gVDEe1HxXVAreFh5YH3TpZvB9HXS";
+export const contractAddress = "TTQXuR39L6mSTb4nqgvTfvGjWFg4fKjFZL";
 export const contractABI = abi.abi;
 
 export const address0 = "410000000000000000000000000000000000000000";
 
 export const TaskTypes = {
   0: "First Come First Serve",
-  1: "Casting",
+  1: "Selected by Author",
 };
 
 export const Statuses = {

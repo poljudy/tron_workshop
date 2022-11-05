@@ -4,6 +4,7 @@ import ServiceCard from "./ServiceCard";
 
 const Services = () => {
   const { services } = useContext(ServiceContext);
+
   return (
     <>
       {services.length < 1 && (
@@ -11,7 +12,7 @@ const Services = () => {
           No services yet
         </p>
       )}
-      <div className="list-none justify-center items-center mt-10">
+      <div className="flex flex-row w-full justify-center items-center mt-10">
         {services &&
           [...services]
             .reverse()

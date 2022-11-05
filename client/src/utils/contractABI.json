@@ -5,11 +5,6 @@
 				"components": [
 					{
 						"internalType": "string",
-						"name": "username",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
 						"name": "category",
 						"type": "string"
 					},
@@ -271,11 +266,6 @@
 					},
 					{
 						"internalType": "string",
-						"name": "username",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
 						"name": "category",
 						"type": "string"
 					},
@@ -346,29 +336,11 @@
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": false,
-				"internalType": "uint8",
-				"name": "_fee",
-				"type": "uint8"
-			}
-		],
-		"name": "ServiceFeeUpdated",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
 				"components": [
 					{
 						"internalType": "uint256",
 						"name": "id",
 						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "username",
-						"type": "string"
 					},
 					{
 						"internalType": "string",
@@ -729,11 +701,6 @@
 					},
 					{
 						"internalType": "string",
-						"name": "username",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
 						"name": "category",
 						"type": "string"
 					},
@@ -916,11 +883,6 @@
 						"internalType": "uint256",
 						"name": "id",
 						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "username",
-						"type": "string"
 					},
 					{
 						"internalType": "string",
@@ -1124,33 +1086,7 @@
 	},
 	{
 		"inputs": [],
-		"name": "serviceFeePercentage",
-		"outputs": [
-			{
-				"internalType": "uint8",
-				"name": "",
-				"type": "uint8"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"name": "totalFees",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "totalServiceFees",
 		"outputs": [
 			{
 				"internalType": "uint256",

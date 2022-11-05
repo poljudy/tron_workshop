@@ -22,7 +22,7 @@ export default function Wallet() {
 
   const handleDisconnect = () => {
     window.localStorage.removeItem("currentAccount");
-    window.location.reload();
+    window.location.replace("/");
   };
 
   useEffect(() => {
@@ -107,6 +107,21 @@ export default function Wallet() {
             <Menu.Item>
               {({ active }) => (
                 <a
+                  href="/profile"
+                  className={classNames(
+                    active
+                      ? "bg-blue-700 text-white cursor-pointer"
+                      : "text-white cursor-pointer",
+                    "block px-4 py-2 text-sm"
+                  )}
+                >
+                  My Profile
+                </a>
+              )}
+            </Menu.Item>
+            <Menu.Item>
+              {({ active }) => (
+                <a
                   href="/mytasks"
                   className={classNames(
                     active
@@ -122,7 +137,7 @@ export default function Wallet() {
             <Menu.Item>
               {({ active }) => (
                 <a
-                  href="/profile"
+                  href="/myservices"
                   className={classNames(
                     active
                       ? "bg-blue-700 text-white cursor-pointer"
@@ -130,14 +145,14 @@ export default function Wallet() {
                     "block px-4 py-2 text-sm"
                   )}
                 >
-                  My Profile
+                  My Services
                 </a>
               )}
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
                 <button
-                  type="submit"
+                  type="button"
                   className={classNames(
                     active ? "bg-[#2546bd] text-white" : "text-white",
                     "block w-full text-left px-4 py-2 text-sm"
