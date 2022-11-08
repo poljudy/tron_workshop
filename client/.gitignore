@@ -26,3 +26,4 @@ typechain
 cache
 artifacts
 package-lock.js
+yarn.lock
