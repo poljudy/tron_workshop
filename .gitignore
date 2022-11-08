@@ -1,2 +1,4 @@
 # Local Netlify folder
 .netlify
+client/yarn.lock
+contract/package-lock.json
