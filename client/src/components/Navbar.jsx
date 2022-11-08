@@ -1,28 +1,21 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { HiMenuAlt4 } from "react-icons/hi";
-import { AiOutlineClose, AiFillPlayCircle } from "react-icons/ai";
+import { AiOutlineClose } from "react-icons/ai";
 import { AuthContext } from "../context/AuthContext";
 import logo1 from "../../images/logo1.png";
 import Wallet from "./Wallet";
+import ConnectWalletButton from "./ConnectWalletButton";
 
 const NavBarItem = ({ title, classprops }) => (
   <li className={`mx-4 cursor-pointer ${classprops}`}>{title}</li>
 );
 
 const Navbar = () => {
-  const { currentAccount, connectWallet } = useContext(AuthContext);
-  // const { fetchedRating } = useContext(PlatformContext);
+  const { currentAccount } = useContext(AuthContext);
   const [toggleMenu, setToggleMenu] = useState(false);
   const renderNotConnectedContainer = () => (
-    <button
-      type="button"
-      onClick={connectWallet}
-      className="flex flex-row justify-center items-center bg-[#2952e3] pt-1 pb-1 pl-3 pr-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
-    >
-      <AiFillPlayCircle className="text-white mr-2" />
-      <p className="text-white text-base font-semibold">Connect Wallet</p>
-    </button>
+    <ConnectWalletButton />
   );
 
   const renderAccountInfo = () => (

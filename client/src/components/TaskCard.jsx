@@ -11,7 +11,7 @@ const TaskCard = ({
   candidates
 }) => (
   <Link to={`/tasks/${id}`}>
-    <div className="flex flex-row justify-center items-start white-glassmorphism p-3 m-2 cursor-pointer transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300">
+    <div className="flex flex-row justify-center items-start white-glassmorphism p-3 m-2 cursor-pointer transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-105 duration-300">
       <div className="ml-5 flex flex-col flex-1">
         <p className="mt-2 text-white text-3xl md:w-9/12">{title}</p>
         <p className="text-center italic text-white text-sm white-glassmorphism">{taskType}</p>

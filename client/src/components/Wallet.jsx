@@ -1,10 +1,10 @@
 import { Fragment, useEffect, useContext, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { FaStar } from "react-icons/fa";
-import tronLogo from "../../images/tronlogo.png";
 import { AuthContext } from "../context/AuthContext";
 import { PlatformContext } from "../context/PlatformContext";
 import { shortenAddress } from "../utils/shortenAddress";
+import AutoAvatar from "./AutoAvatar";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -32,12 +32,8 @@ export default function Wallet() {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-transparent rounded-md shadow-sm hover:bg-[#2546bd] focus:outline-none">
-          <img
-            alt="Network logo"
-            className="w-4 h-4 self-center"
-            src={tronLogo}
-          />
+        <Menu.Button className="inline-flex justify-center items-center w-full px-4 py-2 font-medium text-white bg-transparent rounded-md shadow-sm hover:bg-[#2546bd] focus:outline-none">
+          <AutoAvatar userId={currentAccount} size={36} />
           {shortenAddress(currentAccount)}
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -69,8 +65,7 @@ export default function Wallet() {
           <div className="py-1">
             <Menu.Item>
               {({ active }) => (
-                <a
-                  href="#"
+                <div
                   className={classNames(
                     active
                       ? "bg-[#2546bd] text-white cursor-not-allowed"
@@ -79,13 +74,12 @@ export default function Wallet() {
                   )}
                 >
                   Balance: {balance} TRX
-                </a>
+                </div>
               )}
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
-                <a
-                  href="#"
+                <div
                   className={classNames(
                     active
                       ? "bg-[#2546bd] text-white cursor-not-allowed"
@@ -93,15 +87,17 @@ export default function Wallet() {
                     "block px-4 py-2 text-sm"
                   )}
                 >
-                  <span>Rating:</span>
-                  <span className="flex flex-row justify-center items-center mr-4">
-                    {fetchedRating === 0
-                      ? "unrated"
-                      : [...Array(fetchedRating)].map((star, index) => (
+                  <div className="flex flex-row gap-1">
+                    <span>Rating:</span>
+                    <span className="flex flex-row justify-center items-center mr-4">
+                      {fetchedRating === 0
+                        ? "unrated"
+                        : [...Array(fetchedRating)].map((star, index) => (
                           <FaStar key={index} color="#ffc107" size={20} />
                         ))}
-                  </span>
-                </a>
+                    </span>
+                  </div>
+                </div>
               )}
             </Menu.Item>
             <Menu.Item>

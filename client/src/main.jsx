@@ -6,6 +6,7 @@ import "./index.css";
 import { PlatformProvider } from "./context/PlatformContext";
 import { TaskProvider } from "./context/TaskContext";
 import { ServiceProvider } from "./context/ServiceContext";
+import { ProfileProvider } from "./context/ProfileContext";
 import { AuthProvider } from "./context/AuthContext";
 import MyTasks from "./routes/myTasks";
 import MyServices from "./routes/myServices";
@@ -23,30 +24,32 @@ ReactDOM.render(
     <PlatformProvider>
       <TaskProvider>
         <ServiceProvider>
-          <Router>
-            <Routes>
-              <Route path="/" element={<App />}>
-                <Route index element={<Home />} />
-                <Route path="services" element={<Services />} />
-                <Route path="services/new" element={<NewService />} />
-                <Route path="services/:id" element={<Service />} />
-                <Route path="tasks" element={<Tasks />} />
-                <Route path="tasks/new" element={<NewTask />} />
-                <Route path="tasks/:id" element={<Task />} />
-                <Route path="mytasks" element={<MyTasks />} />
-                <Route path="myservices" element={<MyServices />} />
-                <Route path="profile" element={<Profile />} />
-                <Route
-                  path="*"
-                  element={(
-                    <main className="text-white p-1 min-h-screen">
-                      <h1 className="text-center">There is nothing here!</h1>
-                    </main>
-                  )}
-                />
-              </Route>
-            </Routes>
-          </Router>
+          <ProfileProvider>
+            <Router>
+              <Routes>
+                <Route path="/" element={<App />}>
+                  <Route index element={<Home />} />
+                  <Route path="services" element={<Services />} />
+                  <Route path="services/new" element={<NewService />} />
+                  <Route path="services/:id" element={<Service />} />
+                  <Route path="tasks" element={<Tasks />} />
+                  <Route path="tasks/new" element={<NewTask />} />
+                  <Route path="tasks/:id" element={<Task />} />
+                  <Route path="mytasks" element={<MyTasks />} />
+                  <Route path="myservices" element={<MyServices />} />
+                  <Route path="profile" element={<Profile />} />
+                  <Route
+                    path="*"
+                    element={(
+                      <main className="text-white p-1 min-h-screen">
+                        <h1 className="text-center">There is nothing here!</h1>
+                      </main>
+                    )}
+                  />
+                </Route>
+              </Routes>
+            </Router>
+          </ProfileProvider>
         </ServiceProvider>
       </TaskProvider>
     </PlatformProvider>

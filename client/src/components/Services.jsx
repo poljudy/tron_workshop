@@ -1,22 +1,52 @@
 import { useContext } from "react";
+import { ScrollMenu } from "react-horizontal-scrolling-menu";
+import usePreventBodyScroll from "./usePreventBodyScroll";
 import { ServiceContext } from "../context/ServiceContext";
 import ServiceCard from "./ServiceCard";
+import { LeftArrow, RightArrow } from "./Arrows";
+
+function onWheel(apiObj, ev) {
+  const isThouchpad = Math.abs(ev.deltaX) !== 0 || Math.abs(ev.deltaY) < 15;
+
+  if (isThouchpad) {
+    ev.stopPropagation();
+    return;
+  }
+
+  if (ev.deltaY < 0) {
+    apiObj.scrollNext();
+  } else if (ev.deltaY > 0) {
+    apiObj.scrollPrev();
+  }
+}
 
 const Services = () => {
   const { services } = useContext(ServiceContext);
 
+  const { disableScroll, enableScroll } = usePreventBodyScroll();
+
   return (
     <>
       {services.length < 1 && (
-        <p className="text-white text-2xl text-center my-2">
-          No services yet
-        </p>
+        <p className="text-white text-2xl text-center my-2">No services yet</p>
       )}
-      <div className="flex flex-row w-full justify-center items-center mt-10">
-        {services &&
-          [...services]
-            .reverse()
-            .map((service, i) => <ServiceCard key={i} {...service} />)}
+      <div className="text-white pt-10">
+        <div onMouseEnter={disableScroll} onMouseLeave={enableScroll}>
+          <ScrollMenu
+            LeftArrow={LeftArrow}
+            RightArrow={RightArrow}
+            onWheel={onWheel}
+            className="pt-10"
+          >
+            {services &&
+              [...services]
+                .reverse()
+                .slice(0, 3)
+                .map((service, i) => (
+                  <ServiceCard key={i} itemId={i} {...service} />
+                ))}
+          </ScrollMenu>
+        </div>
       </div>
     </>
   );

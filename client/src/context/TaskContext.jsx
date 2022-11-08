@@ -1,11 +1,9 @@
 import { createContext, useEffect, useState, useContext } from "react";
-// import { toast } from "react-toastify";
 import { ethers } from "ethers";
 import { AuthContext } from "./AuthContext";
 import { contractAddress, TaskTypes, address0, Statuses } from "../utils/constants";
 import contractABI from "../utils/contractABI.json";
 import { PlatformContext } from "./PlatformContext";
-// import MessageDisplay from "./PlatformContext";
 
 export const TaskContext = createContext();
 
@@ -17,13 +15,10 @@ export const TaskProvider = ({ children }) => {
     taskType: "0",
     reward: 0,
   });
-//   const [isLoading, setIsLoading] = useState(false);
+
   const [tasks, setTasks] = useState("");
   const [task, setTask] = useState([]);
-//   const [fee, setFee] = useState(0);
-//   const [fetchedRating, setFetchedRating] = useState(0);
-  // const [contract, setContract] = useState(undefined);
-  const { currentAccount, tronWeb } = useContext(AuthContext);
+  const { tronWeb } = useContext(AuthContext);
   // const { tronWeb } = window;
   const { notify, fee, setIsLoading } = useContext(PlatformContext);
 

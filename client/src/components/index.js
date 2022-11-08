@@ -15,3 +15,4 @@ export { default as Candidates } from "./Candidates";
 export { default as Team } from "./Team";
 export { default as Sponsors } from "./Sponsors";
 export { default as Welcome } from "./Welcome";
+export { default as ConnectWalletButton } from "./ConnectWalletButton";
