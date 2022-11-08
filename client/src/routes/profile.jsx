@@ -79,7 +79,7 @@ const FormField = ({ placeholder, name, type, value, handleChange }) => {
 export default function Profile() {
   const { isLoading } = useContext(PlatformContext);
   const { currentAccount } = useContext(AuthContext);
-  const { handleChange, formData, addProfile, profile, getProfile } =
+  const { handleChange, formData, addProfile, profile } =
     useContext(ProfileContext);
 
   const handleSubmit = (e) => {

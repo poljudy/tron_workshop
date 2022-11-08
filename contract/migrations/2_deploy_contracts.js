@@ -1,5 +1,5 @@
-var Platform = artifacts.require("./Platform.sol");
+var PlatformFactory = artifacts.require("./PlatformFactory.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(Platform);
+  deployer.deploy(PlatformFactory);
 };

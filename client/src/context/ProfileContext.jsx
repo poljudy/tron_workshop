@@ -32,12 +32,12 @@ export const ProfileProvider = ({ children }) => {
     return c;
   };
 
-  const getProfile = async (account) => {
+  const getProfile = async () => {
     if (tronWeb) {
       try {
         setIsLoading(true);
         const contract = await createTronContract();
-        const fetchedProfile = await contract.getProfile(account).call();
+        const fetchedProfile = await contract.getProfile().call();
         console.log(fetchedProfile);
         setProfile(fetchedProfile);
         setIsLoading(false);
@@ -54,11 +54,15 @@ export const ProfileProvider = ({ children }) => {
   const addProfile = async () => {
     if (tronWeb) {
       try {
-        const { avatar, username, skills, langugages, rate, availability } = formData;
+        const { avatar, username, skills, languages, rate, availability } = formData;
         setIsLoading(true);
         const contract = await createTronContract();
-        const transaction = await contract.addProfile([avatar, username, skills, langugages, rate, availability]).send({
+        console.log("formData:", formData);
+        const profileToSend = [avatar, username, skills, languages, rate, availability];
+        console.log("profileToSend: ", profileToSend);
+        const transaction = await contract.addProfile(profileToSend).send({
           feeLimit: 1000_000_000,
+          callValue: 0,
           shouldPollResponse: true,
         });
         console.log(`Success - ${transaction}`);
@@ -80,7 +84,7 @@ export const ProfileProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       await createTronContract();
-      await getProfile(currentAccount);
+      await getProfile();
     };
     fetchData().catch(console.error);
   }, []);
@@ -91,7 +95,8 @@ export const ProfileProvider = ({ children }) => {
         addProfile,
         getProfile,
         handleChange,
-        profile
+        profile,
+        formData,
       }}
     >
       {children}
