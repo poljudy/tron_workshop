@@ -7,7 +7,7 @@ import "./Profiles.sol";
 
 
 contract PlatformFactory is Tasks, Services, Profiles {
-
+    
     function withdrawFees()
         public
         payable
@@ -49,7 +49,7 @@ contract PlatformFactory is Tasks, Services, Profiles {
     {
         return (tasks[_id]);
     }
-
+    
     function getAllServices() public view returns (Service[] memory) {
         Service[] memory serviceList = new Service[](allServices.length);
         for (uint256 i; i < allServices.length; i++) {
@@ -66,12 +66,12 @@ contract PlatformFactory is Tasks, Services, Profiles {
     {
         return (services[_id]);
     }
-
-    function getProfile(address _address)
+    
+    function getProfile()
         public
         view
         returns (Profile memory)
     {
-        return (profiles[_address]);
+        return (profiles[msg.sender]);
     }
 }

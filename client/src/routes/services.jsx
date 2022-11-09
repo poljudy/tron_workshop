@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { HiSearch } from "react-icons/hi";
 import { useSearchParams } from "react-router-dom";
 import { ServiceContext } from "../context/ServiceContext";
-import ServiceCard from "../components/ServiceCard";
+import { ServiceCard } from "../components";
 import { Categories } from "../utils/constants";
 
 const Services = () => {

@@ -1,8 +1,8 @@
 import { createContext, useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
-import { ethers } from "ethers";
+// import { ethers } from "ethers";
 import { AuthContext } from "./AuthContext";
-import { contractAddress, TaskTypes, address0, Statuses } from "../utils/constants";
+import { contractAddress, address0 } from "../utils/constants";
 import contractABI from "../utils/contractABI.json";
 
 export const PlatformContext = createContext();
@@ -32,8 +32,8 @@ export const PlatformProvider = ({ children }) => {
     reward: 0,
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [tasks, setTasks] = useState("");
-  const [task, setTask] = useState([]);
+  // const [tasks, setTasks] = useState("");
+  const [fetchedProfile, setFetchedProfile] = useState([]);
   const [fee, setFee] = useState(0);
   const [fetchedRating, setFetchedRating] = useState(0);
   // const [contract, setContract] = useState(undefined);
@@ -61,32 +61,32 @@ export const PlatformProvider = ({ children }) => {
   };
 
   const getPlatformFee = async () => {
-    try {
-      if (tronWeb) {
+    if (tronWeb) {
+      try {
         const contract = await createTronContract();
         const fetchedFee = await contract.platformFeePercentage().call();
         setFee(fetchedFee);
-      } else {
-        console.log("Tron is not present");
+      } catch (error) {
+        console.log(error);
+        alert(error.message);
       }
-    } catch (error) {
-      console.log(error);
-      alert(error.message);
+    } else {
+      console.log("Tron is not present");
     }
   };
 
   const getRating = async (address) => {
-    try {
-      if (tronWeb && address) {
+    if (tronWeb && address) {
+      try {
         const contract = await createTronContract();
         const r = await contract.getRating(address).call();
         setFetchedRating(r);
-      } else {
-        console.log("Tron is not present");
+      } catch (error) {
+        console.log(error);
+        alert(error.message);
       }
-    } catch (error) {
-      console.log(error);
-      alert(error.message);
+    } else {
+      console.log("Tron is not present");
     }
   };
 
@@ -136,9 +136,11 @@ export const PlatformProvider = ({ children }) => {
         setIsLoading,
         // handleChange,
         getRating,
+        // getProfile,
         fetchedRating,
         formData,
         address0,
+        fetchedProfile
       }}
     >
       {children}

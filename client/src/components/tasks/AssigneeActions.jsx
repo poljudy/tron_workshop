@@ -1,9 +1,9 @@
 import { useContext, useState } from "react";
-import { PlatformContext } from "../context/PlatformContext";
+import { TaskContext } from "../../context/TaskContext";
 
 const AssigneeActions = () => {
   const { task, unassignTask, submitResult } =
-    useContext(PlatformContext);
+    useContext(TaskContext);
   const [result, setResult] = useState("");
   const handleSubmit = (e) => {
     if (result === "") return;

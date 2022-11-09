@@ -1,13 +1,13 @@
 import { useContext } from "react";
 import { HiSearch } from "react-icons/hi";
 import { useSearchParams } from "react-router-dom";
-import { PlatformContext } from "../context/PlatformContext";
-import TaskCard from "../components/TaskCard";
+import { TaskContext } from "../context/TaskContext";
+import { TaskCard } from "../components";
 import { Categories } from "../utils/constants";
 
 const Tasks = () => {
   // const { currentAccount } = useContext(AuthContext);
-  const { tasks } = useContext(PlatformContext);
+  const { tasks } = useContext(TaskContext);
   const [searchParams, setSearchParams] = useSearchParams();
   console.log(tasks);
   return (

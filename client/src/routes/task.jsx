@@ -2,11 +2,13 @@ import React, { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { PlatformContext } from "../context/PlatformContext";
+import { TaskContext } from "../context/TaskContext";
 import { Loader, ActionControls, Candidates } from "../components";
 
 export default function Task() {
   const params = useParams();
-  const { task, getTask, isLoading } = useContext(PlatformContext);
+  const { isLoading } = useContext(PlatformContext);
+  const { task, getTask } = useContext(TaskContext);
   const taskId = params.id;
   useEffect(() => {
     getTask(taskId);

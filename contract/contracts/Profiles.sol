@@ -49,7 +49,7 @@ contract Profiles {
         emit ProfileAdded(profiles[msg.sender]);
         return true;
     }
-    
+
     function updateProfile(ReceivedProfile calldata _newProfile)
         external
         returns (bool)
@@ -66,7 +66,7 @@ contract Profiles {
         emit ProfileUpdated(profiles[msg.sender]);
         return true;
     }
-    
+
     function deleteProfile()
         external
         returns (bool)

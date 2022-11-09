@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
+import { shortenAddress } from "../../utils/shortenAddress";
 
 const ServiceCard = ({
   id,
+  image,
   title,
   createdAt,
+  author,
   price,
   status,
   category
@@ -11,8 +14,9 @@ const ServiceCard = ({
   <Link to={`/services/${id}`}>
     <div className="flex flex-row justify-center items-start white-glassmorphism p-3 m-2 cursor-pointer transition ease-in-out delay-100 hover:-translate-y-1 hover:scale-105 duration-300">
       <div className="ml-5 flex flex-col flex-1">
+        <img alt="Service" className="w-4/12 self-center" src={image} />
         <p className="mt-2 text-white text-3xl">{title}</p>
-        <p className="mt-1 italic text-white text-sm">Created at: {createdAt}</p>
+        <p className="mt-1 italic text-white text-sm">Created at: {createdAt} by {shortenAddress(author)}</p>
         <div className="flex flex-row gap-2 items-center">
           <div className="mt-2 pl-2 pr-2 text-center text-white white-glassmorphism">{status}</div>
           <div className="mt-2 pl-2 pr-2 text-center text-white white-glassmorphism">{category}</div>

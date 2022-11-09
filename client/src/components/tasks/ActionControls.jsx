@@ -1,11 +1,13 @@
 import { useContext } from "react";
-import { PlatformContext } from "../context/PlatformContext";
+import { AuthContext } from "../../context/AuthContext";
+import { TaskContext } from "../../context/TaskContext";
 import AuthorActions from "./AuthorActions";
 import AssigneeActions from "./AssigneeActions";
 import CandidateActions from "./CandidateActions";
 
 const ActionButton = (params) => {
-  const { currentAccount, applyForTask } = useContext(PlatformContext);
+  const { currentAccount } = useContext(AuthContext);
+  const { applyForTask } = useContext(TaskContext);
   const isCandidate = () => {
     for (let i = 0; i < params.task.candidates.length; i += 1) {
       if (params.task.candidates[i] === currentAccount) {

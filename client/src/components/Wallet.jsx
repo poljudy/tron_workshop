@@ -3,6 +3,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { FaStar } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
 import { PlatformContext } from "../context/PlatformContext";
+import { ProfileContext } from "../context/ProfileContext";
 import { shortenAddress } from "../utils/shortenAddress";
 import AutoAvatar from "./AutoAvatar";
 
@@ -13,7 +14,9 @@ function classNames(...classes) {
 export default function Wallet() {
   const { currentAccount } = useContext(AuthContext);
   const [balance, setBalance] = useState(0);
+  // const [profile, setProfile] = useState(null);
   const { fetchedRating } = useContext(PlatformContext);
+  const { profile } = useContext(ProfileContext);
 
   const getBalance = async () => {
     const b = await window.tronWeb.trx.getBalance(currentAccount);
@@ -27,14 +30,18 @@ export default function Wallet() {
 
   useEffect(() => {
     getBalance();
-  });
-
+    // if (currentAccount) getProfile(currentAccount).then((res) => setProfile(res));
+  }, []);
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="inline-flex justify-center items-center w-full px-4 py-2 font-medium text-white bg-transparent rounded-md shadow-sm hover:bg-[#2546bd] focus:outline-none">
-          <AutoAvatar userId={currentAccount} size={36} />
-          {shortenAddress(currentAccount)}
+          {profile.avatar
+            ?
+              <img alt="Avatar" className="" src={profile.avatar} />
+            :
+              <AutoAvatar userId={currentAccount} size={36} />}
+          {profile.username ? profile.username : shortenAddress(currentAccount)}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="w-5 h-5 ml-2 -mr-1"

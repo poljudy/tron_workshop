@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { PlatformContext } from "../context/PlatformContext";
+import { TaskContext } from "../context/TaskContext";
 import { AuthContext } from "../context/AuthContext";
 import { Loader } from "../components";
 import { Categories, TaskTypes } from "../utils/constants";
@@ -56,8 +57,9 @@ const FormField = ({ placeholder, name, type, value, handleChange }) => {
 };
 
 export default function NewTask() {
-  const { handleChange, addTask, formData, isLoading, fee } =
-    useContext(PlatformContext);
+  const { isLoading, fee } = useContext(PlatformContext);
+
+  const { handleChange, addTask, formData } = useContext(TaskContext);
 
   const { currentAccount } = useContext(AuthContext);
 

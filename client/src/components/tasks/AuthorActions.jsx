@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { FaStar } from "react-icons/fa";
-import { PlatformContext } from "../context/PlatformContext";
+import { TaskContext } from "../../context/TaskContext";
 // import { shortenAddress } from "../utils/shortenAddress";
 
 const AuthorActions = () => {
@@ -11,7 +11,7 @@ const AuthorActions = () => {
     unassignTask,
     requestChange,
     completeTask,
-  } = useContext(PlatformContext);
+  } = useContext(TaskContext);
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const defaultSelectValue = "Select a candidate to assign";

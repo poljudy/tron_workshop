@@ -10,8 +10,7 @@ contract Services is Ownable, ReentrancyGuard {
 
     enum ServiceStatuses {
         Active,
-        Paused,
-        Archived
+        Paused
     }
 
     struct Service {
@@ -39,11 +38,8 @@ contract Services is Ownable, ReentrancyGuard {
     using Counters for Counters.Counter;
     Counters.Counter private _mappingLength;
 
-    // uint8 public serviceFeePercentage; // Platform fee in %
-    // uint256 public totalServiceFees;
     uint256[] internal allServices;
     mapping(uint256 => Service) internal services;
-    // mapping(address => uint8) public ratings;
 
     constructor() {
         // serviceFeePercentage = 1;
@@ -55,42 +51,23 @@ contract Services is Ownable, ReentrancyGuard {
     event ServiceAdded(Service _service);
     event ServiceUpdated(Service _service);
     event ServiceDeleted(uint256 _id);
-    // event ServiceFeeUpdated(uint8 _fee);
 
     // Modifiers
 
-    // modifier onlyAuthor(uint256 _id) {
-    //     require(
-    //         msg.sender == services[_id].author,
-    //         "Only author"
-    //     );
-    //     _;
-    // }
-
-    // modifier onlyAssignee(uint256 _id) {
-    //     require(
-    //         msg.sender == services[_id].assignee,
-    //         "Only assignee"
-    //     );
-    //     _;
-    // }
+    modifier onlyServiceAuthor(uint256 _id) {
+        require(
+            msg.sender == services[_id].author,
+            "Only author"
+        );
+        _;
+    }
 
     modifier serviceExists(uint256 _id) {
         require(services[_id].author != address(0), "Service not found.");
         _;
     }
 
-    // // Helper functions
-
-
-    // function calculateServiceFee(uint256 _reward)
-    //     internal
-    //     view
-    //     returns (uint256)
-    // {
-    //     uint256 serviceFee = (_reward / 100) * serviceFeePercentage;
-    //     return serviceFee;
-    // }
+    // Helper functions
 
     function addService(ReceivedService calldata _newService)
         external
@@ -100,9 +77,7 @@ contract Services is Ownable, ReentrancyGuard {
         require(bytes(_newService.title).length > 0, "Title is required.");
         require(bytes(_newService.description).length > 0,"Description is required.");
         require(_newService.price > 0, "Price is required.");
-        
         uint256 _id = _mappingLength.current();
-        
         services[_id].id = _id;
         services[_id].image = _newService.image;
         services[_id].category = _newService.category;
@@ -119,24 +94,65 @@ contract Services is Ownable, ReentrancyGuard {
         return true;
     }
 
+    function updateService(uint256 _id, ReceivedService calldata _newService)
+        external
+        serviceExists(_id)
+        onlyServiceAuthor(_id)
+        returns (bool)
+    {
+        require(bytes(_newService.category).length > 0, "category is required.");
+        require(bytes(_newService.title).length > 0, "Title is required.");
+        require(bytes(_newService.description).length > 0,"Description is required.");
+        require(_newService.price > 0, "Price is required.");
+        services[_id].image = _newService.image;
+        services[_id].category = _newService.category;
+        services[_id].title = _newService.title;
+        services[_id].description = _newService.description;
+        services[_id].price = _newService.price;
+        emit ServiceUpdated(services[_id]);
+        return true;
+    }
 
-    // Getters
+    function pauseService(uint256 _id)
+        external
+        serviceExists(_id)
+        onlyServiceAuthor(_id)
+        returns (bool)
+    {
+        require(services[_id].status == ServiceStatuses.Active, "Invalid service status.");
+        services[_id].status = ServiceStatuses.Paused;
+        services[_id].lastStatusChangeAt = block.timestamp;
+        emit ServiceUpdated(services[_id]);
+        return true;
+    }
+    
+    function resumeService(uint256 _id)
+        external
+        serviceExists(_id)
+        onlyServiceAuthor(_id)
+        returns (bool)
+    {
+        require(services[_id].status == ServiceStatuses.Paused, "Invalid service status.");
+        services[_id].status = ServiceStatuses.Active;
+        services[_id].lastStatusChangeAt = block.timestamp;
+        emit ServiceUpdated(services[_id]);
+        return true;
+    }
 
-    // function getAllServices() public view returns (Service[] memory) {
-    //     Service[] memory serviceList = new Service[](allServices.length);
-    //     for (uint256 i; i < allServices.length; i++) {
-    //         serviceList[i] = services[allServices[i]];
-    //     }
-    //     return serviceList;
-    // }
 
-    // function getService(uint256 _id)
-    //     public
-    //     view
-    //     serviceExists(_id)
-    //     returns (Service memory)
-    // {
-    //     return (services[_id]);
-    // }
-
+    function deleteService(uint256 _id)
+        external
+        serviceExists(_id)
+        onlyServiceAuthor(_id)
+        returns (bool)
+    {
+        delete services[_id];
+        delete allServices[services[_id].allServicesIndex];
+        allServices[services[_id].allServicesIndex] = allServices[
+            allServices.length - 1
+        ];
+        allServices.pop();
+        emit ServiceDeleted(_id);
+        return true;
+    }
 }

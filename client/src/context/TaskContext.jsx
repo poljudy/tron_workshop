@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState, useContext } from "react";
 import { ethers } from "ethers";
 import { AuthContext } from "./AuthContext";
-import { contractAddress, TaskTypes, address0, Statuses } from "../utils/constants";
+import { contractAddress, TaskTypes, address0, TaskStatuses } from "../utils/constants";
 import contractABI from "../utils/contractABI.json";
 import { PlatformContext } from "./PlatformContext";
 
@@ -58,7 +58,7 @@ export const TaskProvider = ({ children }) => {
           : "Not completed yet",
       reward: tronWeb.fromSun(t.reward),
       result: t.result,
-      status: Statuses[t.status],
+      status: TaskStatuses[t.status],
       lastStatusChangeAt: new Date(
         t.lastStatusChangeAt.toNumber() * 1000
       ).toLocaleString(),

@@ -1,10 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import TaskCard from "../components/TaskCard";
-import { PlatformContext } from "../context/PlatformContext";
+import { TaskCard } from "../components";
+import { AuthContext } from "../context/AuthContext";
+import { TaskContext } from "../context/TaskContext";
 
 const MyTasks = () => {
-  const { tasks, getAllTasks, currentAccount } = useContext(PlatformContext);
+  const { currentAccount } = useContext(AuthContext);
+  const { tasks, getAllTasks } = useContext(TaskContext);
 
   useEffect(() => {
     getAllTasks();

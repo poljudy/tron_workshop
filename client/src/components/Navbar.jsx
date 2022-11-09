@@ -6,6 +6,7 @@ import { AuthContext } from "../context/AuthContext";
 import logo1 from "../../images/logo1.png";
 import Wallet from "./Wallet";
 import ConnectWalletButton from "./ConnectWalletButton";
+import Notifications from "./Notifications";
 
 const NavBarItem = ({ title, classprops }) => (
   <li className={`mx-4 cursor-pointer ${classprops}`}>{title}</li>
@@ -48,6 +49,7 @@ const Navbar = () => {
             <Link to="/tasks/new">
               <NavBarItem title="Add Task" />
             </Link>
+            <Notifications />
           </div>
         ) : (
           <li />
@@ -80,7 +82,7 @@ const Navbar = () => {
             <li className="text-xl w-full my-2">
               <AiOutlineClose onClick={() => setToggleMenu(false)} />
             </li>
-            {currentAccount ? (
+            {currentAccount && (
               <li>
                 <Link to="/tasks">
                   <NavBarItem title="Find Tasks" />
@@ -94,8 +96,9 @@ const Navbar = () => {
                 <Link to="/tasks/new">
                   <NavBarItem title="Add Task" />
                 </Link>
+                <Notifications />
               </li>
-            ) : null}
+            )}
             <li>
               {!currentAccount && renderNotConnectedContainer()}
               {currentAccount && renderAccountInfo()}

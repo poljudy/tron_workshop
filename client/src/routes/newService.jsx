@@ -15,7 +15,11 @@ const FormField = ({ placeholder, name, type, value, handleChange }) => {
         type={type}
         onChange={(e) => handleChange(e, name)}
       >
-        {Categories.map((c, i) => <option className="white-glassmorphism" key={i} value={c}>{c}</option>)}
+        {Categories.map((c, i) => (
+          <option className="white-glassmorphism" key={i} value={c}>
+            {c}
+          </option>
+        ))}
       </select>
     );
   }
@@ -46,7 +50,7 @@ const FormField = ({ placeholder, name, type, value, handleChange }) => {
 export default function NewService() {
   const { isLoading } = useContext(PlatformContext);
 
-  const { handleChange, formData, addService } = useContext(ServiceContext);
+  const { handleChange, formData, addService, onUploadHandler, ipfsUrl } = useContext(ServiceContext);
 
   const handleSubmit = (e) => {
     const { title, description, price } = formData;
@@ -59,9 +63,7 @@ export default function NewService() {
     <div className="flex w-full justify-center items-start min-h-screen">
       <div className="flex mf:flex-row flex-col items-start justify-between md:p-20 py-12 px-4">
         <div className="flex flex-1 justify-start items-start flex-col mf:mr-10">
-          <h1 className="text-3xl sm:text-5xl text-white py-1">
-            Add Service
-          </h1>
+          <h1 className="text-3xl sm:text-5xl text-white py-1">Add Service</h1>
           <p className="text-left mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
             Let your customers know what your services are.
           </p>
@@ -88,6 +90,40 @@ export default function NewService() {
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20"
                   />
+                </div>
+              </div>
+            </div>
+            <div className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism">
+              <span
+                className="block tracking-wide text-gray-20 text-xs font-bold mb-2"
+                htmlFor="grid-state"
+              >
+                Image
+              </span>
+              <div className="relative">
+                <div>
+                  <p className=" text-l text-white text-basetext-white">
+                    *Upload an image for your service to IPFS
+                  </p>
+                  {ipfsUrl && <img alt="Service" className="self-center" src={ipfsUrl} />}
+                  <form onSubmit={onUploadHandler}>
+                    <input
+                      className="mt-5 text-l text-white text-basetext-white"
+                      type="file"
+                      name="file"
+                    />
+                    {isLoading ? (
+                      <Loader />
+                    ) : (
+                      <button
+                        className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
+                        id="upload-btn"
+                        type="submit"
+                      >
+                        Upload File
+                      </button>
+                    )}
+                  </form>
                 </div>
               </div>
             </div>

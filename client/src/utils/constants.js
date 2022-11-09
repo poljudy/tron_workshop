@@ -1,6 +1,6 @@
 import abi from "./contractABI.json";
 
-export const contractAddress = "TMa8dZKCLqhfeQiU2jgsWFLJL8tfsyLHPK";
+export const contractAddress = "TTiS31LoikwjDSkJo8rRuJGpTemT77XBoq";
 export const contractABI = abi.abi;
 
 export const address0 = "410000000000000000000000000000000000000000";
@@ -10,12 +10,17 @@ export const TaskTypes = {
   1: "Selected by Author",
 };
 
-export const Statuses = {
+export const TaskStatuses = {
   0: "Active",
   1: "Assigned",
   2: "In Review",
   3: "Change Requested",
   4: "Completed",
+};
+
+export const ServiceStatuses = {
+  0: "Active",
+  1: "Paused",
 };
 
 export const Categories = [

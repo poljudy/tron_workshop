@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { PlatformContext } from "../context/PlatformContext";
+import { TaskContext } from "../../context/TaskContext";
 
 const CandidateActions = () => {
-  const { task } = useContext(PlatformContext);
+  const { task } = useContext(TaskContext);
 
   if (task.assignee === "Unassigned") {
     return (

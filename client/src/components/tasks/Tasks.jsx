@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import { ScrollMenu } from "react-horizontal-scrolling-menu";
-import usePreventBodyScroll from "./usePreventBodyScroll";
-import { ServiceContext } from "../context/ServiceContext";
-import ServiceCard from "./ServiceCard";
-import { LeftArrow, RightArrow } from "./Arrows";
+import { TaskContext } from "../../context/TaskContext";
+import TaskCard from "./TaskCard";
+import usePreventBodyScroll from "../usePreventBodyScroll";
+import { LeftArrow, RightArrow } from "../Arrows";
 
 function onWheel(apiObj, ev) {
   const isThouchpad = Math.abs(ev.deltaX) !== 0 || Math.abs(ev.deltaY) < 15;
@@ -20,15 +20,13 @@ function onWheel(apiObj, ev) {
   }
 }
 
-const Services = () => {
-  const { services } = useContext(ServiceContext);
-
+const Tasks = () => {
+  const { tasks } = useContext(TaskContext);
   const { disableScroll, enableScroll } = usePreventBodyScroll();
-
   return (
     <>
-      {services.length < 1 && (
-        <p className="text-white text-2xl text-center my-2">No services yet</p>
+      {tasks.length < 1 && (
+        <p className="text-white text-2xl text-center my-2">No tasks yet</p>
       )}
       <div className="text-white pt-10">
         <div onMouseEnter={disableScroll} onMouseLeave={enableScroll}>
@@ -38,13 +36,11 @@ const Services = () => {
             onWheel={onWheel}
             className="pt-10"
           >
-            {services &&
-              [...services]
+            {tasks &&
+              [...tasks]
                 .reverse()
                 .slice(0, 3)
-                .map((service, i) => (
-                  <ServiceCard key={i} itemId={i} {...service} />
-                ))}
+                .map((task, i) => <TaskCard key={i} {...task} />)}
           </ScrollMenu>
         </div>
       </div>
@@ -52,4 +48,4 @@ const Services = () => {
   );
 };
 
-export default Services;
+export default Tasks;

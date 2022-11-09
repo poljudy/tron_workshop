@@ -7,6 +7,7 @@ import { AuthContext } from "../context/AuthContext";
 const MyServices = () => {
   const { services, getAllServices } = useContext(ServiceContext);
   const { currentAccount } = useContext(AuthContext);
+
   useEffect(() => {
     getAllServices();
   }, []);
