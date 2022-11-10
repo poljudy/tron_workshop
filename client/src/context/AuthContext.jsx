@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
         setCurrentAccount(account);
         localStorage.setItem("currentAccount", account);
       } else {
-        console.log("No authorized accounts found");
+        alert("No authorized accounts found. Please unlock your TronLink");
       }
     } catch (error) {
       console.log(error);
@@ -40,10 +40,8 @@ export const AuthProvider = ({ children }) => {
       }
       if (e.data.message && e.data.message.action === "setNode") {
         console.log("setNode event", e.data.message);
-        if (e.data.message.data.node.chain === "_") {
-          console.log("tronLink currently selects the main chain");
-        } else {
-          console.log("tronLink currently selects the side chain");
+        if (e.data.message.data.node.fullNode !== "https://api.nileex.io") {
+          alert("Please switch to Nile testnet!");
         }
 
         // Tronlink chrome v3.22.1 & Tronlink APP v4.3.4 started to support

@@ -32,11 +32,12 @@ contract PlatformFactory is Tasks, Services, Profiles {
     function getRating(address _address) public view returns (uint8) {
         return ratings[_address];
     }
-    
      function getAllTasks() public view returns (Task[] memory) {
         Task[] memory taskList = new Task[](allTasks.length);
         for (uint256 i; i < allTasks.length; i++) {
-            taskList[i] = tasks[allTasks[i]];
+            if (tasks[allTasks[i]].id > 0) {
+                taskList[i] = tasks[allTasks[i]];
+            }
         }
         return taskList;
     }
@@ -53,7 +54,9 @@ contract PlatformFactory is Tasks, Services, Profiles {
     function getAllServices() public view returns (Service[] memory) {
         Service[] memory serviceList = new Service[](allServices.length);
         for (uint256 i; i < allServices.length; i++) {
-            serviceList[i] = services[allServices[i]];
+            if (services[allServices[i]].id > 0) {
+                serviceList[i] = services[allServices[i]];
+            }
         }
         return serviceList;
     }

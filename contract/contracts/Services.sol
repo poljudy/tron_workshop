@@ -125,7 +125,7 @@ contract Services is Ownable, ReentrancyGuard {
         emit ServiceUpdated(services[_id]);
         return true;
     }
-    
+
     function resumeService(uint256 _id)
         external
         serviceExists(_id)
@@ -146,12 +146,16 @@ contract Services is Ownable, ReentrancyGuard {
         onlyServiceAuthor(_id)
         returns (bool)
     {
+        uint index = services[_id].allServicesIndex;
         delete services[_id];
-        delete allServices[services[_id].allServicesIndex];
-        allServices[services[_id].allServicesIndex] = allServices[
-            allServices.length - 1
-        ];
-        allServices.pop();
+        delete allServices[index];
+        if (allServices[index] == allServices[allServices.length - 1]) {
+            allServices.pop();
+        } else {
+            allServices[index] = allServices[allServices.length - 1];
+            allServices.pop();
+            services[allServices[index]].allServicesIndex = index;
+        }
         emit ServiceDeleted(_id);
         return true;
     }

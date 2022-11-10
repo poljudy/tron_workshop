@@ -32,18 +32,16 @@ export const ProfileProvider = ({ children }) => {
     return c;
   };
 
-  const getProfile = async () => {
-    if (tronWeb) {
+  const getProfile = async (address) => {
+    if (tronWeb && address) {
       try {
         setIsLoading(true);
         const contract = await createTronContract();
-        const fetchedProfile = await contract.getProfile().call();
-        console.log(fetchedProfile);
+        const fetchedProfile = await contract.getProfile(address).call();
         setProfile(fetchedProfile);
         setIsLoading(false);
       } catch (error) {
         console.log(error);
-        alert(error.message);
         setIsLoading(false);
       }
     } else {
@@ -67,7 +65,7 @@ export const ProfileProvider = ({ children }) => {
         });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
-        window.location.replace("/");
+        window.location.reload();
         notify("Profile saved successfully.");
       } catch (error) {
         console.log(error);
@@ -84,10 +82,13 @@ export const ProfileProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       await createTronContract();
-      await getProfile();
     };
     fetchData().catch(console.error);
   }, []);
+
+  useEffect(() => {
+    getProfile(currentAccount);
+  }, [currentAccount]);
 
   return (
     <ProfileContext.Provider

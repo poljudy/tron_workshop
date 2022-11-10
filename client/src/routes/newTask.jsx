@@ -156,12 +156,15 @@ export default function NewTask() {
               </div>
             </div>
             <p className="text-white self-end">Balance: {balance} TRX</p>
-            <FormField
-              placeholder="Reward (TRX)"
-              name="reward"
-              type="number"
-              handleChange={handleChange}
-            />
+            <div className="flex flex-row w-full gap-2">
+              <FormField
+                placeholder="Reward"
+                name="reward"
+                type="number"
+                handleChange={handleChange}
+              />
+              <span className="text-white self-center">TRX</span>
+            </div>
             <div className="h-[1px] w-full bg-gray-400 my-2" />
             <p className="text-white text-center">
               Total amount to pay (including {fee}% portal fee): {totalAmount}{" "}

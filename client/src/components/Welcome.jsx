@@ -18,7 +18,7 @@ export default function Welcome() {
               className="my-5 bg-[#2952e3] pt-1 pb-1 pl-3 pr-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
             >
               <p className="text-white font-semibold">
-                Creatre Profile
+                Create Profile
               </p>
             </button>
           </Link>

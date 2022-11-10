@@ -129,7 +129,7 @@ export const TaskProvider = ({ children }) => {
         });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
-        window.location.replace("/");
+        window.location.replace("/tasks");
         notify("New task added successfully.");
       } catch (error) {
         console.log(error);
@@ -216,7 +216,7 @@ export const TaskProvider = ({ children }) => {
         setIsLoading(false);
         await getAllTasks();
         notify("Task deleted successfully.");
-        window.location.replace("/");
+        window.location.replace("/tasks");
       } catch (error) {
         console.log(error);
         alert(
@@ -404,7 +404,7 @@ export const TaskProvider = ({ children }) => {
         }
         if (eventResult) {
           console.log("eventResult:", eventResult);
-          const id = eventResult.result.id.toNumber();
+          const id = parseInt(eventResult.result._id, 10);
           setTasks((current) => current.filter((p) => p.id !== id));
         }
       });

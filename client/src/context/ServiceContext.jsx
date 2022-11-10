@@ -131,7 +131,7 @@ export const ServiceProvider = ({ children }) => {
         });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
-        window.location.replace("/");
+        window.location.replace("/services");
         notify("New service added successfully.");
       } catch (error) {
         console.log(error);
@@ -258,7 +258,7 @@ export const ServiceProvider = ({ children }) => {
         setIsLoading(false);
         await getAllServices();
         notify("service deleted successfully.");
-        window.location.replace("/");
+        window.location.replace("/services");
       } catch (error) {
         console.log(error);
         alert(
@@ -318,6 +318,26 @@ export const ServiceProvider = ({ children }) => {
 
   useEffect(() => {
     onServiceUpdated().catch(console.error);
+  }, []);
+
+  const onServiceDeleted = async () => {
+    const contract = await createTronContract();
+    if (tronWeb) {
+      await contract.ServiceDeleted().watch((err, eventResult) => {
+        if (err) {
+          return console.error('Error with "method" event:', err);
+        }
+        if (eventResult) {
+          console.log("eventResult:", eventResult);
+          const id = parseInt(eventResult.result._id, 10);
+          setServices((current) => current.filter((p) => p.id !== id));
+        }
+      });
+    }
+  };
+
+  useEffect(() => {
+    onServiceDeleted().catch(console.error);
   }, []);
 
   return (
