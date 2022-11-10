@@ -30,7 +30,6 @@ export default function Wallet() {
 
   useEffect(() => {
     getBalance();
-    // if (currentAccount) getProfile(currentAccount).then((res) => setProfile(res));
   }, []);
   return (
     <Menu as="div" className="relative inline-block text-left">

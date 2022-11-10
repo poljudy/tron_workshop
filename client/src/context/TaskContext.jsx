@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState, useContext } from "react";
 import { ethers } from "ethers";
+import { Web3Storage } from "web3.storage";
 import { AuthContext } from "./AuthContext";
 import { contractAddress, TaskTypes, address0, TaskStatuses } from "../utils/constants";
 import contractABI from "../utils/contractABI.json";
@@ -21,6 +22,26 @@ export const TaskProvider = ({ children }) => {
   const { tronWeb } = useContext(AuthContext);
   // const { tronWeb } = window;
   const { notify, fee, setIsLoading } = useContext(PlatformContext);
+  const [ipfsUrl, setIpfsUrl] = useState("");
+
+  const onUploadHandler = async (event) => {
+    const client = new Web3Storage({ token: import.meta.env.VITE_WEB3_STORAGE_TOKEN });
+    event.preventDefault();
+    const form = event.target;
+    const { files } = form[0];
+    if (!files || files.length === 0) {
+      return alert("No files selected");
+    }
+    setIsLoading(true);
+    const rootCid = await client.put(files);
+    const info = await client.status(rootCid);
+    // const res = await client.get(rootCid);
+    const url = `https://${info.cid}.ipfs.w3s.link/${files[0].name}`;
+    form.reset();
+    setIpfsUrl(url);
+    setIsLoading(false);
+    notify("File successfully uploaded to IPFS.");
+  };
 
   const handleChange = (e, name) => {
     setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
@@ -433,6 +454,8 @@ export const TaskProvider = ({ children }) => {
         completeTask,
         handleChange,
         formData,
+        onUploadHandler,
+        ipfsUrl,
       }}
     >
       {children}
