@@ -41,7 +41,7 @@ const Services = () => {
             {services &&
               [...services]
                 .reverse()
-                .slice(0, 3)
+                .slice(0, 5)
                 .map((service, i) => (
                   <ServiceCard key={i} itemId={i} {...service} />
                 ))}

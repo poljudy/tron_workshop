@@ -39,7 +39,7 @@ const Tasks = () => {
             {tasks &&
               [...tasks]
                 .reverse()
-                .slice(0, 3)
+                .slice(0, 5)
                 .map((task, i) => <TaskCard key={i} {...task} />)}
           </ScrollMenu>
         </div>

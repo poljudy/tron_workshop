@@ -20,15 +20,19 @@ export default function Task() {
         <div className="ml-5 flex flex-col flex-1">
           <h3 className="mt-2 text-white text-4xl">{task.title}</h3>
           <div className="flex flex-row gap-2 items-center">
-            <div className="mt-2 text-center text-white white-glassmorphism w-3/12">{task.category}</div>
-            <div className="mt-2 text-center text-white white-glassmorphism w-6/12 ">{task.status} since {task.lastStatusChangeAt}</div>
+            <div className="mt-2 text-center text-white white-glassmorphism w-4/12">{task.category}</div>
+            <div className="mt-2 text-center text-white white-glassmorphism w-4/12">{task.taskType}</div>
+            <div className="mt-2 text-center text-white white-glassmorphism w-4/12 ">{task.status} {task.lastStatusChangeAt}</div>
           </div>
           <p className="mt-1 text-white text-2xl md:w-9/12">
             {task.description}
           </p>
-          <p className="mt-1 text-white text-sm md:w-9/12">
-            Type: {task.taskType}
+          <p className="mt-1 italic text-white text-sm md:w-9/12">
+            Ceated at: {task.createdAt}
           </p>
+          {/* <p className="p-2 text-white text-sm self-center white-glassmorphism">
+            {task.taskType}
+          </p> */}
           <p className="mt-1 text-white text-sm md:w-9/12">
             Author: {task.author}
           </p>
@@ -44,6 +48,15 @@ export default function Task() {
           <p className="mt-1 text-white text-sm md:w-9/12">
             Assignee: {task.assignee}
           </p>
+          {
+            task.changeRequests
+            &&
+            (
+              <div className="mt-1 text-white text-sm md:w-9/12">
+                Change Requests: {task.changeRequests.map((c, i) => <div key={i}>{i + 1}: {c}</div>)}
+              </div>
+            )
+          }
           <p className="mt-1 text-white text-sm md:w-9/12">
             Result:{" "}
             {task.result ? (
@@ -59,13 +72,12 @@ export default function Task() {
               "Not submitted yet"
             )}
           </p>
-          <p className="mt-1 italic text-white text-sm md:w-9/12">
-            Ceated at: {task.createdAt}
-          </p>
+          {task.completedAt !== "Not completed yet"
+          && (
           <p className="mt-1 italic text-white text-sm md:w-9/12">
             Completed at: {task.completedAt}
           </p>
-          <p className="mt-1 text-white text-sm md:w-9/12">Change Requests: {task.changeRequests}</p>
+          )}
 
           {isLoading ? (
             <Loader />

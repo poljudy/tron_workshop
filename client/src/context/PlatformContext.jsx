@@ -2,7 +2,8 @@ import { createContext, useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
 // import { ethers } from "ethers";
 import { AuthContext } from "./AuthContext";
-import { contractAddress, address0 } from "../utils/constants";
+import { address0 } from "../utils/constants";
+import { contractAddress } from "../utils/constants";
 import contractABI from "../utils/contractABI.json";
 
 export const PlatformContext = createContext();
@@ -24,21 +25,20 @@ const MessageDisplay = ({ message, hash }) => (
 );
 
 export const PlatformProvider = ({ children }) => {
-  const [formData, setformData] = useState({
-    category: "Programming & Tech",
-    title: "",
-    description: "",
-    taskType: "0",
-    reward: 0,
-  });
+  // const [formData, setformData] = useState({
+  //   category: "Programming & Tech",
+  //   title: "",
+  //   description: "",
+  //   taskType: "0",
+  //   reward: 0,
+  // });
   const [isLoading, setIsLoading] = useState(false);
   // const [tasks, setTasks] = useState("");
-  const [fetchedProfile, setFetchedProfile] = useState([]);
+  // const [fetchedProfile, setFetchedProfile] = useState([]);
   const [fee, setFee] = useState(0);
   const [fetchedRating, setFetchedRating] = useState(0);
   // const [contract, setContract] = useState(undefined);
   const { currentAccount, tronWeb } = useContext(AuthContext);
-  // const { tronWeb } = window;
 
   const notify = (message, hash) => toast.success(<MessageDisplay message={message} hash={hash} />, {
     position: "top-right",
@@ -56,7 +56,10 @@ export const PlatformProvider = ({ children }) => {
   // };
 
   const createTronContract = async () => {
-    const c = await tronWeb.contract(contractABI, contractAddress);
+    let c;
+    if (tronWeb) {
+      c = await tronWeb.contract(contractABI, contractAddress);
+    }
     return c;
   };
 
@@ -92,7 +95,6 @@ export const PlatformProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await createTronContract();
       await getPlatformFee();
     };
     fetchData().catch(console.error);
@@ -107,14 +109,13 @@ export const PlatformProvider = ({ children }) => {
   // TODO Fix events listenenrs later
 
   const onFeeUpdated = async () => {
-    const contract = await createTronContract();
     if (tronWeb) {
+      const contract = await createTronContract();
       await contract.FeeUpdated().watch((err, eventResult) => {
         if (err) {
           return console.error('Error with "method" event:', err);
         }
         if (eventResult) {
-          console.log("eventResult:", eventResult);
           setFee(eventResult.result.fee.toNumber());
         }
       });
@@ -138,9 +139,9 @@ export const PlatformProvider = ({ children }) => {
         getRating,
         // getProfile,
         fetchedRating,
-        formData,
+        // formData,
         address0,
-        fetchedProfile
+        // fetchedProfile
       }}
     >
       {children}

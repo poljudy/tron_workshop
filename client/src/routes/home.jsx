@@ -21,17 +21,6 @@ export default function Home() {
           <Welcome />
           <div className="flex flex-col w-9/12 py-12 px-4">
             <div className="flex flex-row justify-between text-3xl">
-              <span className="text-left text-white">Recent Tasks</span>
-              <Link to="/tasks" className="text-blue-400 text-xl">
-                <i>View all</i>
-              </Link>
-            </div>
-            <div>
-              {isLoading ? <Loader /> : <Tasks />}
-            </div>
-          </div>
-          <div className="flex flex-col w-9/12 py-12 px-4">
-            <div className="flex flex-row justify-between text-3xl">
               <span className="text-left text-white">Recent Services</span>
               <Link to="/services" className="text-blue-400 text-xl">
                 <i>View all</i>
@@ -39,6 +28,17 @@ export default function Home() {
             </div>
             <div>
               {isLoading ? <Loader /> : <Services />}
+            </div>
+          </div>
+          <div className="flex flex-col w-9/12 py-12 px-4">
+            <div className="flex flex-row justify-between text-3xl">
+              <span className="text-left text-white">Recent Tasks</span>
+              <Link to="/tasks" className="text-blue-400 text-xl">
+                <i>View all</i>
+              </Link>
+            </div>
+            <div>
+              {isLoading ? <Loader /> : <Tasks />}
             </div>
           </div>
         </div>

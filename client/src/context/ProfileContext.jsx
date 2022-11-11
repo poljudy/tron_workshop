@@ -28,7 +28,10 @@ export const ProfileProvider = ({ children }) => {
   };
 
   const createTronContract = async () => {
-    const c = await tronWeb.contract(contractABI, contractAddress);
+    let c;
+    if (tronWeb) {
+      c = await tronWeb.contract(contractABI, contractAddress);
+    }
     return c;
   };
 
@@ -55,9 +58,7 @@ export const ProfileProvider = ({ children }) => {
         const { avatar, username, skills, languages, rate, availability } = formData;
         setIsLoading(true);
         const contract = await createTronContract();
-        console.log("formData:", formData);
         const profileToSend = [avatar, username, skills, languages, rate, availability];
-        console.log("profileToSend: ", profileToSend);
         const transaction = await contract.addProfile(profileToSend).send({
           feeLimit: 1000_000_000,
           callValue: 0,
@@ -84,7 +85,7 @@ export const ProfileProvider = ({ children }) => {
       await createTronContract();
     };
     fetchData().catch(console.error);
-  }, []);
+  }, [tronWeb]);
 
   useEffect(() => {
     getProfile(currentAccount);

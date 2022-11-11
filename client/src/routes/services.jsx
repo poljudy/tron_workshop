@@ -11,13 +11,13 @@ const Services = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   console.log("services", services);
   return (
-    <div className="min-h-screen">
+    <div className="flex flex-col w-full justify-start items-center min-h-screen">
       {services ? (
         <div>
           <p className="text-white text-3xl text-center my-2">
             {services.length === 0
               ? "No services yet"
-              : `Recent Services (${services.length})`}
+              : `Services (${services.length})`}
           </p>
           {services.length > 0 && (
             <div className="flex flex-row justify-center items-center">
@@ -46,10 +46,10 @@ const Services = () => {
         </div>
       ) : (
         <p className="text-white text-3xl text-center my-2">
-          No tasks yet
+          No services yet
         </p>
       )}
-      <div className="list-none justify-center items-center mt-10">
+      <div className="flex justify-center items-center mt-10 w-9/12">
         {services &&
           [...services]
             .reverse()

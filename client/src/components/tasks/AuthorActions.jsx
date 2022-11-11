@@ -152,13 +152,21 @@ const AuthorActions = () => {
             type="text"
             onChange={(e) => setMessage(e.target.value)}
           />
-          <button
-            type="button"
-            className="flex flex-row justify-center items-center my-5 bg-[#9c3a06] p-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
-            onClick={handleRequestChange}
-          >
-            Request Change
-          </button>
+          <div className="flex flex-row">
+            <button
+              type="button"
+              className="flex flex-row justify-center items-center my-5 bg-[#9c3a06] p-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
+              onClick={handleRequestChange}
+            >
+              Request Change
+            </button>
+            <button
+              type="button"
+              className="flex flex-row justify-center items-center my-5 bg-red-700 p-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
+            >
+              Open Dispute
+            </button>
+          </div>
         </>
       ) : (
         <button

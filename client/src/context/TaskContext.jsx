@@ -2,8 +2,8 @@ import { createContext, useEffect, useState, useContext } from "react";
 import { ethers } from "ethers";
 import { Web3Storage } from "web3.storage";
 import { AuthContext } from "./AuthContext";
-import { contractAddress, TaskTypes, address0, TaskStatuses } from "../utils/constants";
 import contractABI from "../utils/contractABI.json";
+import { TaskTypes, address0, TaskStatuses, contractAddress } from "../utils/constants";
 import { PlatformContext } from "./PlatformContext";
 
 export const TaskContext = createContext();
@@ -20,9 +20,16 @@ export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState("");
   const [task, setTask] = useState([]);
   const { tronWeb } = useContext(AuthContext);
-  // const { tronWeb } = window;
   const { notify, fee, setIsLoading } = useContext(PlatformContext);
   const [ipfsUrl, setIpfsUrl] = useState("");
+
+  const createTronContract = async () => {
+    let c;
+    if (tronWeb) {
+      c = await tronWeb.contract(contractABI, contractAddress);
+    }
+    return c;
+  };
 
   const onUploadHandler = async (event) => {
     const client = new Web3Storage({ token: import.meta.env.VITE_WEB3_STORAGE_TOKEN });
@@ -45,11 +52,6 @@ export const TaskProvider = ({ children }) => {
 
   const handleChange = (e, name) => {
     setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
-  };
-
-  const createTronContract = async () => {
-    const c = await tronWeb.contract(contractABI, contractAddress);
-    return c;
   };
 
   function formatTask(t) {
@@ -93,7 +95,6 @@ export const TaskProvider = ({ children }) => {
         setIsLoading(true);
         const contract = await createTronContract();
         const availableTasks = await contract.getAllTasks().call();
-        console.log(availableTasks);
         const structuredTasks = availableTasks
           .filter((item) => item.title && item.title !== "")
           .map((item) => (formatTask(item)));
@@ -115,7 +116,6 @@ export const TaskProvider = ({ children }) => {
         setIsLoading(true);
         const contract = await createTronContract();
         const fetchedTask = await contract.getTask(id).call();
-        console.log(fetchedTask);
         setTask(formatTask(fetchedTask));
         setIsLoading(false);
       } catch (error) {
@@ -367,7 +367,6 @@ export const TaskProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await createTronContract();
       await getAllTasks();
     };
     fetchData().catch(console.error);
@@ -378,8 +377,8 @@ export const TaskProvider = ({ children }) => {
   // TODO Fix events listenenrs later
 
   const onTaskAdded = async () => {
-    const contract = await createTronContract();
     if (tronWeb) {
+      const contract = await createTronContract();
       await contract.TaskAdded().watch((err, eventResult) => {
         if (err) {
           return console.error('Error with "method" event:', err);
@@ -417,14 +416,13 @@ export const TaskProvider = ({ children }) => {
   }, []);
 
   const onTaskDeleted = async () => {
-    const contract = await createTronContract();
     if (tronWeb) {
+      const contract = await createTronContract();
       await contract.TaskDeleted().watch((err, eventResult) => {
         if (err) {
           return console.error('Error with "method" event:', err);
         }
         if (eventResult) {
-          console.log("eventResult:", eventResult);
           const id = parseInt(eventResult.result._id, 10);
           setTasks((current) => current.filter((p) => p.id !== id));
         }

@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { TaskContext } from "../../context/TaskContext";
+import { TaskStatuses } from "../../utils/constants";
 import IpfsForm from "./IpfsForm";
 
 const AssigneeActions = () => {
@@ -16,7 +17,7 @@ const AssigneeActions = () => {
     e.preventDefault();
     submitResult(task.id, result);
   };
-  if (task.result) {
+  if (task.status === TaskStatuses[2]) {
     return (
       <p className="mt-5 text-2xl text-white text-basetext-white">
         Result submitted. Waiting for completion from the author.

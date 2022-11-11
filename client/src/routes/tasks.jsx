@@ -17,7 +17,7 @@ const Tasks = () => {
           <p className="text-white text-3xl text-center my-2">
             {tasks.length === 0
               ? "No tasks yet"
-              : `Recent Tasks (${tasks.length})`}
+              : `Tasks (${tasks.length})`}
           </p>
           {tasks.length > 0 && (
             <div className="flex flex-row justify-center items-center">
@@ -49,7 +49,7 @@ const Tasks = () => {
           No tasks yet
         </p>
       )}
-      <div className="list-none justify-center items-center mt-10">
+      <div className="flex justify-center items-center mt-10">
         {tasks &&
           [...tasks]
             .reverse()
