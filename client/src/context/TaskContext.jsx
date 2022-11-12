@@ -3,18 +3,19 @@ import { ethers } from "ethers";
 import { Web3Storage } from "web3.storage";
 import { AuthContext } from "./AuthContext";
 import contractABI from "../utils/contractABI.json";
-import { TaskTypes, address0, TaskStatuses, contractAddress } from "../utils/constants";
+import { TaskTypes, address0, TaskStatuses, Categories, contractAddress } from "../utils/constants";
 import { PlatformContext } from "./PlatformContext";
 
 export const TaskContext = createContext();
 
 export const TaskProvider = ({ children }) => {
   const [formData, setformData] = useState({
-    category: "Programming & Tech",
+    category: Categories[0],
     title: "",
     description: "",
-    taskType: "0",
+    taskType: 0,
     reward: 0,
+    assignee: address0
   });
 
   const [tasks, setTasks] = useState("");
@@ -131,7 +132,7 @@ export const TaskProvider = ({ children }) => {
   const addTask = async () => {
     if (tronWeb) {
       try {
-        const { category, title, description, taskType, reward } = formData;
+        const { category, title, description, taskType, reward, assignee } = formData;
         const feeAmount = (reward / 100) * fee;
         const totalAmount = parseFloat(reward) + parseFloat(feeAmount);
         const taskToSend = [
@@ -140,6 +141,7 @@ export const TaskProvider = ({ children }) => {
           description,
           taskType,
           tronWeb.toSun(reward),
+          assignee
         ];
         setIsLoading(true);
         const contract = await createTronContract();

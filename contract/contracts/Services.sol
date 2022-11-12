@@ -22,6 +22,7 @@ contract Services is Ownable, ReentrancyGuard {
         address payable author;
         uint256 createdAt;
         uint256 price;
+        uint8 deliveryTime;
         uint256 allServicesIndex;
         ServiceStatuses status;
         uint256 lastStatusChangeAt;
@@ -33,6 +34,7 @@ contract Services is Ownable, ReentrancyGuard {
         string title;
         string description;
         uint256 price;
+        uint8 deliveryTime;
     }
 
     using Counters for Counters.Counter;
@@ -77,6 +79,7 @@ contract Services is Ownable, ReentrancyGuard {
         require(bytes(_newService.title).length > 0, "Title is required.");
         require(bytes(_newService.description).length > 0,"Description is required.");
         require(_newService.price > 0, "Price is required.");
+        require(_newService.deliveryTime > 0, "Delivery time is required.");
         uint256 _id = _mappingLength.current();
         services[_id].id = _id;
         services[_id].image = _newService.image;
@@ -86,6 +89,7 @@ contract Services is Ownable, ReentrancyGuard {
         services[_id].author = payable(msg.sender);
         services[_id].createdAt = block.timestamp;
         services[_id].price = _newService.price;
+        services[_id].deliveryTime = _newService.deliveryTime;
         services[_id].allServicesIndex = allServices.length;
         services[_id].lastStatusChangeAt = block.timestamp;
         allServices.push(_id);

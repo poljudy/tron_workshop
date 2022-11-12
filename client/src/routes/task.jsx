@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import { PlatformContext } from "../context/PlatformContext";
 import { TaskContext } from "../context/TaskContext";
 import { Loader, ActionControls, Candidates } from "../components";
+import { TaskStatuses } from "../utils/constants";
 
 export default function Task() {
   const params = useParams();
@@ -30,9 +31,6 @@ export default function Task() {
           <p className="mt-1 italic text-white text-sm md:w-9/12">
             Ceated at: {task.createdAt}
           </p>
-          {/* <p className="p-2 text-white text-sm self-center white-glassmorphism">
-            {task.taskType}
-          </p> */}
           <p className="mt-1 text-white text-sm md:w-9/12">
             Author: {task.author}
           </p>
@@ -72,7 +70,7 @@ export default function Task() {
               "Not submitted yet"
             )}
           </p>
-          {task.completedAt !== "Not completed yet"
+          {task.status === TaskStatuses[4]
           && (
           <p className="mt-1 italic text-white text-sm md:w-9/12">
             Completed at: {task.completedAt}
@@ -82,7 +80,7 @@ export default function Task() {
           {isLoading ? (
             <Loader />
           ) : (
-            task.completedAt === "Not completed yet" && (
+            task.status === TaskStatuses[4] && (
               <ActionControls task={task} />
             )
           )}

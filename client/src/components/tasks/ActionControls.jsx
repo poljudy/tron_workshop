@@ -16,7 +16,9 @@ const ActionButton = (params) => {
     }
     return false;
   };
+
   let button;
+
   if (params.task.author === currentAccount) {
     button = <AuthorActions />;
   } else if (

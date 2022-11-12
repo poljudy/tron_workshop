@@ -78,6 +78,34 @@ export const PlatformProvider = ({ children }) => {
     }
   };
 
+  const rateUser = async (address, rating) => {
+    if (tronWeb && address) {
+      try {
+        setIsLoading(true);
+        const dataToSend = [address, rating];
+        console.log(dataToSend);
+        const contract = await createTronContract();
+        const transaction = await contract.rateUser(address, rating).send({
+          feeLimit: 1000_000_000,
+          callValue: 0,
+          shouldPollResponse: true,
+        });
+        console.log(`Success - ${transaction}`);
+        setIsLoading(false);
+        // window.location.reload();
+        notify("Rating saved successfully.");
+      } catch (error) {
+        console.log(error.message);
+        alert(
+          "Oops! Something went wrong. See the browser console for details."
+        );
+        setIsLoading(false);
+      }
+    } else {
+      console.log("No Tron object");
+    }
+  };
+
   const getRating = async (address) => {
     if (tronWeb && address) {
       try {
@@ -135,13 +163,10 @@ export const PlatformProvider = ({ children }) => {
         currentAccount,
         isLoading,
         setIsLoading,
-        // handleChange,
+        rateUser,
         getRating,
-        // getProfile,
         fetchedRating,
-        // formData,
         address0,
-        // fetchedProfile
       }}
     >
       {children}

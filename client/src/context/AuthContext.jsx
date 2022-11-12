@@ -5,9 +5,8 @@ export const AuthContext = createContext();
 const { tronLink, localStorage, location } = window;
 
 export const AuthProvider = ({ children }) => {
-  const [currentAccount, setCurrentAccount] = useState("");
+  const [currentAccount, setCurrentAccount] = useState(null);
   const connectWallet = async () => {
-    let tronWeb;
     try {
       if (!tronLink) {
         alert("Please install TronLink -> https://www.tronlink.org/");
@@ -18,8 +17,8 @@ export const AuthProvider = ({ children }) => {
       });
       console.log("response: ", response);
       if (response.code === 200) {
-        tronWeb = tronLink.tronWeb;
-        const account = await tronWeb.defaultAddress.base58;
+        window.tronWeb = tronLink.tronWeb;
+        const account = await window.tronWeb.defaultAddress.base58;
         console.log("Yes, catch it:", account);
         setCurrentAccount(account);
         localStorage.setItem("currentAccount", account);
@@ -112,7 +111,7 @@ export const AuthProvider = ({ children }) => {
       } else {
         const res = await tronLink.request({ method: "tron_requestAccounts" });
         if (res.code === 200) {
-          tronWeb = tronLink.tronWeb;
+          window.tronWeb = tronLink.tronWeb;
         }
       }
     };

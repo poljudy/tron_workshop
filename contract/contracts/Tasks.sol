@@ -10,6 +10,7 @@ contract Tasks is Ownable, ReentrancyGuard {
  enum TaskTypes {
         FCFS,
         SelectedByAuthor,
+        ServiceTask,
         Escrow
     }
 
@@ -46,6 +47,7 @@ contract Tasks is Ownable, ReentrancyGuard {
         string description;
         TaskTypes taskType;
         uint256 reward;
+        address payable assignee;
     }
 
     using Counters for Counters.Counter;
@@ -143,14 +145,18 @@ contract Tasks is Ownable, ReentrancyGuard {
         tasks[_id].category = _newTask.category;
         tasks[_id].title = _newTask.title;
         tasks[_id].description = _newTask.description;
+        tasks[_id].taskType = _newTask.taskType;
         tasks[_id].author = payable(msg.sender);
         tasks[_id].createdAt = block.timestamp;
         tasks[_id].reward = _newTask.reward;
-        tasks[_id].taskType = _newTask.taskType;
+        tasks[_id].assignee = _newTask.assignee;
         tasks[_id].allTasksIndex = allTasks.length;
         tasks[_id].lastStatusChangeAt = block.timestamp;
         allTasks.push(_id);
         _idCounter.increment();
+        if (tasks[_id].assignee != address(0)) {
+            tasks[_id].status = Statuses.Assigned;
+        }
         emit TaskAdded(tasks[_id]);
         return true;
     }

@@ -15,6 +15,7 @@ export const ServiceProvider = ({ children }) => {
     title: "",
     description: "",
     price: 0,
+    deliveryTime: 0
   });
   const [services, setServices] = useState([]);
   const [service, setService] = useState([]);
@@ -65,6 +66,7 @@ export const ServiceProvider = ({ children }) => {
       createdAt: new Date(t.createdAt.toNumber() * 1000).toLocaleString(),
       author: tronWeb.address.fromHex(t.author),
       price: tronWeb.fromSun(t.price),
+      deliveryTime: t.deliveryTime,
       status: ServiceStatuses[t.status],
       lastStatusChangeAt: new Date(
         t.lastStatusChangeAt.toNumber() * 1000
@@ -112,7 +114,7 @@ export const ServiceProvider = ({ children }) => {
   const addService = async () => {
     if (tronWeb) {
       try {
-        const { category, title, description, price } = formData;
+        const { category, title, description, price, deliveryTime } = formData;
         const image = ipfsUrl || "";
         const serviceToSend = [
           image,
@@ -120,6 +122,7 @@ export const ServiceProvider = ({ children }) => {
           title,
           description,
           tronWeb.toSun(price),
+          deliveryTime
         ];
         setIsLoading(true);
         const contract = await createTronContract();
@@ -147,7 +150,7 @@ export const ServiceProvider = ({ children }) => {
   const updateService = async () => {
     if (tronWeb) {
       try {
-        const { category, title, description, price } = formData;
+        const { category, title, description, price, deliveryTime } = formData;
         const image = ipfsUrl || "";
         const serviceToSend = [
           image,
@@ -155,6 +158,7 @@ export const ServiceProvider = ({ children }) => {
           title,
           description,
           tronWeb.toSun(price),
+          deliveryTime
         ];
         setIsLoading(true);
         const contract = await createTronContract();
@@ -270,25 +274,31 @@ export const ServiceProvider = ({ children }) => {
     }
   };
 
-  const requestService = async (id) => {
+  const requestService = async (data) => {
     if (tronWeb) {
       try {
+        const { category, title, description, taskType, assignee, reward, fee } = data;
+        const feeAmount = (reward / 100) * fee;
+        const totalAmount = parseFloat(reward) + parseFloat(feeAmount);
+        const taskToSend = [
+          category,
+          title,
+          description,
+          taskType,
+          tronWeb.toSun(reward),
+          assignee,
+        ];
         setIsLoading(true);
         const contract = await createTronContract();
-        const transaction = await contract
-          .requestService(ethers.BigNumber.from(id))
-          .send({
-            feeLimit: 100_000_000,
-            callValue: 0,
-            shouldPollResponse: true,
-          });
+        const transaction = await contract.addTask(taskToSend).send({
+          feeLimit: 1000_000_000,
+          callValue: tronWeb.toSun(totalAmount),
+          shouldPollResponse: true,
+        });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
-        await getAllServices();
-        notify("Service paused successfully.");
-        window.location.reload();
-        getAllServices();
-        getService();
+        window.location.replace("/tasks");
+        notify("New task added successfully.");
       } catch (error) {
         console.log(error);
         alert(
@@ -381,6 +391,7 @@ export const ServiceProvider = ({ children }) => {
         deleteService,
         pauseService,
         resumeService,
+        requestService,
         handleChange,
         formData,
         onUploadHandler,

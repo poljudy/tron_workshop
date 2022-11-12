@@ -4,6 +4,7 @@ import { TaskContext } from "../../context/TaskContext";
 import TaskCard from "./TaskCard";
 import usePreventBodyScroll from "../usePreventBodyScroll";
 import { LeftArrow, RightArrow } from "../Arrows";
+import { TaskStatuses } from "../../utils/constants";
 
 function onWheel(apiObj, ev) {
   const isThouchpad = Math.abs(ev.deltaX) !== 0 || Math.abs(ev.deltaY) < 15;
@@ -38,6 +39,7 @@ const Tasks = () => {
           >
             {tasks &&
               [...tasks]
+                .filter((p) => p.status === TaskStatuses[0])
                 .reverse()
                 .slice(0, 5)
                 .map((task, i) => <TaskCard key={i} {...task} />)}

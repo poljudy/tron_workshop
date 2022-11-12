@@ -38,7 +38,7 @@ const FormField = ({ placeholder, name, type, value, handleChange }) => {
     <input
       placeholder={placeholder}
       type={type}
-      step="0.01"
+      step="0.1"
       min="0"
       value={value}
       onChange={(e) => handleChange(e, name)}
@@ -170,6 +170,23 @@ export default function NewService() {
                   handleChange={handleChange}
                 />
                 <span className="text-white self-center">TRX</span>
+              </div>
+            </div>
+            <div className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism">
+              <span
+                className="block tracking-wide text-gray-20 text-xs font-bold mb-2"
+                htmlFor="grid-state"
+              >
+                Delivery Time
+              </span>
+              <div className="flex flex-row gap-2">
+                <FormField
+                  placeholder="0"
+                  name="deliveryTime"
+                  type="number"
+                  handleChange={handleChange}
+                />
+                <span className="text-white self-center">days</span>
               </div>
             </div>
             <div className="h-[1px] w-full bg-gray-400 my-2" />

@@ -4,6 +4,7 @@ import usePreventBodyScroll from "../usePreventBodyScroll";
 import { ServiceContext } from "../../context/ServiceContext";
 import ServiceCard from "./ServiceCard";
 import { LeftArrow, RightArrow } from "../Arrows";
+import { ServiceStatuses } from "../../utils/constants";
 
 function onWheel(apiObj, ev) {
   const isThouchpad = Math.abs(ev.deltaX) !== 0 || Math.abs(ev.deltaY) < 15;
@@ -40,6 +41,7 @@ const Services = () => {
           >
             {services &&
               [...services]
+                .filter((p) => p.status === ServiceStatuses[0])
                 .reverse()
                 .slice(0, 5)
                 .map((service, i) => (

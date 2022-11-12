@@ -152,7 +152,7 @@ const AuthorActions = () => {
             type="text"
             onChange={(e) => setMessage(e.target.value)}
           />
-          <div className="flex flex-row">
+          <div className="flex flex-row gap-2">
             <button
               type="button"
               className="flex flex-row justify-center items-center my-5 bg-[#9c3a06] p-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
