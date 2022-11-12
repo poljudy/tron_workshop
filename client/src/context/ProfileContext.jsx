@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState, useContext } from "react";
+import { Web3Storage } from "web3.storage";
 import { AuthContext } from "./AuthContext";
 import { contractAddress } from "../utils/constants";
 import contractABI from "../utils/contractABI.json";
@@ -7,6 +8,7 @@ import { PlatformContext } from "./PlatformContext";
 export const ProfileContext = createContext();
 
 export const ProfileProvider = ({ children }) => {
+  const [ipfsUrl, setIpfsUrl] = useState(null);
   const [formData, setformData] = useState({
     avatar: "",
     username: "",
@@ -18,7 +20,6 @@ export const ProfileProvider = ({ children }) => {
   //   const [isLoading, setIsLoading] = useState(false);
   const [profile, setProfile] = useState([]);
   const { currentAccount, tronWeb } = useContext(AuthContext);
-  // const { tronWeb } = window;
   const { notify, setIsLoading } = useContext(PlatformContext);
 
   const handleChange = (e, name) => {
@@ -33,6 +34,24 @@ export const ProfileProvider = ({ children }) => {
       c = await tronWeb.contract(contractABI, contractAddress);
     }
     return c;
+  };
+
+  const onUploadHandler = async (files) => {
+    const client = new Web3Storage({
+      token: import.meta.env.VITE_WEB3_STORAGE_TOKEN,
+    });
+    if (!files || files.length === 0) {
+      return alert("No files selected");
+    }
+    setIsLoading(true);
+    const rootCid = await client.put(files);
+    const info = await client.status(rootCid);
+    // const res = await client.get(rootCid);
+    const url = `https://${info.cid}.ipfs.w3s.link/${files[0].name}`;
+    // form.reset();
+    setIpfsUrl(url);
+    setIsLoading(false);
+    notify("File successfully uploaded to IPFS.");
   };
 
   const getProfile = async (address) => {
@@ -55,9 +74,10 @@ export const ProfileProvider = ({ children }) => {
   const addProfile = async () => {
     if (tronWeb) {
       try {
-        const { avatar, username, skills, languages, rate, availability } = formData;
+        const { username, skills, languages, rate, availability } = formData;
         setIsLoading(true);
         const contract = await createTronContract();
+        const avatar = ipfsUrl || "";
         const profileToSend = [avatar, username, skills, languages, rate, availability];
         const transaction = await contract.addProfile(profileToSend).send({
           feeLimit: 1000_000_000,
@@ -99,6 +119,8 @@ export const ProfileProvider = ({ children }) => {
         handleChange,
         profile,
         formData,
+        onUploadHandler,
+        ipfsUrl
       }}
     >
       {children}

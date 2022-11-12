@@ -1,4 +1,4 @@
-import React, { useContext, createRef, useState, useEffect } from "react";
+import React, { useContext, createRef, useState } from "react";
 import Select from "react-select";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -41,13 +41,13 @@ const FormField = ({ placeholder, name, type, value, handleChange }) => {
         styles={{
           control: (styles) => ({
             ...styles,
-            backgroundColor: "transparent"
+            backgroundColor: "transparent",
           }),
           input: (styles) => ({
             ...styles,
             color: "white",
-            outlineStyle: "none"
-          })
+            outlineStyle: "none",
+          }),
         }}
       />
     );
@@ -79,8 +79,14 @@ const FormField = ({ placeholder, name, type, value, handleChange }) => {
 export default function Profile() {
   const { isLoading } = useContext(PlatformContext);
   const { currentAccount } = useContext(AuthContext);
-  const { handleChange, formData, addProfile, profile } =
-    useContext(ProfileContext);
+  const {
+    handleChange,
+    formData,
+    addProfile,
+    profile,
+    onUploadHandler,
+    ipfsUrl,
+  } = useContext(ProfileContext);
 
   const handleSubmit = (e) => {
     const { username } = formData;
@@ -101,10 +107,13 @@ export default function Profile() {
   // the reference of cropper element
   const cropperRef = createRef();
 
+  const [file, setFile] = useState(null);
+
   const onFileInputChange = (e) => {
-    const file = e.target?.files?.[0];
-    if (file) {
-      file2Base64(file).then((base64) => {
+    const f = e.target?.files?.[0];
+    if (f) {
+      setFile(e.target?.files);
+      file2Base64(f).then((base64) => {
         setUploaded(base64);
       });
     }
@@ -115,13 +124,6 @@ export default function Profile() {
     const cropper = imageElement?.cropper;
     setCropped(cropper.getCroppedCanvas().toDataURL());
   };
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     await getProfile(currentAccount);
-  //   };
-  //   fetchData().catch(console.error);
-  // }, []);
 
   return (
     <div className="flex w-full justify-center items-start  outline-none min-h-screen">
@@ -138,41 +140,81 @@ export default function Profile() {
             <div className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism">
               {uploaded ? (
                 <div>
-                  <Cropper
-                    src={uploaded}
-                    style={{ height: 400, width: 400 }}
-                    autoCropArea={1}
-                    aspectRatio={1}
-                    viewMode={3}
-                    guides={false}
-                    ref={cropperRef}
-                  />
-                  <button
-                    type="button"
-                    className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
-                    onClick={onCrop}
-                  >
-                    Crop
-                  </button>
-                  {cropped && (
-                    <img
-                      src={cropped}
-                      alt="Cropped!"
-                      style={{ borderRadius: "50%" }}
-                    />
+                  {cropped ? (
+                    <div>
+                      <img
+                        src={cropped}
+                        alt="Cropped!"
+                        style={{ borderRadius: "50%" }}
+                      />
+                      {isLoading ? (
+                        <Loader />
+                      ) : (
+                        <>
+                          <button
+                            type="button"
+                            className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
+                            onClick={() => setCropped(false)}
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            type="button"
+                            className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
+                            onClick={() => onUploadHandler(file)}
+                          >
+                            Upload to IPFS
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  ) : (
+                    <div>
+                      <Cropper
+                        src={uploaded}
+                        style={{ height: 400, width: 400 }}
+                        autoCropArea={1}
+                        aspectRatio={1}
+                        viewMode={3}
+                        guides={false}
+                        ref={cropperRef}
+                      />
+                      <button
+                        type="button"
+                        className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
+                        onClick={() => setUploaded(false)}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
+                        onClick={onCrop}
+                      >
+                        Crop
+                      </button>
+                    </div>
                   )}
                 </div>
               ) : (
                 <div className="flex flex-col items-center">
                   <div className="box-border h-96 w-96 border-4 rounded-full white-glassmorphism">
                     {profile.avatar && profile.avatar.length > 0 ? (
-                      <img alt="Avatar" src={profile.avatar} />
+                      <img alt="Avatar" src={profile.avatar} className="w-[36rem] mr-1 rounded-full" />
                     ) : (
                       <AutoAvatar userId={currentAccount} size={370} />
+                    )}
+                    {ipfsUrl && (
+                      <img
+                        alt="Profile"
+                        className="self-center"
+                        src={ipfsUrl}
+                      />
                     )}
                   </div>
                   <input
                     type="file"
+                    name="file"
                     style={{ display: "none" }}
                     ref={fileRef}
                     onChange={onFileInputChange}
@@ -227,10 +269,7 @@ export default function Profile() {
               >
                 Languages
               </span>
-              <FormField
-                name="languages"
-                handleChange={handleChange}
-              />
+              <FormField name="languages" handleChange={handleChange} />
             </div>
             <div className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism">
               <span

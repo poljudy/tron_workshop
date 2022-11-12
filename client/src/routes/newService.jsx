@@ -103,7 +103,7 @@ export default function NewService() {
               <div className="relative">
                 <div>
                   <p className=" text-l text-white text-basetext-white">
-                    *Upload an image for your service to IPFS
+                    Upload an image for your service to IPFS
                   </p>
                   {ipfsUrl && <img alt="Service" className="self-center" src={ipfsUrl} />}
                   <form onSubmit={onUploadHandler}>
