@@ -50,7 +50,6 @@ export const PlatformProvider = ({ children }) => {
     let c;
     if (tronWeb) {
       c = await tronWeb.contract(contractABI, contractAddress);
-      tronWeb.setAddress(contractAddress);
     }
     return c;
   };
