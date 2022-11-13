@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useContext, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
+import { Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
 import { PlatformContext } from "../context/PlatformContext";
@@ -108,8 +109,8 @@ export default function Wallet() {
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
-                <a
-                  href="/profile"
+                <Link
+                  to="/profile"
                   className={classNames(
                     active
                       ? "bg-blue-700 text-white cursor-pointer"
@@ -118,13 +119,13 @@ export default function Wallet() {
                   )}
                 >
                   My Profile
-                </a>
+                </Link>
               )}
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
-                <a
-                  href="/mytasks"
+                <Link
+                  to="/mytasks"
                   className={classNames(
                     active
                       ? "bg-blue-700 text-white cursor-pointer"
@@ -133,12 +134,12 @@ export default function Wallet() {
                   )}
                 >
                   My Tasks
-                </a>
+                </Link>
               )}
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
-                <a
+                <Link
                   href="/myservices"
                   className={classNames(
                     active
@@ -148,7 +149,7 @@ export default function Wallet() {
                   )}
                 >
                   My Services
-                </a>
+                </Link>
               )}
             </Menu.Item>
             <Menu.Item>
