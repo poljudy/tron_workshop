@@ -4,7 +4,6 @@ import { contractAddress } from "../utils/constants";
 export const AuthContext = createContext();
 
 const { tronLink, localStorage, location } = window;
-
 export const AuthProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState(null);
   const connectWallet = async () => {
@@ -19,7 +18,7 @@ export const AuthProvider = ({ children }) => {
       console.log("response: ", response);
       if (response.code === 200) {
         window.tronWeb = tronLink.tronWeb;
-        window.tronWeb.setAddress(contractAddress);
+        await window.tronWeb.setAddress(contractAddress);
         const account = await window.tronWeb.defaultAddress.base58;
         console.log("Yes, catch it:", account);
         setCurrentAccount(account);
@@ -114,7 +113,7 @@ export const AuthProvider = ({ children }) => {
         const res = await tronLink.request({ method: "tron_requestAccounts" });
         if (res.code === 200) {
           window.tronWeb = tronLink.tronWeb;
-          window.tronWeb.setAddress(contractAddress);
+          await window.tronWeb.setAddress(contractAddress);
         }
       }
     };
