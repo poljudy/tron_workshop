@@ -64,7 +64,7 @@ export const TaskProvider = ({ children }) => {
       taskType: TaskTypes[t.taskType],
       createdAt: new Date(
         t.createdAt.toNumber() * 1000
-      ).toLocaleString(),
+      ).toLocaleDateString(),
       author: tronWeb.address.fromHex(t.author),
       candidates:
         t.candidates.length > 0
@@ -78,17 +78,53 @@ export const TaskProvider = ({ children }) => {
         t.completedAt > 0
           ? new Date(
             t.completedAt.toNumber() * 1000
-          ).toLocaleString()
+          ).toLocaleDateString()
           : "Not completed yet",
       reward: tronWeb.fromSun(t.reward),
       result: t.result,
       status: TaskStatuses[t.status],
       lastStatusChangeAt: new Date(
         t.lastStatusChangeAt.toNumber() * 1000
-      ).toLocaleString(),
+      ).toLocaleDateString(),
       changeRequests: t.changeRequests,
     });
   }
+
+  const formatUser = async (address) => {
+    if (tronWeb && address) {
+      try {
+        const user = {};
+        const contract = await createTronContract();
+        const fetchedProfile = await contract.getProfile(address).call();
+        user.profile = fetchedProfile;
+        user.address = tronWeb.address.fromHex(address);
+        const fetchedRating = await contract.getRating(address).call();
+        user.rating = fetchedRating;
+        return user;
+      } catch (error) {
+        console.log(error);
+        alert(error.message);
+      }
+    } else {
+      console.log("Tron is not present");
+    }
+  };
+
+  const composeCandidateProfiles = async (candidates) => {
+    const p = [];
+    if (candidates) {
+      for (let i = 0; i < candidates.candidates.length; i += 1) {
+        const c = await formatUser(candidates.candidates[i]);
+        p.push(c);
+      }
+      return p;
+    }
+  };
+
+  const composeAuthorProfile = async (address) => {
+    const p = await formatUser(address);
+    return p;
+  };
 
   const getAllTasks = async () => {
     try {
@@ -148,7 +184,7 @@ export const TaskProvider = ({ children }) => {
         const transaction = await contract.addTask(taskToSend).send({
           feeLimit: 1000_000_000,
           callValue: tronWeb.toSun(totalAmount),
-          shouldPollResponse: true,
+          // shouldPollResponse: false,
         });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -175,7 +211,7 @@ export const TaskProvider = ({ children }) => {
         const transaction = await contract.applyForTask(bnId).send({
           feeLimit: 100_000_000,
           callValue: 0,
-          shouldPollResponse: true,
+          // shouldPollResponse: true,
         });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -204,7 +240,7 @@ export const TaskProvider = ({ children }) => {
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
-            shouldPollResponse: true,
+            // shouldPollResponse: true,
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -233,7 +269,7 @@ export const TaskProvider = ({ children }) => {
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
-            shouldPollResponse: true,
+            // shouldPollResponse: true,
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -262,7 +298,7 @@ export const TaskProvider = ({ children }) => {
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
-            shouldPollResponse: true,
+            // shouldPollResponse: true,
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -291,7 +327,7 @@ export const TaskProvider = ({ children }) => {
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
-            shouldPollResponse: true,
+            // shouldPollResponse: true,
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -321,7 +357,7 @@ export const TaskProvider = ({ children }) => {
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
-            shouldPollResponse: true,
+            // shouldPollResponse: true,
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -350,7 +386,7 @@ export const TaskProvider = ({ children }) => {
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
-            shouldPollResponse: true,
+            // shouldPollResponse: true,
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -375,7 +411,6 @@ export const TaskProvider = ({ children }) => {
   }, []);
 
   // Event listeners
-
   // TODO Fix events listenenrs later
 
   const onTaskAdded = async () => {
@@ -456,6 +491,8 @@ export const TaskProvider = ({ children }) => {
         formData,
         onUploadHandler,
         ipfsUrl,
+        composeCandidateProfiles,
+        composeAuthorProfile
       }}
     >
       {children}

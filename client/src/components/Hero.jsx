@@ -18,13 +18,13 @@ function Hero() {
         <div className="headings flex flex-1 flex-col text-white items-center justify-center h-[100%] text-[2rem]">
           <p>Need a professional? Create a task and enjoy!</p>
           <p className="pb-4">
-            Or select them yourself from our highly skilled freelancers
+            Or select from a number of services our highly skilled freelancers offer
           </p>
           <ConnectWalletButton />
         </div>
         {/* right side */}
         <div className="headings flex flex-1 flex-col text-white items-start justify-center h-[100%] text-[2rem]">
-          <img alt="Hero 1" className="md:w-10/12 lg:w-6/12 self-center" src={hero1} />
+          <img alt="Hero 1" className="md:w-10/12 lg:w-8/12 self-center" src={hero1} />
         </div>
       </div>
       <div className="wrapper flex items-center justify-between px-[5rem] rounded-b-[5rem] w-[100%] h-[35rem] relative z-[3]">

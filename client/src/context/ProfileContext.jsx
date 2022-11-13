@@ -9,6 +9,7 @@ export const ProfileContext = createContext();
 
 export const ProfileProvider = ({ children }) => {
   const [ipfsUrl, setIpfsUrl] = useState(null);
+  const [profile, setProfile] = useState([]);
   const [formData, setformData] = useState({
     avatar: "",
     username: "",
@@ -18,7 +19,6 @@ export const ProfileProvider = ({ children }) => {
     availability: 0
   });
   //   const [isLoading, setIsLoading] = useState(false);
-  const [profile, setProfile] = useState([]);
   const { currentAccount, tronWeb } = useContext(AuthContext);
   const { notify, setIsLoading } = useContext(PlatformContext);
 
@@ -48,7 +48,6 @@ export const ProfileProvider = ({ children }) => {
     const info = await client.status(rootCid);
     // const res = await client.get(rootCid);
     const url = `https://${info.cid}.ipfs.w3s.link/${files[0].name}`;
-    // form.reset();
     setIpfsUrl(url);
     setIsLoading(false);
     notify("File successfully uploaded to IPFS.");
@@ -71,6 +70,23 @@ export const ProfileProvider = ({ children }) => {
     }
   };
 
+  const getUserProfile = async (address) => {
+    if (tronWeb && address) {
+      try {
+        setIsLoading(true);
+        const contract = await createTronContract();
+        const fetchedProfile = await contract.getProfile(address).call();
+        setIsLoading(false);
+        return fetchedProfile;
+      } catch (error) {
+        console.log(error);
+        setIsLoading(false);
+      }
+    } else {
+      console.log("Tron is not present");
+    }
+  };
+
   const addProfile = async () => {
     if (tronWeb) {
       try {
@@ -82,12 +98,12 @@ export const ProfileProvider = ({ children }) => {
         const transaction = await contract.addProfile(profileToSend).send({
           feeLimit: 1000_000_000,
           callValue: 0,
-          shouldPollResponse: true,
+          // shouldPollResponse: false,
         });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
-        window.location.reload();
         notify("Profile saved successfully.");
+        window.location.reload();
       } catch (error) {
         console.log(error);
         alert(
@@ -116,11 +132,12 @@ export const ProfileProvider = ({ children }) => {
       value={{
         addProfile,
         getProfile,
+        getUserProfile,
         handleChange,
         profile,
         formData,
         onUploadHandler,
-        ipfsUrl
+        ipfsUrl,
       }}
     >
       {children}

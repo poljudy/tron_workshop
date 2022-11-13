@@ -63,14 +63,14 @@ export const ServiceProvider = ({ children }) => {
       category: t.category,
       title: t.title,
       description: t.description,
-      createdAt: new Date(t.createdAt.toNumber() * 1000).toLocaleString(),
+      createdAt: new Date(t.createdAt.toNumber() * 1000).toLocaleDateString(),
       author: tronWeb.address.fromHex(t.author),
       price: tronWeb.fromSun(t.price),
       deliveryTime: t.deliveryTime,
       status: ServiceStatuses[t.status],
       lastStatusChangeAt: new Date(
         t.lastStatusChangeAt.toNumber() * 1000
-      ).toLocaleString(),
+      ).toLocaleDateString(),
     };
   }
 
@@ -129,7 +129,7 @@ export const ServiceProvider = ({ children }) => {
         const transaction = await contract.addService(serviceToSend).send({
           feeLimit: 1000_000_000,
           callValue: 0,
-          shouldPollResponse: true,
+          // shouldPollResponse: true,
         });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -165,7 +165,7 @@ export const ServiceProvider = ({ children }) => {
         const transaction = await contract.updateService(serviceToSend).send({
           feeLimit: 1000_000_000,
           callValue: 0,
-          shouldPollResponse: true,
+          // shouldPollResponse: true,
         });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -193,7 +193,7 @@ export const ServiceProvider = ({ children }) => {
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
-            shouldPollResponse: true,
+            // shouldPollResponse: true,
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -224,7 +224,7 @@ export const ServiceProvider = ({ children }) => {
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
-            shouldPollResponse: true,
+            // shouldPollResponse: true,
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -255,7 +255,7 @@ export const ServiceProvider = ({ children }) => {
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
-            shouldPollResponse: true,
+            // shouldPollResponse: true,
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -293,7 +293,7 @@ export const ServiceProvider = ({ children }) => {
         const transaction = await contract.addTask(taskToSend).send({
           feeLimit: 1000_000_000,
           callValue: tronWeb.toSun(totalAmount),
-          shouldPollResponse: true,
+          // shouldPollResponse: true,
         });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import AutoAvatar from "../AutoAvatar";
 import { shortenAddress } from "../../utils/shortenAddress";
+import { TaskTypes } from "../../utils/constants";
 
 const TaskCard = ({
   id,
@@ -22,7 +23,7 @@ const TaskCard = ({
           <p className="text-2xl">{reward} TRX</p>
         </div>
         <p className="mt-2 text-sm truncate ...">{description}</p>
-        {taskType !== "First Come First Serve" && <p className="mt-1 italic text-sm">Candidates: {candidates.length}</p>}
+        {/* {taskType !== TaskTypes[0] && <p className="mt-1 italic text-sm">Candidates: {candidates.length}</p>} */}
         <p className="mt-2 text-center italic text-sm white-glassmorphism">{taskType}</p>
         <div className="flex flex-row gap-2 items-center">
           <div className="mt-2 pl-2 pr-2 text-center white-glassmorphism">{category}</div>

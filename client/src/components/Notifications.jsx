@@ -10,8 +10,8 @@ export default function Notifications() {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="inline-flex justify-center items-center w-full px-4 py-2 font-medium text-white bg-transparent rounded-md shadow-sm hover:bg-[#2546bd] focus:outline-none">
-          <AiFillBell />
+        <Menu.Button className="inline-flex justify-center w-full font-medium text-white bg-transparent rounded-md shadow-sm focus:outline-none">
+          <AiFillBell size={24} />
         </Menu.Button>
       </div>
 

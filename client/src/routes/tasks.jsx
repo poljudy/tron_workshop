@@ -17,7 +17,6 @@ const Tasks = () => {
       setSearchParams({});
     }
   };
-
   return (
     <div className="min-h-screen">
       {tasks ? (
@@ -64,7 +63,7 @@ const Tasks = () => {
       ) : (
         <p className="text-white text-3xl text-center my-2">No tasks yet</p>
       )}
-      <div className="flex justify-center items-center mt-10">
+      <div className="flex flex-wrap justify-center items-center mt-10">
         {tasks &&
           [...tasks]
             .reverse()

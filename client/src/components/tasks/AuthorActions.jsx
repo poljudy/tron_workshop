@@ -1,6 +1,10 @@
 import { useContext, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { TaskContext } from "../../context/TaskContext";
+import { TaskStatuses } from "../../utils/constants";
+import { shortenAddress } from "../../utils/shortenAddress";
+import Candidates from "./Candidates";
+
 // import { shortenAddress } from "../utils/shortenAddress";
 
 const AuthorActions = () => {
@@ -36,10 +40,11 @@ const AuthorActions = () => {
   };
 
   // If the task is not assigned
-  if (task.status === "Active") {
+  if (task.status === TaskStatuses[0]) {
     if (task.candidates.length > 0) {
       return (
         <div>
+          {/* <Candidates /> */}
           <select
             className="mt-4 block appearance-none bg-transparent border text-white py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:border-gray-500"
             id="select"
@@ -53,12 +58,12 @@ const AuthorActions = () => {
           >
             <option value="">{defaultSelectValue}</option>
             {task.candidates.map((candidate, i) => (
-              <option key={i} value={candidate.candidate}>
-                {candidate.candidate} - rating: {candidate.rating === 0 ? "unrated" : `${candidate.rating}/5`}
+              <option key={i} value={candidate}>
+                {shortenAddress(candidate)}
               </option>
             ))}
           </select>
-          <div className="flex flex-row">
+          <div className="flex flex-row gap-2">
             <button
               type="button"
               className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"

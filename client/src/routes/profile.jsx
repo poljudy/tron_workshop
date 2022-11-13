@@ -131,7 +131,7 @@ export default function Profile() {
         <div className="flex flex-1 justify-start items-start flex-col mf:mr-10">
           <h1 className="text-3xl sm:text-5xl text-white py-1">Profile</h1>
           <p className="text-left mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
-            Let us know you better.
+            Let your customers know you better.
           </p>
         </div>
 
@@ -198,9 +198,8 @@ export default function Profile() {
                 </div>
               ) : (
                 <div className="flex flex-col items-center">
-                  <div className="box-border h-96 w-96 border-4 rounded-full white-glassmorphism">
                     {profile.avatar && profile.avatar.length > 0 ? (
-                      <img alt="Avatar" src={profile.avatar} className="w-[36rem] mr-1 rounded-full" />
+                      <img alt="Avatar" src={profile.avatar} className="w-[36rem] mr-1 rounded-full box-border border-4" />
                     ) : (
                       <AutoAvatar userId={currentAccount} size={370} />
                     )}
@@ -211,7 +210,6 @@ export default function Profile() {
                         src={ipfsUrl}
                       />
                     )}
-                  </div>
                   <input
                     type="file"
                     name="file"

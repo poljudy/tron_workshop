@@ -111,6 +111,7 @@ export default function NewService() {
                       className="mt-5 text-l text-white text-basetext-white"
                       type="file"
                       name="file"
+                      accept="image/png,image/jpeg,image/gif"
                     />
                     {isLoading ? (
                       <Loader />

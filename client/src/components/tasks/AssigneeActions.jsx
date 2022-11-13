@@ -28,11 +28,32 @@ const AssigneeActions = () => {
     rateUser(task.author, rating);
   };
 
+  const calculateDaysLeft = (date) => {
+    const currentTime = new Date();
+    console.log(currentTime);
+    const prevTime = new Date(date);
+    console.log(date);
+    console.log(prevTime);
+    const differenceInTime = currentTime.getTime() - prevTime.getTime();
+    const differenceInDays = differenceInTime / (1000 * 60 * 60 * 24);
+    return differenceInDays;
+  };
+
   if (task.status === TaskStatuses[2]) {
     return (
-      <p className="mt-5 text-2xl text-white text-basetext-white">
-        Result submitted. Waiting for completion from the author.
-      </p>
+      <>
+        <p className="mt-5 text-2xl text-white text-basetext-white">
+          Result submitted. Waiting for completion from the author.
+        </p>
+        <p>Feel free to request payment if you did not receive your reward within 10 days</p>
+        <p>(Request Payment will be available in {calculateDaysLeft(task.lastStatusChangeAt)} days)</p>
+        <button
+          type="button"
+          className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
+        >
+          Request Payment
+        </button>
+      </>
     );
   }
 

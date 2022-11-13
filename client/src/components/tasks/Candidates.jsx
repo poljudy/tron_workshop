@@ -1,34 +1,74 @@
+import React, { useContext, useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
+import AutoAvatar from "../AutoAvatar";
+import { TaskContext } from "../../context/TaskContext";
+import { shortenAddress } from "../../utils/shortenAddress";
+import languages from "../../utils/languages.json";
 
-const Candidates = (props) => {
-  const { candidates } = props;
-  if (candidates) {
-    return (
-      <div className="flex flex-wrap justify-start items-center">
-        <ul>
-          {candidates.map((candidate, i) => (
-            <li key={i} className="flex flex-row justify-start items-center">
-              <span>{candidate}</span>{" "}
-              <span className="flex flex-row justify-center items-center m-2">
-                {candidate.rating === 0 ? "Unrated" :
-                  [...Array(candidate.rating)].map((star, index) => (
-                    <FaStar
-                      key={index}
-                      color="#ffc107"
-                      size={20}
-                    />
-                  ))}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  }
+const Candidates = (candidates) => {
+  const { composeCandidateProfiles } = useContext(TaskContext);
+  const [candidateProfiles, setCandidateProfiles] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      const c = await composeCandidateProfiles(candidates);
+      setCandidateProfiles(c);
+    };
+    fetchData().catch(console.error);
+    return () => {
+      // this now gets called when the component unmounts
+      setCandidateProfiles(null);
+    };
+  }, [candidates]);
+
   return (
-    <p className="text-white text-xl my-2">
-      No candidates applied yet
-    </p>
+    <div>
+      {candidateProfiles &&
+        candidateProfiles.map((p, i) => (
+          <div
+            key={i}
+            className="flex flex-col gap-2 justify-start items-start white-glassmorphism p-3 m-2"
+          >
+            <div className="flex flex-row justify-start items-center">
+              {p.profile.avatar ? (
+                <img
+                  alt="Avatar"
+                  className="w-[2.5rem] mr-1 rounded-full border"
+                  src={p.profile.avatar}
+                />
+              ) : (
+                <AutoAvatar userId={p.address} size={36} />
+              )}
+              {p.profile.username ? (
+                <span>
+                  {p.profile.username} ({shortenAddress(p.address)})
+                </span>
+              ) : (
+                shortenAddress(p.address)
+              )}
+              <span className="pl-1">
+                <FaStar color="#ffc107" size={20} />
+              </span>
+              {p.rating.toFixed(1)}
+            </div>
+            {p.profile.skills && <p>{p.profile.skills}</p>}
+            {p.profile.languages && (
+              <p>
+                {p.profile.languages.map((l, j) => (
+                  <span key={j} className="p-2 m-1 white-glassmorphism">
+                    {languages.find((entry) => entry.code === l).name}
+                  </span>
+                ))}
+              </p>
+            )}
+            <div className="flex flex-row w-full justify-between">
+              {p.profile.rate > 0 && <span>${p.profile.rate}/hr</span>}
+              {p.profile.availability > 0 && (
+                <span>{p.profile.availability}hrs per week</span>
+              )}
+            </div>
+          </div>
+        ))}
+    </div>
   );
 };
 

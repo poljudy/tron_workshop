@@ -1,9 +1,7 @@
 import { createContext, useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
-// import { ethers } from "ethers";
 import { AuthContext } from "./AuthContext";
-import { address0 } from "../utils/constants";
-import { contractAddress } from "../utils/constants";
+import { address0, contractAddress } from "../utils/constants";
 import contractABI from "../utils/contractABI.json";
 
 export const PlatformContext = createContext();
@@ -25,13 +23,6 @@ const MessageDisplay = ({ message, hash }) => (
 );
 
 export const PlatformProvider = ({ children }) => {
-  // const [formData, setformData] = useState({
-  //   category: "Programming & Tech",
-  //   title: "",
-  //   description: "",
-  //   taskType: "0",
-  //   reward: 0,
-  // });
   const [isLoading, setIsLoading] = useState(false);
   // const [tasks, setTasks] = useState("");
   // const [fetchedProfile, setFetchedProfile] = useState([]);
@@ -88,7 +79,7 @@ export const PlatformProvider = ({ children }) => {
         const transaction = await contract.rateUser(address, rating).send({
           feeLimit: 1000_000_000,
           callValue: 0,
-          shouldPollResponse: true,
+          // shouldPollResponse: true,
         });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
