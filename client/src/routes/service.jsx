@@ -83,7 +83,7 @@ export default function Service() {
             <div className="pt-4 flex flex-row gap-2 items-center italic">
               <div className="flex flex-row items-center">
                 {profile && profile.avatar ? (
-                  <img alt="Avatar" className="" src={profile.avatar} />
+                  <img alt="Avatar" className="w-[2.5rem] mr-1 rounded-full border" src={profile.avatar} />
                 ) : (
                   <AutoAvatar userId={service.author} size={36} />
                 )}
