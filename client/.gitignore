@@ -27,3 +27,4 @@ cache
 artifacts
 package-lock.js
 yarn.lock
+.netlify

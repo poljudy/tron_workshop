@@ -1,5 +1,5 @@
 import { React } from "react";
-import path318 from "../img/Path318.png";
+import path318 from "../images/Path318.png";
 import session2 from "../../images/session2.jpeg";
 
 function Sponsors() {

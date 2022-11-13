@@ -1,5 +1,5 @@
 import { React } from "react";
-import path318 from "../img/Path318.png";
+import path318 from "../images/Path318.png";
 import vad from "../../images/Vad.jpg";
 
 function Team() {
