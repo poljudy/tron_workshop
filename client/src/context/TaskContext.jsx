@@ -27,6 +27,7 @@ export const TaskProvider = ({ children }) => {
   const createTronContract = async () => {
     let c;
     if (tronWeb) {
+      window.tronWeb.setAddress(contractAddress);
       c = await tronWeb.contract(contractABI, contractAddress);
     }
     return c;
