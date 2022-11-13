@@ -10,6 +10,7 @@ import AutoAvatar from "../components/AutoAvatar";
 import { contractAddress } from "../utils/constants";
 import contractABI from "../utils/contractABI.json";
 import { AuthContext } from "../context/AuthContext";
+import { shortenAddress } from "../utils/shortenAddress";
 
 export default function Service() {
   const params = useParams();
@@ -86,7 +87,7 @@ export default function Service() {
                 ) : (
                   <AutoAvatar userId={service.author} size={36} />
                 )}
-                {profile ? profile.username : service.author}
+                {profile ? profile.username : shortenAddress(service.author)}
               </div>
               <div className="flex flex-row justify-center items-center">
                 <FaStar color="#ffc107" />

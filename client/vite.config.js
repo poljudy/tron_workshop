@@ -12,7 +12,6 @@ export default defineConfig({
       },
       plugins: [
         GlobalPolyFill({
-          process: true,
           buffer: true,
         }),
       ],
