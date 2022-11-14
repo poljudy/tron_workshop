@@ -99,7 +99,7 @@ export const ProfileProvider = ({ children }) => {
         const transaction = await contract.addProfile(profileToSend).send({
           feeLimit: 1000_000_000,
           callValue: 0,
-          // shouldPollResponse: false,
+          shouldPollResponse: true,
         });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);

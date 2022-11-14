@@ -80,7 +80,7 @@ export const PlatformProvider = ({ children }) => {
         const transaction = await contract.rateUser(address, rating).send({
           feeLimit: 1000_000_000,
           callValue: 0,
-          // shouldPollResponse: true,
+          shouldPollResponse: true,
         });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
