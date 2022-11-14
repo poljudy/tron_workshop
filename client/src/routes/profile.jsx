@@ -131,7 +131,7 @@ export default function Profile() {
         <div className="flex flex-1 justify-start items-start flex-col mf:mr-10">
           <h1 className="text-3xl sm:text-5xl text-white py-1">Profile</h1>
           <p className="text-left mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
-            Let your customers know you better.
+            Let your customers know your strongest skills.
           </p>
         </div>
 
@@ -198,18 +198,18 @@ export default function Profile() {
                 </div>
               ) : (
                 <div className="flex flex-col items-center">
-                    {profile.avatar && profile.avatar.length > 0 ? (
-                      <img alt="Avatar" src={profile.avatar} className="w-[36rem] mr-1 rounded-full box-border border-4" />
-                    ) : (
-                      <AutoAvatar userId={currentAccount} size={370} />
-                    )}
-                    {ipfsUrl && (
-                      <img
-                        alt="Profile"
-                        className="self-center"
-                        src={ipfsUrl}
-                      />
-                    )}
+                  {profile.avatar && profile.avatar.length > 0 ? (
+                    <img
+                      alt="Avatar"
+                      src={profile.avatar}
+                      className="w-[36rem] mr-1 rounded-full box-border border-4"
+                    />
+                  ) : (
+                    <AutoAvatar userId={currentAccount} size={370} />
+                  )}
+                  {ipfsUrl && (
+                    <img alt="Profile" className="self-center" src={ipfsUrl} />
+                  )}
                   <input
                     type="file"
                     name="file"
@@ -233,7 +233,7 @@ export default function Profile() {
                 className="block tracking-wide text-gray-20 text-xs font-bold mb-2"
                 htmlFor="grid-state"
               >
-                Useranme
+                Useranme*
               </span>
               <div>
                 <FormField
