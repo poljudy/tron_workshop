@@ -233,7 +233,7 @@ export default function Profile() {
                 className="block tracking-wide text-gray-20 text-xs font-bold mb-2"
                 htmlFor="grid-state"
               >
-                Useranme*
+                Username*
               </span>
               <div>
                 <FormField
