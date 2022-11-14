@@ -7,6 +7,7 @@ import contractABI from "../utils/contractABI.json";
 import { PlatformContext } from "./PlatformContext";
 
 export const ServiceContext = createContext();
+const shouldPollResponse = true;
 
 export const ServiceProvider = ({ children }) => {
   const [formData, setformData] = useState({
@@ -130,7 +131,7 @@ export const ServiceProvider = ({ children }) => {
         const transaction = await contract.addService(serviceToSend).send({
           feeLimit: 1000_000_000,
           callValue: 0,
-          // shouldPollResponse: true,
+          shouldPollResponse
         });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -166,7 +167,7 @@ export const ServiceProvider = ({ children }) => {
         const transaction = await contract.updateService(serviceToSend).send({
           feeLimit: 1000_000_000,
           callValue: 0,
-          // shouldPollResponse: true,
+          shouldPollResponse
         });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -194,7 +195,7 @@ export const ServiceProvider = ({ children }) => {
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
-            // shouldPollResponse: true,
+            shouldPollResponse
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -225,7 +226,7 @@ export const ServiceProvider = ({ children }) => {
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
-            // shouldPollResponse: true,
+            shouldPollResponse
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -256,7 +257,7 @@ export const ServiceProvider = ({ children }) => {
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
-            // shouldPollResponse: true,
+            shouldPollResponse
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -289,12 +290,13 @@ export const ServiceProvider = ({ children }) => {
           tronWeb.toSun(reward),
           assignee,
         ];
+        console.log(taskToSend);
         setIsLoading(true);
         const contract = await createTronContract();
         const transaction = await contract.addTask(taskToSend).send({
           feeLimit: 1000_000_000,
           callValue: tronWeb.toSun(totalAmount),
-          // shouldPollResponse: true,
+          shouldPollResponse
         });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);

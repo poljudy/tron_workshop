@@ -3,9 +3,6 @@ import { FaStar } from "react-icons/fa";
 import { TaskContext } from "../../context/TaskContext";
 import { TaskStatuses } from "../../utils/constants";
 import { shortenAddress } from "../../utils/shortenAddress";
-import Candidates from "./Candidates";
-
-// import { shortenAddress } from "../utils/shortenAddress";
 
 const AuthorActions = () => {
   const {
@@ -44,7 +41,6 @@ const AuthorActions = () => {
     if (task.candidates.length > 0) {
       return (
         <div>
-          {/* <Candidates /> */}
           <select
             className="mt-4 block appearance-none bg-transparent border text-white py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:border-gray-500"
             id="select"

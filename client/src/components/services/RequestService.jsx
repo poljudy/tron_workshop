@@ -1,13 +1,10 @@
 import { useContext, useState } from "react";
 import { PlatformContext } from "../../context/PlatformContext";
-// import { FaStar } from "react-icons/fa";
 import { ServiceContext } from "../../context/ServiceContext";
-// import { shortenAddress } from "../utils/shortenAddress";
-import { ServiceStatuses } from "../../utils/constants";
 
 const RequestService = () => {
   const { service, requestService } = useContext(ServiceContext);
-  const { fee, isLoading } = useContext(PlatformContext);
+  const { fee } = useContext(PlatformContext);
 
   const totalAmount = (
     parseFloat(service.price) +
@@ -18,7 +15,7 @@ const RequestService = () => {
     category: service.category,
     title: service.title,
     description: "",
-    taskType: "3",
+    taskType: "0",
     assignee: service.author,
     reward: service.price,
     fee

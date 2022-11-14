@@ -13,14 +13,13 @@ const TaskCard = ({
   reward,
   status,
   category,
-  candidates
+  // candidates
 }) => (
   <Link to={`/tasks/${id}`}>
     <div className="w-[24rem] h-[16rem] flex flex-row justify-center items-start text-white white-glassmorphism p-3 m-2 cursor-pointer transition ease-in-out delay-50 hover:-translate-y-1 hover:scale-104 duration-300">
       <div className="flex flex-col w-full justify-center">
         <div className="flex flex-row justify-between">
           <p className="text-3xl truncate ...">{title}</p>
-          {/* <p className="text-2xl">{reward} TRX</p> */}
         </div>
         <p className="mt-2 text-sm truncate ...">{description}</p>
         {/* {taskType !== TaskTypes[0] && <p className="mt-1 italic text-sm">Candidates: {candidates.length}</p>} */}

@@ -8,6 +8,8 @@ import { PlatformContext } from "./PlatformContext";
 
 export const TaskContext = createContext();
 
+const shouldPollResponse = true;
+
 export const TaskProvider = ({ children }) => {
   const [formData, setformData] = useState({
     category: Categories[0],
@@ -185,7 +187,7 @@ export const TaskProvider = ({ children }) => {
         const transaction = await contract.addTask(taskToSend).send({
           feeLimit: 1000_000_000,
           callValue: tronWeb.toSun(totalAmount),
-          // shouldPollResponse: false,
+          shouldPollResponse
         });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -212,7 +214,7 @@ export const TaskProvider = ({ children }) => {
         const transaction = await contract.applyForTask(bnId).send({
           feeLimit: 100_000_000,
           callValue: 0,
-          // shouldPollResponse: true,
+          shouldPollResponse
         });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -241,7 +243,7 @@ export const TaskProvider = ({ children }) => {
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
-            // shouldPollResponse: true,
+            shouldPollResponse
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -270,7 +272,7 @@ export const TaskProvider = ({ children }) => {
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
-            // shouldPollResponse: true,
+            shouldPollResponse
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -299,7 +301,7 @@ export const TaskProvider = ({ children }) => {
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
-            // shouldPollResponse: true,
+            shouldPollResponse
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -328,7 +330,7 @@ export const TaskProvider = ({ children }) => {
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
-            // shouldPollResponse: true,
+            shouldPollResponse
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -358,7 +360,7 @@ export const TaskProvider = ({ children }) => {
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
-            // shouldPollResponse: true,
+            shouldPollResponse
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
@@ -387,7 +389,7 @@ export const TaskProvider = ({ children }) => {
           .send({
             feeLimit: 100_000_000,
             callValue: 0,
-            // shouldPollResponse: true,
+            shouldPollResponse,
           });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
