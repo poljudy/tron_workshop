@@ -2,7 +2,7 @@
   "name": "medo",
   "version": "0.0.0",
   "license": "MIT",
-  "homepage": "https://vadkutsen.github.io/medo-tron",
+  "homepage": "https://vadkutsen.github.io/medo-tron/index.html",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
