@@ -20,7 +20,7 @@ const TaskCard = ({
       <div className="flex flex-col w-full justify-center">
         <div className="flex flex-row justify-between">
           <p className="text-3xl truncate ...">{title}</p>
-          <p className="text-2xl">{reward} TRX</p>
+          {/* <p className="text-2xl">{reward} TRX</p> */}
         </div>
         <p className="mt-2 text-sm truncate ...">{description}</p>
         {/* {taskType !== TaskTypes[0] && <p className="mt-1 italic text-sm">Candidates: {candidates.length}</p>} */}
@@ -40,7 +40,7 @@ const TaskCard = ({
           {createdAt}
         </div>
         {/* } */}
-
+        <p className="text-2xl self-end">{reward} TRX</p>
         {/* <p className="mt-1 italic text-white text-sm md:w-9/12">Completed at: {completedAt}</p> */}
       </div>
     </div>
