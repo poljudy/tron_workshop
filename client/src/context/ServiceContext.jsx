@@ -86,7 +86,7 @@ export const ServiceProvider = ({ children }) => {
         setIsLoading(false);
       } catch (error) {
         console.log(error);
-        alert(error.message);
+        // alert(error.message);
         setIsLoading(false);
       }
     } else {
@@ -104,7 +104,7 @@ export const ServiceProvider = ({ children }) => {
         setIsLoading(false);
       } catch (error) {
         console.log(error);
-        alert(error.message);
+        // alert(error.message);
         setIsLoading(false);
       }
     } else {
@@ -138,9 +138,9 @@ export const ServiceProvider = ({ children }) => {
         notify("New service added successfully.");
       } catch (error) {
         console.log(error);
-        alert(
-          "Oops! Something went wrong. See the browser console for details."
-        );
+        // alert(
+        //   "Oops! Something went wrong. See the browser console for details."
+        // );
         setIsLoading(false);
       }
     } else {
@@ -174,9 +174,9 @@ export const ServiceProvider = ({ children }) => {
         notify("Service updated successfully.");
       } catch (error) {
         console.log(error);
-        alert(
-          "Oops! Something went wrong. See the browser console for details."
-        );
+        // alert(
+        //   "Oops! Something went wrong. See the browser console for details."
+        // );
         setIsLoading(false);
       }
     } else {
@@ -205,9 +205,9 @@ export const ServiceProvider = ({ children }) => {
         getService();
       } catch (error) {
         console.log(error);
-        alert(
-          "Oops! Something went wrong. See the browser console for details."
-        );
+        // alert(
+        //   "Oops! Something went wrong. See the browser console for details."
+        // );
         setIsLoading(false);
       }
     } else {
@@ -236,9 +236,9 @@ export const ServiceProvider = ({ children }) => {
         getService();
       } catch (error) {
         console.log(error);
-        alert(
-          "Oops! Something went wrong. See the browser console for details."
-        );
+        // alert(
+        //   "Oops! Something went wrong. See the browser console for details."
+        // );
         setIsLoading(false);
       }
     } else {
@@ -265,9 +265,9 @@ export const ServiceProvider = ({ children }) => {
         window.location.replace("/services");
       } catch (error) {
         console.log(error);
-        alert(
-          "Oops! Something went wrong. See the browser console for details."
-        );
+        // alert(
+        //   "Oops! Something went wrong. See the browser console for details."
+        // );
         setIsLoading(false);
       }
     } else {
@@ -302,9 +302,9 @@ export const ServiceProvider = ({ children }) => {
         notify("New task added successfully.");
       } catch (error) {
         console.log(error);
-        alert(
-          "Oops! Something went wrong. See the browser console for details."
-        );
+        // alert(
+        //   "Oops! Something went wrong. See the browser console for details."
+        // );
         setIsLoading(false);
       }
     } else {

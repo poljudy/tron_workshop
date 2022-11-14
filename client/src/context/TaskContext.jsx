@@ -104,7 +104,7 @@ export const TaskProvider = ({ children }) => {
         return user;
       } catch (error) {
         console.log(error);
-        alert(error.message);
+        // alert(error.message);
       }
     } else {
       console.log("Tron is not present");
@@ -143,7 +143,7 @@ export const TaskProvider = ({ children }) => {
       }
     } catch (error) {
       console.log(error);
-      alert(error.message);
+      // alert(error.message);
       setIsLoading(false);
     }
   };
@@ -158,7 +158,7 @@ export const TaskProvider = ({ children }) => {
         setIsLoading(false);
       } catch (error) {
         console.log(error);
-        alert(error.message);
+        // alert(error.message);
         setIsLoading(false);
       }
     } else {
@@ -193,9 +193,9 @@ export const TaskProvider = ({ children }) => {
         notify("New task added successfully.");
       } catch (error) {
         console.log(error);
-        alert(
-          "Oops! Something went wrong. See the browser console for details."
-        );
+        // alert(
+        //   "Oops! Something went wrong. See the browser console for details."
+        // );
         setIsLoading(false);
       }
     } else {
@@ -221,9 +221,9 @@ export const TaskProvider = ({ children }) => {
         notify("Successfully applied.");
       } catch (error) {
         console.log(error);
-        alert(
-          "Oops! Something went wrong. See the browser console for details."
-        );
+        // alert(
+        //   "Oops! Something went wrong. See the browser console for details."
+        // );
         setIsLoading(false);
       }
     } else {
@@ -250,9 +250,9 @@ export const TaskProvider = ({ children }) => {
         notify("Result submitted successfully.");
       } catch (error) {
         console.log(error);
-        alert(
-          "Oops! Something went wrong. See the browser console for details."
-        );
+        // alert(
+        //   "Oops! Something went wrong. See the browser console for details."
+        // );
         setIsLoading(false);
       }
     } else {
@@ -279,9 +279,9 @@ export const TaskProvider = ({ children }) => {
         window.location.replace("/tasks");
       } catch (error) {
         console.log(error);
-        alert(
-          "Oops! Something went wrong. See the browser console for details."
-        );
+        // alert(
+        //   "Oops! Something went wrong. See the browser console for details."
+        // );
         setIsLoading(false);
       }
     } else {
@@ -308,9 +308,9 @@ export const TaskProvider = ({ children }) => {
         notify("Task assigned.");
       } catch (error) {
         console.log(error);
-        alert(
-          "Oops! Something went wrong. See the browser console for details."
-        );
+        // alert(
+        //   "Oops! Something went wrong. See the browser console for details."
+        // );
         setIsLoading(false);
       }
     } else {
@@ -337,9 +337,9 @@ export const TaskProvider = ({ children }) => {
         notify("Task unassigned.");
       } catch (error) {
         console.log(error);
-        alert(
-          "Oops! Something went wrong. See the browser console for details."
-        );
+        // alert(
+        //   "Oops! Something went wrong. See the browser console for details."
+        // );
         setIsLoading(false);
       }
     } else {
@@ -367,9 +367,9 @@ export const TaskProvider = ({ children }) => {
         notify("Change reaquest submitted.");
       } catch (error) {
         console.log(error);
-        alert(
-          "Oops! Something went wrong. See the browser console for details."
-        );
+        // alert(
+        //   "Oops! Something went wrong. See the browser console for details."
+        // );
         setIsLoading(false);
       }
     } else {
@@ -399,7 +399,7 @@ export const TaskProvider = ({ children }) => {
       }
     } catch (error) {
       console.log(error);
-      alert("Oops! Something went wrong. See the browser console for details.");
+      // alert("Oops! Something went wrong. See the browser console for details.");
       setIsLoading(false);
     }
   };

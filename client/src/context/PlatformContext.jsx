@@ -63,7 +63,7 @@ export const PlatformProvider = ({ children }) => {
         setFee(fetchedFee);
       } catch (error) {
         console.log(error);
-        alert(error.message);
+        // alert(error.message);
       }
     } else {
       console.log("Tron is not present");
@@ -88,9 +88,9 @@ export const PlatformProvider = ({ children }) => {
         notify("Rating saved successfully.");
       } catch (error) {
         console.log(error.message);
-        alert(
-          "Oops! Something went wrong. See the browser console for details."
-        );
+        // alert(
+        //   "Oops! Something went wrong. See the browser console for details."
+        // );
         setIsLoading(false);
       }
     } else {
@@ -106,7 +106,7 @@ export const PlatformProvider = ({ children }) => {
         setFetchedRating(r);
       } catch (error) {
         console.log(error);
-        alert(error.message);
+        // alert(error.message);
       }
     } else {
       console.log("Tron is not present");
