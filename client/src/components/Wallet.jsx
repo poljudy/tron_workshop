@@ -35,7 +35,7 @@ export default function Wallet() {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="inline-flex justify-center items-center w-full px-4 py-2 font-medium text-white bg-transparent rounded-md shadow-sm hover:bg-[#2546bd] focus:outline-none">
+        <Menu.Button className="inline-flex justify-center items-center w-full px-4 py-2 font-medium text-white bg-transparent rounded-md shadow-sm focus:outline-none">
           {profile.avatar
             ?
               <img alt="Avatar" className="w-[2.5rem] mr-1 rounded-full border" src={profile.avatar} />
