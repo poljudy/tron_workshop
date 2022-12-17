@@ -18,18 +18,21 @@ export default function Wallet() {
   const { fetchedRating } = useContext(PlatformContext);
   const { profile } = useContext(ProfileContext);
 
+  const { tronWeb, location, localStorage } = window;
   const getBalance = async () => {
-    const b = await window.tronWeb.trx.getBalance(currentAccount);
-    setBalance(window.tronWeb.fromSun(b));
+    const b = await tronWeb.trx.getBalance(currentAccount);
+    setBalance(tronWeb.fromSun(b));
   };
 
   const handleDisconnect = () => {
-    window.localStorage.removeItem("currentAccount");
-    window.location.replace("/");
+    localStorage.removeItem("currentAccount");
+    location.replace("/");
   };
 
   useEffect(() => {
-    getBalance();
+    if (tronWeb) {
+      getBalance();
+    }
   }, []);
   return (
     <Menu as="div" className="relative inline-block text-left">

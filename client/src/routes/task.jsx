@@ -23,7 +23,9 @@ export default function Task() {
       const a = await composeAuthorProfile(task.author);
       setAuthorProfile(a);
     };
-    fetchData().catch(console.error);
+    if (window.tronWeb) {
+      fetchData().catch(console.error);
+    }
     return () => {
       // this now gets called when the component unmounts
       setAuthorProfile(null);
@@ -107,7 +109,7 @@ export default function Task() {
           {isLoading ? (
             <Loader />
           ) : (
-            task.status !== TaskStatuses[4] && <ActionControls task={task} />
+            <ActionControls task={task} />
           )}
         </div>
         <div>

@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import AutoAvatar from "../AutoAvatar";
 import { shortenAddress } from "../../utils/shortenAddress";
-import { TaskTypes } from "../../utils/constants";
 
 const TaskCard = ({
   id,

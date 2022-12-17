@@ -9,7 +9,9 @@ const MyTasks = () => {
   const { tasks, getAllTasks } = useContext(TaskContext);
 
   useEffect(() => {
-    getAllTasks();
+    if (window.tronWeb) {
+      getAllTasks();
+    }
   }, []);
 
   function checkTask(task) {

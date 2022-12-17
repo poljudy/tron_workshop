@@ -9,6 +9,8 @@ import { PlatformContext } from "./PlatformContext";
 export const ServiceContext = createContext();
 const shouldPollResponse = true;
 
+const { tronWeb } = window;
+
 export const ServiceProvider = ({ children }) => {
   const [formData, setformData] = useState({
     category: Categories[0],
@@ -21,13 +23,13 @@ export const ServiceProvider = ({ children }) => {
   const [services, setServices] = useState([]);
   const [service, setService] = useState([]);
   const [ipfsUrl, setIpfsUrl] = useState(null);
-  const { tronWeb } = useContext(AuthContext);
+  // const { tronWeb } = useContext(AuthContext);
   const { notify, setIsLoading } = useContext(PlatformContext);
 
   const createTronContract = async () => {
     let c;
     if (tronWeb) {
-      window.tronWeb.setAddress(contractAddress);
+      tronWeb.setAddress(contractAddress);
       c = await tronWeb.contract(contractABI, contractAddress);
     }
     return c;
@@ -318,7 +320,9 @@ export const ServiceProvider = ({ children }) => {
     const fetchData = async () => {
       await getAllServices();
     };
-    fetchData().catch(console.error);
+    if (tronWeb) {
+      fetchData().catch(console.error);
+    }
   }, [tronWeb]);
 
   // Event listeners

@@ -4,9 +4,9 @@ import { TaskContext } from "../../context/TaskContext";
 import { TaskStatuses } from "../../utils/constants";
 import { shortenAddress } from "../../utils/shortenAddress";
 
-const AuthorActions = () => {
+const AuthorActions = (params) => {
+  const { task } = params;
   const {
-    task,
     deleteTask,
     assignTask,
     unassignTask,
@@ -107,69 +107,9 @@ const AuthorActions = () => {
     );
   }
   // If the task is assigned
-  return (
-    <div>
-      {task.result ? (
-        <>
-          <p className="mt-3 text-white">Please rate the assignee first</p>
-          <p className="text-white">and then mark the task as complete.</p>
-          <div className="flex flex-row">
-            {[...Array(5)].map((star, i) => {
-              const ratingValue = i + 1;
-              return (
-                <label>
-                  <input
-                    type="radio"
-                    name="rating"
-                    value={ratingValue}
-                    style={{ display: "none" }}
-                    onClick={() => setRating(ratingValue)}
-                  />
-                  <FaStar
-                    color={
-                      ratingValue <= (hover || rating) ? "#ffc107" : "#e4e5e9"
-                    }
-                    size={40}
-                    onMouseEnter={() => setHover(ratingValue)}
-                    onMouseLeave={() => setHover(null)}
-                  />
-                </label>
-              );
-            })}
-          </div>
-          <button
-            type="button"
-            className="flex flex-row justify-center items-center my-5 bg-[#134e4a] p-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
-            onClick={handleComplete}
-          >
-            Complete
-          </button>
-          <p className="mt-3 text-white">Not satisfied with the result?</p>
-          <p className="text-white">Submit a change request (You can submit up to 3 change requests).</p>
-          <textarea
-            className="my-2 w-9/12 rounded-sm p-2 outline-none bg-transparent text-white text-sm white-glassmorphism"
-            placeholder="Describe what exactly you'd like to change..."
-            name="requestMessage"
-            type="text"
-            onChange={(e) => setMessage(e.target.value)}
-          />
-          <div className="flex flex-row gap-2">
-            <button
-              type="button"
-              className="flex flex-row justify-center items-center my-5 bg-[#9c3a06] p-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
-              onClick={handleRequestChange}
-            >
-              Request Change
-            </button>
-            <button
-              type="button"
-              className="flex flex-row justify-center items-center my-5 bg-red-700 p-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
-            >
-              Open Dispute
-            </button>
-          </div>
-        </>
-      ) : (
+  if (task.status === TaskStatuses[1]) {
+    return (
+      <div>
         <button
           type="button"
           className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
@@ -177,9 +117,77 @@ const AuthorActions = () => {
         >
           Unassign
         </button>
-      )}
-    </div>
-  );
+      </div>
+    );
+  }
+
+  // If the task is in review or change requested
+  if (task.status === TaskStatuses[2] || task.status === TaskStatuses[3]) {
+    return (
+      <div>
+        <p className="mt-3 text-white">Please rate the assignee first</p>
+        <p className="text-white">and then mark the task as complete.</p>
+        <div className="flex flex-row">
+          {[...Array(5)].map((star, i) => {
+            const ratingValue = i + 1;
+            return (
+              <label key={i}>
+                <input
+                  type="radio"
+                  name="rating"
+                  value={ratingValue}
+                  style={{ display: "none" }}
+                  onClick={() => setRating(ratingValue)}
+                />
+                <FaStar
+                  color={
+                    ratingValue <= (hover || rating) ? "#ffc107" : "#e4e5e9"
+                  }
+                  size={40}
+                  onMouseEnter={() => setHover(ratingValue)}
+                  onMouseLeave={() => setHover(null)}
+                />
+              </label>
+            );
+          })}
+        </div>
+        <button
+          type="button"
+          className="flex flex-row justify-center items-center my-5 bg-[#134e4a] p-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
+          onClick={handleComplete}
+        >
+          Complete
+        </button>
+        <p className="mt-3 text-white">Not satisfied with the result?</p>
+        <p className="text-white">
+          Submit a change request (You can submit up to 3 change requests).
+        </p>
+        <textarea
+          className="my-2 w-9/12 rounded-sm p-2 outline-none bg-transparent text-white text-sm white-glassmorphism"
+          placeholder="Describe what exactly you'd like to change..."
+          name="requestMessage"
+          type="text"
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <div className="flex flex-row gap-2">
+          <button
+            type="button"
+            className="flex flex-row justify-center items-center my-5 bg-[#9c3a06] p-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
+            onClick={handleRequestChange}
+          >
+            Request Change
+          </button>
+          <button
+            type="button"
+            className="flex flex-row justify-center items-center my-5 bg-red-700 p-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
+          >
+            Open Dispute
+          </button>
+        </div>
+      </div>
+    );
+  }
+  return null;
 };
 
 export default AuthorActions;

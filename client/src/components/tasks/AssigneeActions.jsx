@@ -5,8 +5,9 @@ import { PlatformContext } from "../../context/PlatformContext";
 import { TaskStatuses } from "../../utils/constants";
 import IpfsForm from "./IpfsForm";
 
-const AssigneeActions = () => {
-  const { task, unassignTask, submitResult, ipfsUrl } = useContext(TaskContext);
+const AssigneeActions = (params) => {
+  const { task } = params;
+  const { unassignTask, submitResult, ipfsUrl } = useContext(TaskContext);
   const { rateUser } = useContext(PlatformContext);
   const [result, setResult] = useState("");
   const [rating, setRating] = useState(0);
@@ -39,6 +40,36 @@ const AssigneeActions = () => {
     return differenceInDays;
   };
 
+  if (task.status === TaskStatuses[1]) {
+    return (
+      <div>
+        <button
+          type="button"
+          className="flex flex-row justify-center items-center my-5 bg-yellow-700 pl-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
+          onClick={() => unassignTask(task.id)}
+        >
+          Unassign
+        </button>
+        <IpfsForm />
+        <input
+          className="my-2 w-9/12 rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
+          placeholder="Result Link"
+          name="result"
+          type="text"
+          value={result}
+          onChange={(e) => setResult(e.target.value)}
+        />
+        <button
+          type="button"
+          className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
+          onClick={handleSubmit}
+        >
+          Submit Result
+        </button>
+      </div>
+    );
+  }
+
   if (task.status === TaskStatuses[2]) {
     return (
       <>
@@ -57,6 +88,39 @@ const AssigneeActions = () => {
     );
   }
 
+  if (task.status === TaskStatuses[3]) {
+    return (
+      <div>
+        <p className="mt-5 text-2xl text-white text-basetext-white">
+          Changes requested form the author! Please resubmit your result.
+        </p>
+        <button
+          type="button"
+          className="flex flex-row justify-center items-center my-5 bg-yellow-700 pl-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
+          onClick={() => unassignTask(task.id)}
+        >
+          Unassign
+        </button>
+        <IpfsForm />
+        <input
+          className="my-2 w-9/12 rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
+          placeholder="Result Link"
+          name="result"
+          type="text"
+          value={result}
+          onChange={(e) => setResult(e.target.value)}
+        />
+        <button
+          type="button"
+          className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
+          onClick={handleSubmit}
+        >
+          Re-submit Result
+        </button>
+      </div>
+    );
+  }
+
   if (task.status === TaskStatuses[4]) {
     return (
       <div>
@@ -68,7 +132,9 @@ const AssigneeActions = () => {
           {[...Array(5)].map((star, i) => {
             const ratingValue = i + 1;
             return (
-              <label>
+              <label
+                key={i}
+              >
                 <input
                   type="radio"
                   name="rating"
@@ -98,33 +164,7 @@ const AssigneeActions = () => {
       </div>
     );
   }
-  return (
-    <div>
-      <button
-        type="button"
-        className="flex flex-row justify-center items-center my-5 bg-yellow-700 pl-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
-        onClick={() => unassignTask(task.id)}
-      >
-        Unassign
-      </button>
-      <IpfsForm />
-      <input
-        className="my-2 w-9/12 rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
-        placeholder="Result Link"
-        name="result"
-        type="text"
-        value={result}
-        onChange={(e) => setResult(e.target.value)}
-      />
-      <button
-        type="button"
-        className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 w-1/6 text-white rounded-full cursor-pointer hover:bg-[#2546bd]"
-        onClick={handleSubmit}
-      >
-        Submit Result
-      </button>
-    </div>
-  );
+  return null;
 };
 
 export default AssigneeActions;

@@ -7,6 +7,8 @@ import { PlatformContext } from "./PlatformContext";
 
 export const ProfileContext = createContext();
 
+const { tronWeb } = window;
+
 export const ProfileProvider = ({ children }) => {
   const [ipfsUrl, setIpfsUrl] = useState(null);
   const [profile, setProfile] = useState([]);
@@ -19,7 +21,7 @@ export const ProfileProvider = ({ children }) => {
     availability: 0
   });
   //   const [isLoading, setIsLoading] = useState(false);
-  const { currentAccount, tronWeb } = useContext(AuthContext);
+  const { currentAccount } = useContext(AuthContext);
   const { notify, setIsLoading } = useContext(PlatformContext);
 
   const handleChange = (e, name) => {
@@ -31,7 +33,7 @@ export const ProfileProvider = ({ children }) => {
   const createTronContract = async () => {
     let c;
     if (tronWeb) {
-      window.tronWeb.setAddress(contractAddress);
+      tronWeb.setAddress(contractAddress);
       c = await tronWeb.contract(contractABI, contractAddress);
     }
     return c;
@@ -121,7 +123,9 @@ export const ProfileProvider = ({ children }) => {
     const fetchData = async () => {
       await createTronContract();
     };
-    fetchData().catch(console.error);
+    if (tronWeb) {
+      fetchData().catch(console.error);
+    }
   }, [tronWeb]);
 
   useEffect(() => {

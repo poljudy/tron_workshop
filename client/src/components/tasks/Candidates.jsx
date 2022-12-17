@@ -13,7 +13,9 @@ const Candidates = (candidates) => {
       const c = await composeCandidateProfiles(candidates);
       setCandidateProfiles(c);
     };
-    fetchData().catch(console.error);
+    if (window.tronWeb) {
+      fetchData().catch(console.error);
+    }
     return () => {
       // this now gets called when the component unmounts
       setCandidateProfiles(null);

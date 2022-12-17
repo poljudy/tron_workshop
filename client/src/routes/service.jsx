@@ -9,12 +9,11 @@ import { Loader } from "../components";
 import AutoAvatar from "../components/AutoAvatar";
 import { contractAddress } from "../utils/constants";
 import contractABI from "../utils/contractABI.json";
-import { AuthContext } from "../context/AuthContext";
 import { shortenAddress } from "../utils/shortenAddress";
 
 export default function Service() {
   const params = useParams();
-  const { tronWeb } = useContext(AuthContext);
+  const { tronWeb } = window;
   const { service, getService } = useContext(ServiceContext);
   const { isLoading } = useContext(PlatformContext);
   const serviceId = params.id;
@@ -52,9 +51,11 @@ export default function Service() {
   };
 
   useEffect(() => {
-    getService(serviceId);
-    getRating(service.author);
-    getProfile(service.author);
+    if (tronWeb) {
+      getService(serviceId);
+      getRating(service.author);
+      getProfile(service.author);
+    }
   }, [serviceId]);
   return (
     <div className="min-h-screen text-white">

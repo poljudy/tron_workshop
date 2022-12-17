@@ -10,6 +10,8 @@ export const TaskContext = createContext();
 
 const shouldPollResponse = true;
 
+const { tronWeb } = window;
+
 export const TaskProvider = ({ children }) => {
   const [formData, setformData] = useState({
     category: Categories[0],
@@ -22,14 +24,14 @@ export const TaskProvider = ({ children }) => {
 
   const [tasks, setTasks] = useState("");
   const [task, setTask] = useState([]);
-  const { tronWeb } = useContext(AuthContext);
+  // const { tronWeb } = useContext(AuthContext);
   const { notify, fee, setIsLoading } = useContext(PlatformContext);
   const [ipfsUrl, setIpfsUrl] = useState("");
 
   const createTronContract = async () => {
     let c;
     if (tronWeb) {
-      window.tronWeb.setAddress(contractAddress);
+      tronWeb.setAddress(contractAddress);
       c = await tronWeb.contract(contractABI, contractAddress);
     }
     return c;
@@ -410,7 +412,9 @@ export const TaskProvider = ({ children }) => {
     const fetchData = async () => {
       await getAllTasks();
     };
-    fetchData().catch(console.error);
+    if (tronWeb) {
+      fetchData().catch(console.error);
+    }
   }, []);
 
   // Event listeners

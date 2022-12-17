@@ -1,10 +1,9 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { shortenAddress } from "../../utils/shortenAddress";
 import AutoAvatar from "../AutoAvatar";
 import { contractAddress } from "../../utils/constants";
 import contractABI from "../../utils/contractABI.json";
-import { AuthContext } from "../../context/AuthContext";
 
 const ServiceCard = ({
   id,
@@ -17,11 +16,12 @@ const ServiceCard = ({
   category,
 }) => {
   const [profile, setProfile] = useState(null);
-  const { tronWeb } = useContext(AuthContext);
+  const { tronWeb } = window;
 
   const getProfile = async (address) => {
     if (tronWeb && address) {
       try {
+        tronWeb.setAddress(contractAddress);
         const contract = await tronWeb.contract(contractABI, contractAddress);
         const r = await contract.getProfile(address).call();
         setProfile(r);
@@ -34,7 +34,9 @@ const ServiceCard = ({
     }
   };
   useEffect(() => {
-    getProfile(author);
+    if (tronWeb) {
+      getProfile(author);
+    }
   }, []);
 
   return (
@@ -51,7 +53,7 @@ const ServiceCard = ({
             ) : (
               <AutoAvatar userId={author} size={36} />
             )}
-            {profile && profile.username ? profile.username : shortenAddress(author)}
+            {profile && profile.username ? <span>{profile.username} ({shortenAddress(author)})</span> : shortenAddress(author)}
           </div>
           {createdAt}
           <div className="flex flex-row gap-2 items-center">

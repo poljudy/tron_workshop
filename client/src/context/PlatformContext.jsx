@@ -6,6 +6,8 @@ import contractABI from "../utils/contractABI.json";
 
 export const PlatformContext = createContext();
 
+const { tronWeb } = window;
+
 const MessageDisplay = ({ message, hash }) => (
   <div className="w-full">
     <p>{message}</p>
@@ -29,7 +31,7 @@ export const PlatformProvider = ({ children }) => {
   const [fee, setFee] = useState(0);
   const [fetchedRating, setFetchedRating] = useState(0);
   // const [contract, setContract] = useState(undefined);
-  const { currentAccount, tronWeb } = useContext(AuthContext);
+  const { currentAccount } = useContext(AuthContext);
 
   const notify = (message, hash) => toast.success(<MessageDisplay message={message} hash={hash} />, {
     position: "top-right",
@@ -49,7 +51,7 @@ export const PlatformProvider = ({ children }) => {
   const createTronContract = async () => {
     let c;
     if (tronWeb) {
-      window.tronWeb.setAddress(contractAddress);
+      tronWeb.setAddress(contractAddress);
       c = await tronWeb.contract(contractABI, contractAddress);
     }
     return c;
@@ -117,11 +119,15 @@ export const PlatformProvider = ({ children }) => {
     const fetchData = async () => {
       await getPlatformFee();
     };
-    fetchData().catch(console.error);
+    if (tronWeb) {
+      fetchData().catch(console.error);
+    }
   }, []);
 
   useEffect(() => {
-    getRating(currentAccount);
+    if (tronWeb) {
+      getRating(currentAccount);
+    }
   }, [currentAccount]);
 
   // Event listeners

@@ -1,8 +1,6 @@
-import { useContext } from "react";
-import { TaskContext } from "../../context/TaskContext";
 
-const CandidateActions = () => {
-  const { task } = useContext(TaskContext);
+const CandidateActions = (params) => {
+  const { task } = params;
 
   if (task.assignee === "Unassigned") {
     return (
