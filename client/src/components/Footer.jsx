@@ -1,6 +1,6 @@
 import React from "react";
 import { SiDiscord } from "react-icons/si";
-import { FaTelegramPlane, FaFacebook } from "react-icons/fa";
+import { FaTelegramPlane, FaFacebook, FaTwitter } from "react-icons/fa";
 import { AiOutlineCopyright } from "react-icons/ai";
 import logo1 from "../../images/logo1.png";
 
