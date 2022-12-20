@@ -1,6 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { FiTwitter } from "react-icons/fi";
 import { SiDiscord } from "react-icons/si";
 import { FaTelegramPlane, FaFacebook } from "react-icons/fa";
 import { AiOutlineCopyright } from "react-icons/ai";
@@ -16,10 +14,10 @@ const Footer = () => (
         <span className="text-xl">2022</span>
       </div>
       <div className="flex gap-2 text-white text-right">
-        <Link to="https://www.facebook.com/people/Hotskills/100088810601810" target="_blank" rel="noreferrer"><FaFacebook /></Link>
-        <Link to="https://twitter.com/hotskillscrypto" target="_blank" rel="noreferrer"><FiTwitter /></Link>
-        <Link to="https://discord.gg/Zk8MDnTjn5" target="_blank" rel="noreferrer"><SiDiscord /></Link>
-        <Link to="https://t.me/hotskillscrypto" target="_blank" rel="noreferrer"><FaTelegramPlane /></Link>
+        <a href="https://www.facebook.com/people/Hotskills/100088810601810" target="_blank" rel="noreferrer"><FaFacebook /></a>
+        <a href="https://twitter.com/hotskillscrypto" target="_blank" rel="noreferrer"><FaTwitter /></a>
+        <a href="https://discord.gg/Zk8MDnTjn5" target="_blank" rel="noreferrer"><SiDiscord /></a>
+        <a href="https://t.me/hotskillscrypto" target="_blank" rel="noreferrer"><FaTelegramPlane /></a>
       </div>
     </div>
   </div>
