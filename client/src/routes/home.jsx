@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { PlatformContext } from "../context/PlatformContext";
-import { Welcome, Tasks, Services, Hero, Team, Sponsors, Loader, TestMode } from "../components";
+import { Welcome, Tasks, Services, Hero, Loader, TestMode } from "../components";
 import { AuthContext } from "../context/AuthContext";
 
 export default function Home() {
@@ -14,8 +14,6 @@ export default function Home() {
         <>
           <TestMode />
           <Hero />
-          <Team />
-          <Sponsors />
         </>
       ) : (
         <div className="flex flex-col items-center w-full">

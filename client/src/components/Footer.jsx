@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FiTwitter } from "react-icons/fi";
 import { SiDiscord } from "react-icons/si";
-import { FaTelegramPlane, FaGithub } from "react-icons/fa";
+import { FaTelegramPlane, FaFacebook } from "react-icons/fa";
 import { AiOutlineCopyright } from "react-icons/ai";
 import logo1 from "../../images/logo1.png";
 
@@ -16,10 +16,10 @@ const Footer = () => (
         <span className="text-xl">2022</span>
       </div>
       <div className="flex gap-2 text-white text-right">
-        <Link to="#!"><FiTwitter /></Link>
-        <Link to="#!"><SiDiscord /></Link>
-        <Link to="#!"><FaTelegramPlane /></Link>
-        <Link to="#!"><FaGithub /></Link>
+        <Link to="https://www.facebook.com/people/Hotskills/100088810601810" target="_blank" rel="noreferrer"><FaFacebook /></Link>
+        <Link to="https://twitter.com/hotskillscrypto" target="_blank" rel="noreferrer"><FiTwitter /></Link>
+        <Link to="https://discord.gg/Zk8MDnTjn5" target="_blank" rel="noreferrer"><SiDiscord /></Link>
+        <Link to="https://t.me/hotskillscrypto" target="_blank" rel="noreferrer"><FaTelegramPlane /></Link>
       </div>
     </div>
   </div>
