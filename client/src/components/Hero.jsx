@@ -1,17 +1,17 @@
 import { React } from "react";
 import hero1 from "../../images/hero1.png";
 import hero2 from "../../images/hero2.png";
-import logo1 from "../../images/logo1.png";
+// import logo1 from "../../images/logo1.png";
 import ConnectWalletButton from "./ConnectWalletButton";
 
 function Hero() {
   return (
     <>
       <div className="flex flex-col items-center">
-        <h1 className="mt-10 text-white text-6xl">Meet our new brand</h1>
-        <img alt="Brand logo" className="w-6/12 self-center" src={logo1} />
-        <h2 className="mt-2 text-white text-4xl">formerly MeDo</h2>
-        <p className="mt-2 text-white text-4xl">the best decentralized freelance platform</p>
+        <h1 className="mt-10 text-white text-6xl">Work-to-Earn Marketplace</h1>
+        {/* <img alt="Brand logo" className="w-6/12 self-center" src={logo1} /> */}
+        <h2 className="mt-2 text-white text-4xl">Multichain crypto platform for freelancers.</h2>
+        <p className="mt-2 text-white text-4xl">Secure and fast payments. Low fees.</p>
       </div>
       <div className="wrapper flex items-center justify-between px-[5rem] rounded-b-[5rem] w-[100%] h-[35rem] relative z-[3]">
         {/* left side */}
