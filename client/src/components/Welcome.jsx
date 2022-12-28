@@ -24,7 +24,15 @@ export default function Welcome() {
           </Link>
         </>
       )}
-      <p className="rext-xl">Please check the latest activity on the platform below</p>
+      <p className="text-2xl">Please let us know what we can improve to make our plarform better.</p>
+      <a
+        href="https://airtable.com/shrNtFxFBO5NYaMc4"
+        target="_blank"
+        rel="noreferrer"
+        className="text-blue-400 text-2xl"
+      >
+        <i>Feedback form</i>
+      </a>
     </div>
   );
 }
