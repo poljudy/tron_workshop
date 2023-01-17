@@ -19,3 +19,4 @@ export { default as ConnectWalletButton } from "./ConnectWalletButton";
 export { default as Notifications } from "./Notifications";
 export { default as TestMode } from "./TestMode";
 export { default as Connect } from "./Connect";
+export { default as NoWallet } from "./NoWallet";

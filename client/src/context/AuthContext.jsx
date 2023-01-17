@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   const connectWallet = async () => {
     try {
       if (!tronLink) {
-        alert("Please install TronLink -> https://www.tronlink.org/");
+        // alert("Please install TronLink -> https://www.tronlink.org/");
         return;
       }
       tronLink

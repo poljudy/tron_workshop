@@ -4,6 +4,9 @@ import tronLogo from "../../images/tronlogo.png";
 
 const ConnectWalletButton = () => {
   const { connectWallet } = useContext(AuthContext);
+  const { ethereum } = window;
+
+  if (!ethereum) return <span>Wallet not found</span>;
   return (
     <button
       type="button"
