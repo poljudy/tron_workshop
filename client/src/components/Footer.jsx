@@ -11,7 +11,7 @@ const Footer = () => (
       <div className="flex text-white text-left">
         <img alt="Brand logo" className="h-6" src={logo1} />
         <AiOutlineCopyright className="w-4 self-center" />
-        <span className="text-xl">2022</span>
+        <span className="text-xl">2023</span>
       </div>
       <div className="flex gap-2 text-white text-right">
         <a href="https://www.facebook.com/people/Hotskills/100088810601810" target="_blank" rel="noreferrer"><FaFacebook /></a>
