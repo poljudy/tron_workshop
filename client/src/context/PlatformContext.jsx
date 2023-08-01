@@ -26,11 +26,8 @@ const MessageDisplay = ({ message, hash }) => (
 
 export const PlatformProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
-  // const [tasks, setTasks] = useState("");
-  // const [fetchedProfile, setFetchedProfile] = useState([]);
   const [fee, setFee] = useState(0);
   const [fetchedRating, setFetchedRating] = useState(0);
-  // const [contract, setContract] = useState(undefined);
   const { currentAccount } = useContext(AuthContext);
 
   const notify = (message, hash) => toast.success(<MessageDisplay message={message} hash={hash} />, {
@@ -43,10 +40,6 @@ export const PlatformProvider = ({ children }) => {
     progress: undefined,
     theme: "dark",
   });
-
-  // const handleChange = (e, name) => {
-  //   setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
-  // };
 
   const createTronContract = async () => {
     let c;
