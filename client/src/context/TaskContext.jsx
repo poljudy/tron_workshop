@@ -1,7 +1,6 @@
 import { createContext, useEffect, useState, useContext } from "react";
 import { ethers } from "ethers";
 import { Web3Storage } from "web3.storage";
-import { AuthContext } from "./AuthContext";
 import contractABI from "../utils/contractABI.json";
 import { TaskTypes, address0, TaskStatuses, Categories, contractAddress } from "../utils/constants";
 import { PlatformContext } from "./PlatformContext";
@@ -24,7 +23,6 @@ export const TaskProvider = ({ children }) => {
 
   const [tasks, setTasks] = useState("");
   const [task, setTask] = useState([]);
-  // const { tronWeb } = useContext(AuthContext);
   const { notify, fee, setIsLoading } = useContext(PlatformContext);
   const [ipfsUrl, setIpfsUrl] = useState("");
 
@@ -48,7 +46,6 @@ export const TaskProvider = ({ children }) => {
     setIsLoading(true);
     const rootCid = await client.put(files);
     const info = await client.status(rootCid);
-    // const res = await client.get(rootCid);
     const url = `https://${info.cid}.ipfs.w3s.link/${files[0].name}`;
     form.reset();
     setIpfsUrl(url);
@@ -108,7 +105,6 @@ export const TaskProvider = ({ children }) => {
         return user;
       } catch (error) {
         console.log(error);
-        // alert(error.message);
       }
     } else {
       console.log("Tron is not present");
@@ -147,7 +143,6 @@ export const TaskProvider = ({ children }) => {
       }
     } catch (error) {
       console.log(error);
-      // alert(error.message);
       setIsLoading(false);
     }
   };
@@ -162,7 +157,6 @@ export const TaskProvider = ({ children }) => {
         setIsLoading(false);
       } catch (error) {
         console.log(error);
-        // alert(error.message);
         setIsLoading(false);
       }
     } else {
@@ -197,9 +191,6 @@ export const TaskProvider = ({ children }) => {
         notify("New task added successfully.");
       } catch (error) {
         console.log(error);
-        // alert(
-        //   "Oops! Something went wrong. See the browser console for details."
-        // );
         setIsLoading(false);
       }
     } else {
@@ -225,9 +216,6 @@ export const TaskProvider = ({ children }) => {
         notify("Successfully applied.");
       } catch (error) {
         console.log(error);
-        // alert(
-        //   "Oops! Something went wrong. See the browser console for details."
-        // );
         setIsLoading(false);
       }
     } else {
