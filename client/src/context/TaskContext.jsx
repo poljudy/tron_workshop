@@ -242,9 +242,6 @@ export const TaskProvider = ({ children }) => {
         notify("Result submitted successfully.");
       } catch (error) {
         console.log(error);
-        // alert(
-        //   "Oops! Something went wrong. See the browser console for details."
-        // );
         setIsLoading(false);
       }
     } else {
@@ -271,9 +268,6 @@ export const TaskProvider = ({ children }) => {
         window.location.replace("/tasks");
       } catch (error) {
         console.log(error);
-        // alert(
-        //   "Oops! Something went wrong. See the browser console for details."
-        // );
         setIsLoading(false);
       }
     } else {
@@ -300,9 +294,6 @@ export const TaskProvider = ({ children }) => {
         notify("Task assigned.");
       } catch (error) {
         console.log(error);
-        // alert(
-        //   "Oops! Something went wrong. See the browser console for details."
-        // );
         setIsLoading(false);
       }
     } else {
@@ -329,9 +320,6 @@ export const TaskProvider = ({ children }) => {
         notify("Task unassigned.");
       } catch (error) {
         console.log(error);
-        // alert(
-        //   "Oops! Something went wrong. See the browser console for details."
-        // );
         setIsLoading(false);
       }
     } else {
