@@ -1,7 +1,6 @@
 import { createContext, useEffect, useState, useContext } from "react";
 import { Web3Storage } from "web3.storage";
 import { ethers } from "ethers";
-import { AuthContext } from "./AuthContext";
 import { ServiceStatuses, Categories, contractAddress } from "../utils/constants";
 import contractABI from "../utils/contractABI.json";
 import { PlatformContext } from "./PlatformContext";
@@ -23,7 +22,6 @@ export const ServiceProvider = ({ children }) => {
   const [services, setServices] = useState([]);
   const [service, setService] = useState([]);
   const [ipfsUrl, setIpfsUrl] = useState(null);
-  // const { tronWeb } = useContext(AuthContext);
   const { notify, setIsLoading } = useContext(PlatformContext);
 
   const createTronContract = async () => {
@@ -48,7 +46,6 @@ export const ServiceProvider = ({ children }) => {
     setIsLoading(true);
     const rootCid = await client.put(files);
     const info = await client.status(rootCid);
-    // const res = await client.get(rootCid);
     const url = `https://${info.cid}.ipfs.w3s.link/${files[0].name}`;
     form.reset();
     setIpfsUrl(url);
@@ -89,7 +86,6 @@ export const ServiceProvider = ({ children }) => {
         setIsLoading(false);
       } catch (error) {
         console.log(error);
-        // alert(error.message);
         setIsLoading(false);
       }
     } else {
@@ -107,7 +103,6 @@ export const ServiceProvider = ({ children }) => {
         setIsLoading(false);
       } catch (error) {
         console.log(error);
-        // alert(error.message);
         setIsLoading(false);
       }
     } else {
