@@ -20,7 +20,7 @@ export const ProfileProvider = ({ children }) => {
     rate: 0,
     availability: 0
   });
-  //   const [isLoading, setIsLoading] = useState(false);
+
   const { currentAccount } = useContext(AuthContext);
   const { notify, setIsLoading } = useContext(PlatformContext);
 
@@ -49,7 +49,6 @@ export const ProfileProvider = ({ children }) => {
     setIsLoading(true);
     const rootCid = await client.put(files);
     const info = await client.status(rootCid);
-    // const res = await client.get(rootCid);
     const url = `https://${info.cid}.ipfs.w3s.link/${files[0].name}`;
     setIpfsUrl(url);
     setIsLoading(false);
