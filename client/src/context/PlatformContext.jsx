@@ -58,7 +58,6 @@ export const PlatformProvider = ({ children }) => {
         setFee(fetchedFee);
       } catch (error) {
         console.log(error);
-        // alert(error.message);
       }
     } else {
       console.log("Tron is not present");
@@ -79,13 +78,9 @@ export const PlatformProvider = ({ children }) => {
         });
         console.log(`Success - ${transaction}`);
         setIsLoading(false);
-        // window.location.reload();
         notify("Rating saved successfully.");
       } catch (error) {
         console.log(error.message);
-        // alert(
-        //   "Oops! Something went wrong. See the browser console for details."
-        // );
         setIsLoading(false);
       }
     } else {
@@ -101,7 +96,6 @@ export const PlatformProvider = ({ children }) => {
         setFetchedRating(r);
       } catch (error) {
         console.log(error);
-        // alert(error.message);
       }
     } else {
       console.log("Tron is not present");
@@ -122,10 +116,6 @@ export const PlatformProvider = ({ children }) => {
       getRating(currentAccount);
     }
   }, [currentAccount]);
-
-  // Event listeners
-
-  // TODO Fix events listenenrs later
 
   const onFeeUpdated = async () => {
     if (tronWeb) {
