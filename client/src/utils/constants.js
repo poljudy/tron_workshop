@@ -33,4 +33,3 @@ export const Categories = [
   "Lifestyle",
   "Other",
 ];
-

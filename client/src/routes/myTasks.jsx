@@ -16,8 +16,8 @@ const MyTasks = () => {
 
   function checkTask(task) {
     return task.author === currentAccount
-    || task.assignee === currentAccount
-    || task.candidates.includes(currentAccount);
+      || task.assignee === currentAccount
+      || task.candidates.includes(currentAccount);
   }
   return (
     <>
