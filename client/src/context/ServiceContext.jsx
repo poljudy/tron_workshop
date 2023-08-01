@@ -224,9 +224,6 @@ export const ServiceProvider = ({ children }) => {
         getService();
       } catch (error) {
         console.log(error);
-        // alert(
-        //   "Oops! Something went wrong. See the browser console for details."
-        // );
         setIsLoading(false);
       }
     } else {
@@ -253,9 +250,6 @@ export const ServiceProvider = ({ children }) => {
         window.location.replace("/services");
       } catch (error) {
         console.log(error);
-        // alert(
-        //   "Oops! Something went wrong. See the browser console for details."
-        // );
         setIsLoading(false);
       }
     } else {
@@ -291,9 +285,6 @@ export const ServiceProvider = ({ children }) => {
         notify("New task added successfully.");
       } catch (error) {
         console.log(error);
-        // alert(
-        //   "Oops! Something went wrong. See the browser console for details."
-        // );
         setIsLoading(false);
       }
     } else {
@@ -309,8 +300,6 @@ export const ServiceProvider = ({ children }) => {
       fetchData().catch(console.error);
     }
   }, [tronWeb]);
-
-  // Event listeners
 
   const onServiceAdded = async () => {
     const contract = await createTronContract();
