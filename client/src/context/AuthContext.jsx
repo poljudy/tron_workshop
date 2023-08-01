@@ -85,7 +85,6 @@ export const AuthProvider = ({ children }) => {
         }
         // Tronlink chrome v3.22.0 & Tronlink APP v4.3.4 started to support
         if (e.data.message && e.data.message.action === "disconnectWeb") {
-          // console.log("disconnectWeb event", e.data.message);
           setCurrentAccount("");
           localStorage.removeItem("currentAccount");
           location.replace("/");
@@ -93,7 +92,6 @@ export const AuthProvider = ({ children }) => {
 
         // Tronlink chrome v3.22.0 & Tronlink APP v4.3.4 started to support
         if (e.data.message && e.data.message.action === "rejectWeb") {
-          // console.log("rejectWeb event", e.data.message);
           setCurrentAccount("");
           localStorage.removeItem("currentAccount");
           location.replace("/");
@@ -119,8 +117,6 @@ export const AuthProvider = ({ children }) => {
           })
           .catch((err) => {
             if (err.code === 4001) {
-              // EIP-1193 userRejectedRequest error
-              // If this happens, the user rejected the connection request.
               console.log("Please connect to TronLink.");
             } else {
               console.error(err);
