@@ -136,9 +136,6 @@ export const ServiceProvider = ({ children }) => {
         notify("New service added successfully.");
       } catch (error) {
         console.log(error);
-        // alert(
-        //   "Oops! Something went wrong. See the browser console for details."
-        // );
         setIsLoading(false);
       }
     } else {
@@ -172,9 +169,6 @@ export const ServiceProvider = ({ children }) => {
         notify("Service updated successfully.");
       } catch (error) {
         console.log(error);
-        // alert(
-        //   "Oops! Something went wrong. See the browser console for details."
-        // );
         setIsLoading(false);
       }
     } else {
@@ -198,14 +192,10 @@ export const ServiceProvider = ({ children }) => {
         setIsLoading(false);
         await getAllServices();
         notify("Service paused successfully.");
-        // window.location.reload();
         getAllServices();
         getService();
       } catch (error) {
         console.log(error);
-        // alert(
-        //   "Oops! Something went wrong. See the browser console for details."
-        // );
         setIsLoading(false);
       }
     } else {
