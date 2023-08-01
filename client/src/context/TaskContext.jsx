@@ -347,9 +347,6 @@ export const TaskProvider = ({ children }) => {
         notify("Change reaquest submitted.");
       } catch (error) {
         console.log(error);
-        // alert(
-        //   "Oops! Something went wrong. See the browser console for details."
-        // );
         setIsLoading(false);
       }
     } else {
@@ -379,7 +376,6 @@ export const TaskProvider = ({ children }) => {
       }
     } catch (error) {
       console.log(error);
-      // alert("Oops! Something went wrong. See the browser console for details.");
       setIsLoading(false);
     }
   };
@@ -392,9 +388,6 @@ export const TaskProvider = ({ children }) => {
       fetchData().catch(console.error);
     }
   }, []);
-
-  // Event listeners
-  // TODO Fix events listenenrs later
 
   const onTaskAdded = async () => {
     if (tronWeb) {
